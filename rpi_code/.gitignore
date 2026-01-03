@@ -1,0 +1,17 @@
+# Logs & runtime data
+logs/
+src/logs/
+data/telemetry/
+data/logs/
+/src/image_processing/__pycache__/
+/src/utils/__pycache__/
+# Videos
+*.mp4
+*.avi
+*.csv
+*.log
+# Python junk
+__pycache__/
+*.pyc
+venv/
+.venv/

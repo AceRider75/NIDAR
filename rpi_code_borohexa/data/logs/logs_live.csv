@@ -1,0 +1,189 @@
+1767435713.043136,PixHawk,"Heartbeat from system 1, component 0"
+1767435718.0440757,PixHawk,Sent Mode Set to GUIDED
+1767435718.045178,PixHawk,Fetched heartbeat for armable check
+1767435721.0541663,PixHawk,"No Ack for Arm Command
+"
+1767435725.0567026,PixHawk,"Takeoff Failed or Rejected. Error Code: TIMEOUT
+"
+1767435763.0607038,PixHawk,Sent Mode Set to LAND
+1767435765.0610209,PixHawk,Sent Mode Set to LAND
+1767435767.0613334,PixHawk,Sent Mode Set to LAND
+1767435768.061479,PixHawk,LAND mode confirmed
+1767435925.0668402,PixHawk,"Heartbeat from system 1, component 0"
+1767435930.0682561,PixHawk,Sent Mode Set to GUIDED
+1767435930.0708964,PixHawk,Fetched heartbeat for armable check
+1767435930.0817227,PixHawk,"Drone Armed
+"
+1767435934.0855608,PixHawk,"Takeoff Failed or Rejected. Error Code: TIMEOUT
+"
+1767435976.0898576,PixHawk,Sent Mode Set to LAND
+1767435978.090176,PixHawk,Sent Mode Set to LAND
+1767435979.090371,PixHawk,LAND mode confirmed
+1767435986.0613565,PixHawk,"Heartbeat from system 1, component 0"
+1767435991.0626657,PixHawk,Sent Mode Set to GUIDED
+1767435992.0606136,PixHawk,Fetched heartbeat for armable check
+1767435995.0621934,PixHawk,"No Ack for Arm Command
+"
+1767435999.0720258,PixHawk,"Takeoff Failed or Rejected. Error Code: TIMEOUT
+"
+1767436037.075794,PixHawk,Sent Mode Set to LAND
+1767436039.076085,PixHawk,Sent Mode Set to LAND
+1767436040.0762908,PixHawk,LAND mode confirmed
+1767436132.0656009,PixHawk,"Heartbeat from system 1, component 0"
+1767436137.0665488,PixHawk,Sent Mode Set to GUIDED
+1767436137.0677154,PixHawk,Fetched heartbeat for armable check
+1767436137.069064,PixHawk,"Drone Armed
+"
+1767436137.0794525,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767436145.619623,PixHawk,"Reached target altitude: 3.005m
+"
+1767436204.6260493,PixHawk,Sent Mode Set to LAND
+1767436206.6263976,PixHawk,Sent Mode Set to LAND
+1767436207.6265812,PixHawk,LAND mode confirmed
+1767436577.1463594,PixHawk,"Heartbeat from system 1, component 0"
+1767436582.1474285,PixHawk,Sent Mode Set to GUIDED
+1767436582.1488674,PixHawk,Fetched heartbeat for armable check
+1767436585.1527,PixHawk,"No Ack for Arm Command
+"
+1767436585.1633463,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767436591.2054486,PixHawk,"Reached target altitude: 2.958m
+"
+1767436608.1227663,PixHawk,Sent Mode Set to LAND
+1767436730.1436245,PixHawk,"Heartbeat from system 1, component 0"
+1767436735.1451774,PixHawk,Sent Mode Set to GUIDED
+1767436735.146758,PixHawk,Fetched heartbeat for armable check
+1767436738.1503375,PixHawk,"No Ack for Arm Command
+"
+1767436742.1516008,PixHawk,"Takeoff Failed or Rejected. Error Code: TIMEOUT
+"
+1767436754.2511969,PixHawk,Sent Mode Set to LAND
+1767436851.1490095,PixHawk,"Heartbeat from system 1, component 0"
+1767436856.1508977,PixHawk,Sent Mode Set to GUIDED
+1767436857.1490428,PixHawk,Fetched heartbeat for armable check
+1767436860.1516738,PixHawk,"No Ack for Arm Command
+"
+1767436860.1625376,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767436866.2080965,PixHawk,"Reached target altitude: 2.961m
+"
+1767436870.9400804,PixHawk,Sent Mode Set to LAND
+1767436941.1575086,PixHawk,"Heartbeat from system 1, component 0"
+1767436946.1588256,PixHawk,Sent Mode Set to GUIDED
+1767436946.161454,PixHawk,Fetched heartbeat for armable check
+1767436946.1663046,PixHawk,"Drone Armed
+"
+1767436970.23635,PixHawk,Sent Mode Set to LAND
+1767436971.2366133,PixHawk,LAND mode confirmed
+1767437035.160852,PixHawk,"Heartbeat from system 1, component 0"
+1767437040.1622849,PixHawk,Sent Mode Set to GUIDED
+1767437040.1646607,PixHawk,Fetched heartbeat for armable check
+1767437040.1695876,PixHawk,"Drone Armed
+"
+1767437040.175171,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767437048.2209888,PixHawk,"Reached target altitude: 2.95m
+"
+1767437082.2251074,PixHawk,Sent Mode Set to LAND
+1767437084.2254348,PixHawk,Sent Mode Set to LAND
+1767437086.2257447,PixHawk,Sent Mode Set to LAND
+1767437087.2259374,PixHawk,LAND mode confirmed
+1767437099.1656423,PixHawk,"Heartbeat from system 1, component 0"
+1767437104.1669457,PixHawk,Sent Mode Set to GUIDED
+1767437104.1696086,PixHawk,Fetched heartbeat for armable check
+1767437104.1772163,PixHawk,"Drone Armed
+"
+1767437104.1803613,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767437112.2261138,PixHawk,"Reached target altitude: 2.953m
+"
+1767437146.2296999,PixHawk,Sent Mode Set to LAND
+1767437148.230055,PixHawk,Sent Mode Set to LAND
+1767437149.2302465,PixHawk,LAND mode confirmed
+1767437218.1948721,PixHawk,"Heartbeat from system 1, component 0"
+1767437223.196309,PixHawk,Sent Mode Set to GUIDED
+1767437223.197355,PixHawk,Fetched heartbeat for armable check
+1767437223.2042282,PixHawk,"Drone Armed
+"
+1767437223.2105362,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767437230.103914,PixHawk,"Reached target altitude: 2.973m
+"
+1767437347.875175,PixHawk,Sent Mode Set to LAND
+1767437349.8754873,PixHawk,Sent Mode Set to LAND
+1767437350.87563,PixHawk,LAND mode confirmed
+1767437363.1229734,PixHawk,"Heartbeat from system 1, component 0"
+1767437368.125196,PixHawk,Sent Mode Set to GUIDED
+1767437369.123396,PixHawk,Fetched heartbeat for armable check
+1767437369.1345048,PixHawk,"Drone Armed
+"
+1767437369.141172,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767437377.1806233,PixHawk,"Reached target altitude: 2.903m
+"
+1767437435.1866853,PixHawk,Sent Mode Set to LAND
+1767437437.187146,PixHawk,Sent Mode Set to LAND
+1767437438.187393,PixHawk,LAND mode confirmed
+1767437518.1292758,PixHawk,"Heartbeat from system 1, component 0"
+1767437523.1302583,PixHawk,Sent Mode Set to GUIDED
+1767437523.1329582,PixHawk,Fetched heartbeat for armable check
+1767437523.1381793,PixHawk,"Drone Armed
+"
+1767437523.1441875,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767437532.6908872,PixHawk,"Reached target altitude: 2.879m
+"
+1767437611.6998787,PixHawk,Sent Mode Set to LAND
+1767437613.7002048,PixHawk,Sent Mode Set to LAND
+1767437614.700392,PixHawk,LAND mode confirmed
+1767437962.1542666,PixHawk,"Heartbeat from system 1, component 0"
+1767437964.0740182,PixHawk,Sent Mode Set to LAND
+1767437966.0743303,PixHawk,Sent Mode Set to LAND
+1767439618.244757,PixHawk,"Heartbeat from system 1, component 0"
+1767439623.2462769,PixHawk,Sent Mode Set to GUIDED
+1767439623.248721,PixHawk,Fetched heartbeat for armable check
+1767439623.253612,PixHawk,"Drone Armed
+"
+1767439623.2594116,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767439632.8056507,PixHawk,"Reached target altitude: 2.904m
+"
+1767439710.81377,PixHawk,Sent Mode Set to LAND
+1767439712.8142025,PixHawk,Sent Mode Set to LAND
+1767439714.8145273,PixHawk,Sent Mode Set to LAND
+1767439716.8147712,PixHawk,CRITICAL: Failed to switch to LAND mode
+1767439881.2563627,PixHawk,"Heartbeat from system 1, component 0"
+1767439886.2574072,PixHawk,Sent Mode Set to GUIDED
+1767439886.261678,PixHawk,Fetched heartbeat for armable check
+1767439886.2670772,PixHawk,"Drone Armed
+"
+1767439886.2728724,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767439896.3145332,PixHawk,"Reached target altitude: 2.946m
+"
+1767439972.5363226,PixHawk,Sent Mode Set to LAND
+1767439974.5367138,PixHawk,Sent Mode Set to LAND
+1767439975.536918,PixHawk,LAND mode confirmed
+1767440013.26693,PixHawk,"Heartbeat from system 1, component 0"
+1767440018.2684531,PixHawk,Sent Mode Set to GUIDED
+1767440018.269975,PixHawk,Fetched heartbeat for armable check
+1767440018.2725472,PixHawk,"Drone Armed
+"
+1767440108.663959,PixHawk,Sent Mode Set to LAND
+1767440109.6641614,PixHawk,LAND mode confirmed
+1767440161.3768065,PixHawk,Sent Mode Set to LAND
+1767440162.3769536,PixHawk,LAND mode confirmed
+1767440165.2456071,PixHawk,"Heartbeat from system 1, component 0"
+1767440170.246724,PixHawk,Sent Mode Set to GUIDED
+1767440170.2474015,PixHawk,Fetched heartbeat for armable check
+1767440170.2497385,PixHawk,"Drone Armed
+"
+1767440170.2546213,PixHawk,"Takeoff Command Accepted. Climbing...
+"
+1767440173.7576952,PixHawk,"Reached target altitude: 3.001m
+"
+1767440196.7746909,PixHawk,Sent Mode Set to LAND
+1767440198.7751079,PixHawk,Sent Mode Set to LAND
+1767440200.7754455,PixHawk,Sent Mode Set to LAND
+1767440202.7756724,PixHawk,CRITICAL: Failed to switch to LAND mode

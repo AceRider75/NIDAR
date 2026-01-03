@@ -1,0 +1,9 @@
+gcs:
+  controller_name: GCS
+  log_level: INFO
+radio:
+  host: 0.0.0.0
+  port: 9000
+sitl:
+  connection_url: 127.0.0.1:14550
+  enabled: false

@@ -1,0 +1,7 @@
+pymavlink
+mavproxy
+numpy
+opencv-python
+pyserial
+matplotlib
+lxml
