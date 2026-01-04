@@ -1,6 +1,8 @@
 import threading
 import time
 import queue
+import csv
+import os
 from enum import Enum, auto
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, List, Dict, Any
@@ -95,6 +97,11 @@ class DroneController:
         # Log buffer for UI
         self.log_buffer: List[str] = []
         self.log_buffer_lock = threading.Lock()
+
+        # Telemetry CSV logger
+        self.telemetry_log_file = self.config.telemetry_log_file
+        self.telemetry_log_lock = threading.Lock()
+        self._init_telemetry_log()
 
         self.logger.info("DroneController initialized")
         self.logger.info(f"Geofence mode: {self.config.geofence_mode}")
@@ -252,6 +259,58 @@ class DroneController:
         self.logger.info("Controller stopped")
 
     # ==========================================================================
+    # TELEMETRY LOGGING
+    # ==========================================================================
+
+    def _init_telemetry_log(self):
+        """Initialize telemetry CSV log file with headers"""
+        try:
+            # Ensure directory exists
+            log_dir = os.path.dirname(self.telemetry_log_file)
+            if log_dir and not os.path.exists(log_dir):
+                os.makedirs(log_dir)
+            
+            # Write CSV headers
+            with open(self.telemetry_log_file, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([
+                    'timestamp', 'datetime', 'lat', 'lon', 'alt',
+                    'roll', 'pitch', 'yaw', 'vx', 'vy', 'vz',
+                    'xacc', 'yacc', 'battery', 'flight_mode', 'armed', 'state'
+                ])
+            self.logger.info(f"Telemetry log initialized: {self.telemetry_log_file}")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize telemetry log: {e}")
+
+    def _log_telemetry(self):
+        """Log current telemetry to CSV file"""
+        try:
+            with self.telemetry_log_lock:
+                with open(self.telemetry_log_file, 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([
+                        self.telemetry.timestamp,
+                        datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
+                        self.telemetry.lat,
+                        self.telemetry.lon,
+                        self.telemetry.alt,
+                        self.telemetry.roll,
+                        self.telemetry.pitch,
+                        self.telemetry.yaw,
+                        self.telemetry.vx,
+                        self.telemetry.vy,
+                        self.telemetry.vz,
+                        self.telemetry.xacc,
+                        self.telemetry.yacc,
+                        self.telemetry.battery,
+                        self.telemetry.flight_mode,
+                        self.telemetry.armed,
+                        self.state.name
+                    ])
+        except Exception as e:
+            self.logger.error(f"Failed to log telemetry: {e}")
+
+    # ==========================================================================
     # TELEMETRY THREAD
     # ==========================================================================
 
@@ -309,8 +368,10 @@ class DroneController:
                         # Check if armed
                         self.telemetry.armed = (
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED) != 0
-                    self.logger.info(f"Telemetry updated: lat {self.telemetry.lat} lon {self.telemetry.lon} alt {self.telemetry.alt}m")
-                    
+
+                    # Log telemetry to CSV file
+                    self._log_telemetry()
+
             except Exception as e:
                 self.logger.error(f"Telemetry error: {e}")
                 time.sleep(0.1)
