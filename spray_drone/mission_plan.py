@@ -175,7 +175,7 @@ class MissionPlanner:
         
         return optimized
     
-    def get_polygon_corners(kml_path, polygon_name="Field"):        #Extract Polygon Corners from KML File
+    def get_polygon_corners(self, kml_path, polygon_name="Field"):        #Extract Polygon Corners from KML File
         tree = etree.parse(kml_path)
 
         ns = {
