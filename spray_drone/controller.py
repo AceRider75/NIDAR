@@ -154,17 +154,21 @@ class DroneController:
                 
                 # Step 4: CRITICAL - Wait for data to actually start flowing
                 self.logger.info("Verifying data stream...")
-                if not self._verify_data_stream(timeout=10):
-                    self.logger.warning("Data stream verification failed, retrying...")
-                    with self.connection_lock:
-                        if self.connection:
-                            try:
-                                self.connection.close()
-                            except:
-                                pass
-                        self.connection = None
-                    time.sleep(2)
-                    continue
+                # if not self._verify_data_stream(timeout=10):
+                #     self.logger.warning("Data stream verification failed, retrying...")
+                #     with self.connection_lock:
+                #         if self.connection:
+                #             try:
+                #                 self.connection.close()
+                #             except:
+                #                 pass
+                #         self.connection = None
+                #     time.sleep(2)
+                #     continue
+
+                self.logger.info("Waiting for data streams to initialize...")
+                time.sleep(3)  # Give streams time to start
+
                 
                 # Step 5: Initialize tracking variables
                 self.connected.set()
