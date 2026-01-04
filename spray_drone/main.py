@@ -9,7 +9,7 @@ def main():
 
     # Configure
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
+    KML_PATH = os.path.join(BASE_DIR, "data", "JU.kml")
     
     config = DroneConfig(
         connection_string='127.0.0.1:14551',
