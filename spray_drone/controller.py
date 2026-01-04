@@ -372,7 +372,7 @@ class DroneController:
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED) != 0
 
                     # Log telemetry to CSV file
-                    print(self.telemetry)
+                    self.logger.info("logging telemetry nigga")
                     self._log_telemetry()
 
             except Exception as e:
