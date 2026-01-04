@@ -1168,3 +1168,92 @@ class DroneController:
         self._add_log(f"Geofence mode: {mode}")
         return True
 
+
+def check_mavlink_connection(connection_string: str):
+    """
+    Simple test to verify MAVLink connection is working
+    Run this separately to isolate connection issues
+    """
+    print(f"Testing MAVLink connection to {connection_string}")
+    
+    try:
+        # Connect
+        print("Connecting...")
+        conn = mavutil.mavlink_connection(connection_string, baud=57600)
+        
+        # Wait for heartbeat
+        print("Waiting for heartbeat...")
+        conn.wait_heartbeat(timeout=10)
+        print(f"✓ Connected to system {conn.target_system}")
+        
+        # Request data stream
+        print("Requesting data stream...")
+        conn.mav.request_data_stream_send(
+            conn.target_system,
+            conn.target_component,
+            mavutil.mavlink.MAV_DATA_STREAM_ALL,
+            10,  # 10 Hz
+            1
+        )
+        
+        # Read messages for 10 seconds
+        print("Reading messages for 10 seconds...")
+        start = time.time()
+        msg_types = {}
+        
+        while time.time() - start < 10:
+            msg = conn.recv_match(blocking=True, timeout=1)
+            if msg:
+                msg_type = msg.get_type()
+                msg_types[msg_type] = msg_types.get(msg_type, 0) + 1
+        
+        # Report
+        print(f"\n✓ Received {sum(msg_types.values())} messages:")
+        for msg_type, count in sorted(msg_types.items()):
+            print(f"  {msg_type}: {count}")
+        
+        if 'GLOBAL_POSITION_INT' in msg_types:
+            print("\n✓ Connection is working properly!")
+            return True
+        else:
+            print("\n✗ No GPS data received - check connection")
+            return False
+            
+    except Exception as e:
+        print(f"\n✗ Connection test failed: {e}")
+        return False
+
+
+if __name__ == "__main__":
+    from config import DroneConfig
+    
+    # First, test basic connection
+    print("Step 1: Testing basic MAVLink connection")
+    if not check_mavlink_connection('127.0.0.1:14551'):
+        print("Fix connection issues before proceeding")
+        exit(1)
+    
+    print("\n" + "="*60)
+    print("Step 2: Testing DroneController")
+    print("="*60 + "\n")
+    
+    # Create and start controller
+    config = DroneConfig(
+        connection_string='127.0.0.1:14551',
+        telemetry_rate_hz=10
+    )
+    
+    controller = DroneController(config)
+    
+    if not controller.connect():
+        print("Failed to connect controller")
+        exit(1)
+    
+    controller.start()
+    
+    # Run diagnostics
+    diagnose_telemetry(controller, duration=20)
+    
+    # Cleanup
+    controller.stop()
+    print("Test complete!")
