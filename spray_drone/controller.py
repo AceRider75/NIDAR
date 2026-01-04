@@ -78,6 +78,15 @@ class DroneController:
         self.mission_active = threading.Event()
         self.mission_start_time: float = 0.0
 
+        self.last_command_ack: Optional[Any] = None
+        self.command_ack_lock = threading.Lock()
+        self.ack_received_event = threading.Event()
+        
+        # ADD THESE: System status tracking
+        self.system_status = mavutil.mavlink.MAV_STATE_UNINIT
+        self.system_status_lock = threading.Lock()
+
+
         # Command queue for ordered execution
         self.command_queue = queue.Queue(maxsize=100)
 
@@ -316,133 +325,113 @@ class DroneController:
     # TELEMETRY THREAD
     # ==========================================================================
 
-    # def _telemetry_loop(self):
-    #     self.logger.info("Telemetry loop started")
-
-    #     while self.running.is_set():   # ensure Event is used
-    #         try:
-    #             conn = self.connection
-    #             if not conn:
-    #                 time.sleep(0.1)
-    #                 continue
-
-    #             msg = conn.recv_match(blocking=True, timeout=1)
-    #             if not msg:
-    #                 continue
-
-    #             msg_type = msg.get_type()
-    #             data = msg.to_dict()
-
-    #             with self.telemetry_lock:
-    #                 self.telemetry.timestamp = time.time()
-
-    #                 if msg_type == "SYS_STATUS":
-    #                     self.telemetry.battery = data.get("battery_remaining", -1)
-
-    #                 elif msg_type == "GLOBAL_POSITION_INT":
-    #                     self.telemetry.lat = data["lat"] / 1e7
-    #                     self.telemetry.lon = data["lon"] / 1e7
-    #                     self.telemetry.alt = data["relative_alt"] / 1000.0
-    #                     self.telemetry.vx = data["vx"] / 100.0
-    #                     self.telemetry.vy = data["vy"] / 100.0
-    #                     self.telemetry.vz = data["vz"] / 100.0
-
-    #                 elif msg_type == "ATTITUDE":
-    #                     self.telemetry.roll = math.degrees(data["roll"])
-    #                     self.telemetry.pitch = math.degrees(data["pitch"])
-    #                     self.telemetry.yaw = math.degrees(data["yaw"])
-
-    #                 elif msg_type == "RAW_IMU":
-    #                     self.telemetry.xacc = data["xacc"] / 1000.0
-    #                     self.telemetry.yacc = data["yacc"] / 1000.0
-
-    #                 elif msg_type == "HEARTBEAT":
-    #                     self.telemetry.flight_mode = conn.flightmode
-    #                     self.telemetry.armed = bool(
-    #                         data["base_mode"] & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
-    #                     )
-
-    #             self._log_telemetry()
-
-    #         except Exception as e:
-    #             self.logger.exception("Telemetry loop error")
-    #             time.sleep(0.1)
-
-    #     self.logger.info("Telemetry loop stopped")
-
     def _telemetry_loop(self):
+        """
+        CRITICAL: This is the ONLY method that calls recv_match()
+        All other threads must use shared state instead
+        """
         self.logger.info("Telemetry loop started")
         msg_count = 0
         last_log = time.time()
+        last_debug = time.time()
 
         while self.running.is_set():
             try:
-                conn = self.connection
+                # Check connection
+                with self.connection_lock:
+                    conn = self.connection
+                
                 if not conn:
                     time.sleep(0.1)
                     continue
 
-                # ONLY place in entire codebase that calls recv_match
-                msg = conn.recv_match(blocking=True, timeout=1)
+                # ============================================
+                # ONLY PLACE IN ENTIRE CODEBASE THAT READS
+                # ============================================
+                msg = conn.recv_match(blocking=True, timeout=0.5)
+                
                 if not msg:
                     continue
 
                 msg_type = msg.get_type()
-                data = msg.to_dict()
                 msg_count += 1
-
                 now = time.time()
 
-                with self.telemetry_lock:
-                    self.telemetry.timestamp = now
+                # Process message based on type
+                if msg_type == "SYS_STATUS":
+                    with self.telemetry_lock:
+                        self.telemetry.timestamp = now
+                        self.telemetry.battery = msg.battery_remaining
 
-                    if msg_type == "SYS_STATUS":
-                        self.telemetry.battery = data.get("battery_remaining", -1)
+                elif msg_type == "GLOBAL_POSITION_INT":
+                    with self.telemetry_lock:
+                        self.telemetry.timestamp = now
+                        self.telemetry.lat = msg.lat / 1e7
+                        self.telemetry.lon = msg.lon / 1e7
+                        self.telemetry.alt = msg.relative_alt / 1000.0
+                        self.telemetry.vx = msg.vx / 100.0
+                        self.telemetry.vy = msg.vy / 100.0
+                        self.telemetry.vz = msg.vz / 100.0
 
-                    elif msg_type == "GLOBAL_POSITION_INT":
-                        self.telemetry.lat = data["lat"] / 1e7
-                        self.telemetry.lon = data["lon"] / 1e7
-                        self.telemetry.alt = data["relative_alt"] / 1000.0
-                        self.telemetry.vx = data["vx"] / 100.0
-                        self.telemetry.vy = data["vy"] / 100.0
-                        self.telemetry.vz = data["vz"] / 100.0
+                elif msg_type == "ATTITUDE":
+                    with self.telemetry_lock:
+                        self.telemetry.timestamp = now
+                        self.telemetry.roll = math.degrees(msg.roll)
+                        self.telemetry.pitch = math.degrees(msg.pitch)
+                        self.telemetry.yaw = math.degrees(msg.yaw)
 
-                    elif msg_type == "ATTITUDE":
-                        self.telemetry.roll = math.degrees(data["roll"])
-                        self.telemetry.pitch = math.degrees(data["pitch"])
-                        self.telemetry.yaw = math.degrees(data["yaw"])
+                elif msg_type == "RAW_IMU":
+                    with self.telemetry_lock:
+                        self.telemetry.timestamp = now
+                        self.telemetry.xacc = msg.xacc / 1000.0
+                        self.telemetry.yacc = msg.yacc / 1000.0
 
-                    elif msg_type == "RAW_IMU":
-                        self.telemetry.xacc = data["xacc"] / 1000.0
-                        self.telemetry.yacc = data["yacc"] / 1000.0
-
-                    elif msg_type == "HEARTBEAT":
-                        self.telemetry.flight_mode = conn.flightmode
+                elif msg_type == "HEARTBEAT":
+                    # Update heartbeat timestamp
+                    with self.heartbeat_lock:
+                        self.last_heartbeat = now
+                    
+                    # Update system status for armable checking
+                    with self.system_status_lock:
+                        self.system_status = msg.system_status
+                    
+                    # Update telemetry
+                    with self.telemetry_lock:
+                        self.telemetry.timestamp = now
+                        with self.connection_lock:
+                            self.telemetry.flight_mode = conn.flightmode
                         self.telemetry.armed = bool(
-                            data["base_mode"] & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
+                            msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
                         )
 
-                        # 🔥 CRITICAL FIX
-                        with self.heartbeat_lock:
-                            self.last_heartbeat = now
+                elif msg_type == "COMMAND_ACK":
+                    # Store ACK for waiting threads
+                    with self.command_ack_lock:
+                        self.last_command_ack = msg
+                        self.ack_received_event.set()  # Wake up waiting thread
+                    
+                    self.logger.debug(f"ACK received: cmd={msg.command}, result={msg.result}")
 
-                # Log CSV at fixed rate (10 Hz max)
+                # Log to CSV at fixed rate (10 Hz)
                 if now - last_log >= 0.1:
                     self._log_telemetry()
                     last_log = now
 
-                # Debug visibility
-                if msg_count % 100 == 0:
-                    self.logger.debug(
-                        f"Telemetry OK: {msg_count} msgs | "
-                        f"Lat={self.telemetry.lat:.6f} Lon={self.telemetry.lon:.6f}"
-                    )
+                # Debug visibility every 5 seconds
+                if now - last_debug >= 5.0:
+                    with self.telemetry_lock:
+                        self.logger.debug(
+                            f"Telemetry OK: {msg_count} msgs | "
+                            f"Lat={self.telemetry.lat:.6f} Lon={self.telemetry.lon:.6f} "
+                            f"Alt={self.telemetry.alt:.2f}m | Battery={self.telemetry.battery}%"
+                        )
+                    last_debug = now
 
-            except Exception:
-                self.logger.exception("Telemetry loop error")
+            except Exception as e:
+                self.logger.exception(f"Telemetry loop error: {e}")
                 time.sleep(0.1)
 
-        self.logger.info("Telemetry loop stopped")
+        self.logger.info(f"Telemetry loop stopped after {msg_count} messages")
 
     # ==========================================================================
     # HEARTBEAT MONITOR
@@ -905,23 +894,36 @@ class DroneController:
     # ==========================================================================
     # LOW-LEVEL COMMANDS
     # ==========================================================================
-    
+
     def _wait_for_armable(self, timeout: float = 30) -> bool:
-        """Wait for drone to become armable"""
+        """
+        Wait for drone to become armable
+        FIXED: Uses shared system_status instead of calling recv_match()
+        """
         start = time.time()
+        self.logger.info("Waiting for drone to become armable...")
+        
         while time.time() - start < timeout:
             try:
-                with self.connection_lock:
-                    msg = self.connection.recv_match(type='HEARTBEAT', blocking=True, timeout=1)
+                # Read from shared state (updated by telemetry loop)
+                with self.system_status_lock:
+                    status = self.system_status
                 
-                if msg and msg.system_status == mavutil.mavlink.MAV_STATE_STANDBY:
+                if status == mavutil.mavlink.MAV_STATE_STANDBY:
                     self.logger.info("Drone is armable")
                     return True
                 
+                # Log status every 2 seconds
+                if int(time.time() - start) % 2 == 0:
+                    self.logger.debug(f"Waiting for armable... current status: {status}")
+                
                 time.sleep(0.5)
+                
             except Exception as e:
                 self.logger.error(f"Error checking armable: {e}")
+                time.sleep(1)
         
+        self.logger.error(f"Armable timeout after {timeout}s")
         return False
     
     def _arm(self) -> bool:
@@ -1081,29 +1083,37 @@ class DroneController:
         else:
             self.logger.error("Failed to enter RTL mode")
             return False
-    
+
     def _wait_for_ack(self, command: int, timeout: float = None) -> Optional[Any]:
-        """Wait for command acknowledgement"""
+        """
+        Wait for command acknowledgement
+        FIXED: Uses Event and shared state instead of calling recv_match()
+        """
         timeout = timeout or self.config.command_ack_timeout
+        
+        # Clear previous ACK
+        with self.command_ack_lock:
+            self.last_command_ack = None
+            self.ack_received_event.clear()
+        
         start = time.time()
         
         while time.time() - start < timeout:
-            try:
-                with self.connection_lock:
-                    msg = self.connection.recv_match(
-                        type='COMMAND_ACK',
-                        blocking=True,
-                        timeout=0.5
-                    )
-                
-                if msg and msg.command == command:
-                    return msg
-            except Exception as e:
-                self.logger.error(f"Error waiting for ACK: {e}")
+            # Wait for ACK event (set by telemetry loop)
+            ack_received = self.ack_received_event.wait(timeout=0.1)
             
-            time.sleep(0.01)
+            if ack_received:
+                with self.command_ack_lock:
+                    ack = self.last_command_ack
+                    
+                    if ack and ack.command == command:
+                        self.logger.debug(f"ACK matched for command {command}")
+                        return ack
+                    
+                    # Wrong command, keep waiting
+                    self.ack_received_event.clear()
         
-        self.logger.warning(f"ACK timeout for command {command}")
+        self.logger.warning(f"ACK timeout for command {command} after {timeout}s")
         return None
 
     # ==========================================================================
