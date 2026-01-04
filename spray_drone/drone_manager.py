@@ -3,7 +3,9 @@ from radio_comm import RadioComm
 import time
 import os
 from config import DroneConfig
-# from utils import log
+# from utils import log_message
+from utils import setup_logger
+
 DRONE_NAME = "Sprayer"
 PASSWORD = "vihang@2025"
 
@@ -17,7 +19,7 @@ class DroneManager:
         KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
         
         config = DroneConfig(
-            connection_string='127.0.0.1:14551',  # Change to '/dev/ttyACM0' for real hardware
+            connection_string='/dev/ttyACM0',  # Change to '/dev/ttyACM0' for real hardware
             geofence_mode="polygon",  # or "radius"
             kml_file=KML_PATH,
             polygon_name="Field",
@@ -92,7 +94,7 @@ class DroneManager:
         elif cmd == "SET_MODE":
             mode = params.get('mode')
             # Mode changes are handled internally by state machine
-            log_message("RPi", f"Mode change requests handled by state machine\n")
+            # log_message("RPi", f"Mode change requests handled by state machine\n")
 
         elif cmd == "LOAD_WAYPOINTS":
             waypoints = params.get('waypoints', [])
@@ -103,7 +105,8 @@ class DroneManager:
             )
 
         else:
-            log_message("RPi", f"Unknown Command: {cmd}\n")
+            print(f"Unknown Command: {cmd}")
+            # log_message("RPi", f"Unknown Command: {cmd}\n")
     
     # -------------------------------------------------
     # TELEMETRY TX - UPDATED
@@ -113,7 +116,7 @@ class DroneManager:
         
         packet = {
             "name": DRONE_NAME,
-            "password": PASSWORD,
+            # "password": PASSWORD,
             "state": status['state'],
             "battery": status['telemetry']['battery'],
             "telemetry": status['telemetry'],
