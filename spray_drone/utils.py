@@ -5,6 +5,12 @@ from typing import List, Tuple
 from dataclasses import dataclass, field
 import time
 import json
+import os
+import csv
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_DIR = os.path.join(BASE_DIR, "data", "logs")
+LOG_FILE = os.path.join(LOG_DIR, "logs_live.csv")
 
 class DroneState(Enum):
     """Finite state machine states"""
@@ -99,3 +105,16 @@ def dict_to_json(data_dict: dict, indent=4) -> str:
     except (TypeError, ValueError) as e:
         print("Cannot convert dictionary to JSON:", e)
         return None
+
+def log_message(device: str, message: str) -> str:
+
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+
+    with open(LOG_FILE, "a+", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([time.time(), device, message])
+    
+    logged_message = f"{time.time()} | [{device}]{message}"
+    print(logged_message)
+
+    return logged_message
