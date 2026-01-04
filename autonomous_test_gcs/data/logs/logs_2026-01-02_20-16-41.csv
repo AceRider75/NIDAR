@@ -1,0 +1,25 @@
+time,device,message
+20:16:42,GCS,"Radio Connected
+"
+20:16:42,GCS,"Radio start failed — no serial connection
+"
+20:16:42,GCS,"Radio listener started
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"
+20:19:19,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': -0.024, 'yacc': -0.048}, 'log': ''}
+"

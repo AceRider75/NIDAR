@@ -39,7 +39,7 @@ class GraphPanel(ctk.CTkFrame):
         self.canvas = FigureCanvasTkAgg(self.fig, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True, padx=5, pady=5)
 
-    def update_graph(self, t: float, v1: float, v2: float, v3: float) -> None:
+    def update_graph(self, t: float, v1: float, v2: float, v3: float) -> None:   #Add new data point to graph
         self.t_data.append(t)
         self.d1.append(v1)
         self.d2.append(v2)

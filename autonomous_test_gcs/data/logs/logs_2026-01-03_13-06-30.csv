@@ -1,0 +1,31 @@
+time,device,message
+13:06:30,GCS,"Radio Connected
+"
+13:06:30,GCS,"Radio start failed — no serial connection
+"
+13:06:30,GCS,"Radio listener started
+"
+13:06:54,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, 'lon': 0.0, 'alt': 2463, 'yaw': -39.65666230226807, 'xacc': -0.004, 'yacc': -0.05, 'yellow_spots': []}}
+"
+13:06:54,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, 'lon': 0.0, 'alt': 2463, 'yaw': -39.65666230226807, 'xacc': -0.004, 'yacc': -0.05, 'yellow_spots': []}}
+"
+13:06:54,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, 'lon': 0.0, 'alt': 2463, 'yaw': -39.65666230226807, 'xacc': -0.004, 'yacc': -0.05, 'yellow_spots': []}}
+"
+13:06:54,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, 'lon': 0.0, 'alt': 2463, 'yaw': -39.65666230226807, 'xacc': -0.004, 'yacc': -0.05, 'yellow_spots': []}}
+"
+13:06:54,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, 'lon': 0.0, 'alt': 2463, 'yaw': -39.65666230226807, 'xacc': -0.004, 'yacc': -0.05, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"
+13:07:05,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'telemetry': {'lat': 0.0, '': 0.3173611646074988, 'yaw': -39.67008703908173, 'xacc': -0.005, 'yacc': -0.049, 'yellow_spots': []}}
+"

@@ -58,7 +58,7 @@ class DronePanel(ctk.CTkFrame):
         elif self.title == "Sprayer Drone":
             self.controller.land(DroneName.Sprayer)
 
-    def update_status(self, status: str, battery: int) -> None:
+    def update_status(self, status: str, battery: int) -> None:         #Update status and battery info
         self.status_label.configure(text=f"Status: {status}")
         self.battery_label.configure(text=f"Battery: {battery}%")
         self.battery_bar.set(battery / 100)
@@ -67,7 +67,7 @@ class DronePanel(ctk.CTkFrame):
         else:
             self.battery_bar.configure(progress_color = "green") 
         
-    def update_telemetry(self, text: str) -> None:
+    def update_telemetry(self, text: str) -> None:                      #Update telemetry box (NOT logs)
         self.telemetry_box.configure(state="normal")
         self.telemetry_box.delete("0.0", "end")
         self.telemetry_box.insert("end", text)

@@ -10,7 +10,7 @@ class TelemetryView(ctk.CTkFrame):
         self.textbox.pack(fill="both", expand=True, padx=5, pady=5)
         self.textbox.configure(state = "disabled")
 
-    def append_text(self, text: str) -> None:
+    def append_text(self, text: str) -> None:       #Append text to the textbox
         if(text != ""):
             self.textbox.configure(state="normal")
             self.textbox.insert("end", text + "\n")

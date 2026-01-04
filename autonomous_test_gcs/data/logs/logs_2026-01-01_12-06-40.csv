@@ -1,0 +1,7 @@
+time,device,message
+12:06:41,GCS,"Radio Connected
+"
+12:06:41,GCS,"Radio start failed — no serial connection
+"
+12:06:41,GCS,"Radio listener started
+"

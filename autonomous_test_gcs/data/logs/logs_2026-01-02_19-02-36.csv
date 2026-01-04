@@ -1,0 +1,39 @@
+time,device,message
+19:02:37,GCS,"Radio Connected
+"
+19:02:37,GCS,"Radio start failed — no serial connection
+"
+19:02:37,GCS,"Radio listener started
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:06,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 22.54146515, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
+19:04:11,GCSController,"Unknown packet: {'name': 'Sprayer', 'password': 'vihang@2025', 'status': 'Idle', 'battery': -1, 'telemetry': {'lat': 2293487866, 'xacc': -0.003, 'yacc': -0.039}, 'log': ''}
+"
