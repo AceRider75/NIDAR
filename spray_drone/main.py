@@ -1,19 +1,27 @@
-from config import DroneConfig
-from controller import DroneController
+# main.py - UPDATED VERSION
+
 import time
-import threading
+from controller import DroneController, DroneConfig
+import os
 
-def example_basic_mission():
-    """Example: Basic waypoint mission"""
+def main():
+    print("Starting Controller...")
 
-    # Create controller with custom config
+    # Configure
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
+    
     config = DroneConfig(
         connection_string='127.0.0.1:14551',
+        geofence_mode="polygon",
+        kml_file=KML_PATH,
+        polygon_name="Field",
         max_altitude=30.0,
-        geofence_radius=200.0,
-        waypoint_radius=3.0
+        waypoint_radius=3.0,
+        default_altitude=3.0,
+        optimize_waypoint_order=True
     )
-
+    
     controller = DroneController(config)
 
     try:
@@ -21,101 +29,69 @@ def example_basic_mission():
         if not controller.connect():
             print("Failed to connect")
             return
-
-        # Start background threads
+        
+        # Start threads
         controller.start()
         time.sleep(2)
-
+        
+        # Define mission waypoints
+        waypoints = [
+            (22.497764, 88.372255, 3.0),
+            (22.497701, 88.372401, 3.0),
+            (22.497600, 88.372300, 3.0),
+            (22.497943, 88.372148, 3.0),
+            (22.498022, 88.372386, 3.0),
+        ]
+        
+        # Load mission (validates against KML polygon)
+        if not controller.load_mission_from_points(waypoints, validate_geofence=True):
+            print("Failed to load mission")
+            return
+        
+        # Add return home
+        controller.add_return_home_waypoint()
+        
         # Arm and takeoff
-        if not controller.arm_and_takeoff(altitude=5.0):
+        print("Arming and taking off...")
+        if not controller.arm_and_takeoff(altitude=3.0):
             print("Failed to arm and takeoff")
             return
-
-        # Define waypoints (lat, lon, alt)
-        waypoints = [
-            (22.497764, 88.372255, 5.0),
-            (22.497701, 88.372401, 5.0),
-            (22.497600, 88.372300, 5.0),
-            (22.497943, 88.372148, 5.0),
-        ]
-
+        
         # Start mission
-        if not controller.start_mission(waypoints):
+        print("Starting mission...")
+        if not controller.start_mission():
             print("Failed to start mission")
             return
-
+        
         # Monitor mission
         while controller.mission_active.is_set():
             status = controller.get_status()
+            
             print(
-                f"State: {status['state']}, Progress: {status['mission']['progress']}")
+                f"State: {status['state']} | "
+                f"Progress: {status['mission']['progress']} | "
+                f"Pos: ({status['telemetry']['lat']:.6f}, {status['telemetry']['lon']:.6f}, {status['telemetry']['alt']:.2f}m) | "
+                f"Battery: {status['telemetry']['battery']}% | "
+                f"Healthy: {status['healthy']}"
+            )
+            
             time.sleep(2)
-
-        # Land
-        controller.land()
-
+        
+        print("Mission complete!")
+        
         # Wait for landing
         time.sleep(10)
 
     except KeyboardInterrupt:
-        print("\nEmergency stop!")
+        print("Interrupted by user")
+        print("Emergency landing...")
         controller.emergency_stop()
+        time.sleep(10)
 
     finally:
+        print("Stopping controller...")
         controller.stop()
-
-
-def example_with_monitoring():
-    """Example: Mission with health monitoring"""
-
-    controller = DroneController()
-
-    try:
-        controller.connect()
-        controller.start()
-
-        # Monitor thread
-        def health_monitor():
-            while controller.running.is_set():
-                status = controller.get_status()
-
-                # Check battery
-                battery = status['telemetry']['battery']
-                if battery < 20 and battery > 0:
-                    print("WARNING: Low battery!")
-                    controller.return_to_launch()
-
-                # Check geofence
-                if not status['healthy']:
-                    print("WARNING: Connection unhealthy!")
-
-                time.sleep(5)
-
-        monitor = threading.Thread(target=health_monitor, daemon=True)
-        monitor.start()
-
-        # Execute mission
-        controller.arm_and_takeoff(5.0)
-
-        waypoints = [
-            (22.497764, 88.372255, 5.0),
-            (22.497701, 88.372401, 5.0),
-        ]
-
-        controller.start_mission(waypoints)
-
-        # Wait for completion
-        while controller.mission_active.is_set():
-            time.sleep(1)
-
-        controller.land()
-
-    finally:
-        controller.stop()
+        print("Test finished.")
 
 if __name__ == "__main__":
-    print("Starting basic mission example...")
-    example_basic_mission()
-
-    # print("\nStarting mission with monitoring example...")
-    # example_with_monitoring()
+    main()

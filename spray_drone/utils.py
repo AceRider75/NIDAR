@@ -40,6 +40,7 @@ class Waypoint:
     alt: float
     radius: float = 5.0
     timestamp: float = field(default_factory=time.time)
+    validated: bool = False
 
 
 def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging.Logger:
