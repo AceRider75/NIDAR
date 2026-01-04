@@ -46,7 +46,7 @@ class DroneManager:
         cmd = packet.get("command")
         params = packet.get("params", {})
         
-        log_message("RPi", f"Received command: {cmd}\n")
+        # log_message("RPi", f"Received command: {cmd}\n")
 
         if cmd == "START":
             # NEW: Load mission from params, then start
