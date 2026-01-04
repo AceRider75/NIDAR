@@ -323,13 +323,16 @@ class DroneController:
 
         while self.running.is_set():
             try:
+                # Check connection exists (quick check with lock)
                 with self.connection_lock:
                     if not self.connection:
                         self.logger.warning("No connection in telemetry loop, waiting...")
                         time.sleep(0.1)
                         continue
+                    conn = self.connection  # Get reference
 
-                    msg = self.connection.recv_match(blocking=True, timeout=1)
+                # Receive message WITHOUT holding the lock (blocking call)
+                msg = conn.recv_match(blocking=True, timeout=1)
 
                 if not msg:
                     continue
@@ -369,9 +372,8 @@ class DroneController:
                         with self.heartbeat_lock:
                             self.last_heartbeat = time.time()
 
-                        with self.connection_lock:
-                            if self.connection:
-                                self.telemetry.flight_mode = self.connection.flightmode
+                        # Get flight mode
+                        self.telemetry.flight_mode = conn.flightmode
 
                         # Check if armed
                         self.telemetry.armed = (
