@@ -3,7 +3,7 @@ from radio_comm import RadioComm
 import time
 import os
 from config import DroneConfig
-# from utils import log_message
+from utils import log_message
 from utils import setup_logger
 
 DRONE_NAME = "Sprayer"
@@ -48,7 +48,7 @@ class DroneManager:
         cmd = packet.get("command")
         params = packet.get("params", {})
         
-        # log_message("RPi", f"Received command: {cmd}\n")
+        log_message("RPi", f"Received command: {cmd}\n")
 
         if cmd == "START":
             # NEW: Load mission from params, then start
@@ -94,7 +94,7 @@ class DroneManager:
         elif cmd == "SET_MODE":
             mode = params.get('mode')
             # Mode changes are handled internally by state machine
-            # log_message("RPi", f"Mode change requests handled by state machine\n")
+            log_message("RPi", f"Mode change requests handled by state machine\n")
 
         elif cmd == "LOAD_WAYPOINTS":
             waypoints = params.get('waypoints', [])
@@ -105,8 +105,7 @@ class DroneManager:
             )
 
         else:
-            print(f"Unknown Command: {cmd}")
-            # log_message("RPi", f"Unknown Command: {cmd}\n")
+            log_message("RPi", f"Unknown Command: {cmd}\n")
     
     # -------------------------------------------------
     # TELEMETRY TX - UPDATED
