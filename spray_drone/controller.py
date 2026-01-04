@@ -329,7 +329,7 @@ class DroneController:
                         time.sleep(0.1)
                         continue
 
-                    msg = self.connection.recv_match(blocking=True, timeout=0.5)
+                    msg = self.connection.recv_match(blocking=True, timeout=1)
 
                 if not msg:
                     continue
