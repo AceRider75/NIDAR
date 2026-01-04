@@ -12,7 +12,7 @@ def main():
     KML_PATH = os.path.join(BASE_DIR, "data", "JU.kml")
     
     config = DroneConfig(
-        connection_string='127.0.0.1:14551',
+        connection_string='/dev/ttyACM0',
         geofence_mode="polygon",
         kml_file=KML_PATH,
         polygon_name="Field",

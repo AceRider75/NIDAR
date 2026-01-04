@@ -135,7 +135,7 @@ class DroneController:
                 with self.connection_lock:
                     self.connection = mavutil.mavlink_connection(
                         self.config.connection_string,
-                        baud=57600
+                        baud=115200
                     )
 
                 # Step 2: Wait for heartbeat (blocks until received)
