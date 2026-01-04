@@ -9,7 +9,8 @@ KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
 class DroneConfig:
     """Central configuration for drone operations"""
     # Connection
-    connection_string: str = '127.0.0.1:14551'
+    # connection_string: str = '127.0.0.1:14551'
+    connection_string: str = '/dev/ttyACM0'  # Serial connection for Raspberry Pi
     connection_timeout: int = 30
     heartbeat_timeout: int = 5
     
