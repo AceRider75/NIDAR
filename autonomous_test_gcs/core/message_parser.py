@@ -5,7 +5,7 @@ def json_to_dict(json_string: str) -> dict:
         data = json.loads(json_string)
         return data
     except json.JSONDecodeError as e:
-        print("Invalid JSON:", e)
+        # Silence parse errors here; callers handle None results and may log context.
         return None
 
 def dict_to_json(data_dict: dict, indent=4) -> str:

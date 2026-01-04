@@ -26,6 +26,12 @@ class RadioComm:                #Handles low-level radio communication with the 
 
 
     def _connect(self) -> None:         #Establish serial connection to the radio
+        # If port is empty/falsy, skip attempting to open a serial device.
+        if not self.port:
+            print("[RadioComm] No port configured, skipping connect")
+            self.serial = None
+            return
+
         try:
             self.serial = serial.Serial(
                 self.port,
