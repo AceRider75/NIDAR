@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 import time
 import json
 import os
+import csv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_DIR = os.path.join(BASE_DIR, "data", "logs")
