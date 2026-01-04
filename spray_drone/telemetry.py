@@ -20,6 +20,9 @@ class Telemetry:
     battery: int = -1
     flight_mode: str = "UNKNOWN"
     armed: bool = False
+    home_lat: float = 0.0
+    home_lon: float = 0.0
+    home_alt: float = 0.0
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -34,5 +37,8 @@ class Telemetry:
             'yaw': self.yaw,
             'battery': self.battery,
             'mode': self.flight_mode,
-            'armed': self.armed
+            'armed': self.armed,
+            'home_lat': self.home_lat,
+            'home_lon': self.home_lon,
+            'home_alt': self.home_alt
         }
