@@ -316,25 +316,85 @@ class DroneController:
     # TELEMETRY THREAD
     # ==========================================================================
 
+    # def _telemetry_loop(self):
+    #     self.logger.info("Telemetry loop started")
+
+    #     while self.running.is_set():   # ensure Event is used
+    #         try:
+    #             conn = self.connection
+    #             if not conn:
+    #                 time.sleep(0.1)
+    #                 continue
+
+    #             msg = conn.recv_match(blocking=True, timeout=1)
+    #             if not msg:
+    #                 continue
+
+    #             msg_type = msg.get_type()
+    #             data = msg.to_dict()
+
+    #             with self.telemetry_lock:
+    #                 self.telemetry.timestamp = time.time()
+
+    #                 if msg_type == "SYS_STATUS":
+    #                     self.telemetry.battery = data.get("battery_remaining", -1)
+
+    #                 elif msg_type == "GLOBAL_POSITION_INT":
+    #                     self.telemetry.lat = data["lat"] / 1e7
+    #                     self.telemetry.lon = data["lon"] / 1e7
+    #                     self.telemetry.alt = data["relative_alt"] / 1000.0
+    #                     self.telemetry.vx = data["vx"] / 100.0
+    #                     self.telemetry.vy = data["vy"] / 100.0
+    #                     self.telemetry.vz = data["vz"] / 100.0
+
+    #                 elif msg_type == "ATTITUDE":
+    #                     self.telemetry.roll = math.degrees(data["roll"])
+    #                     self.telemetry.pitch = math.degrees(data["pitch"])
+    #                     self.telemetry.yaw = math.degrees(data["yaw"])
+
+    #                 elif msg_type == "RAW_IMU":
+    #                     self.telemetry.xacc = data["xacc"] / 1000.0
+    #                     self.telemetry.yacc = data["yacc"] / 1000.0
+
+    #                 elif msg_type == "HEARTBEAT":
+    #                     self.telemetry.flight_mode = conn.flightmode
+    #                     self.telemetry.armed = bool(
+    #                         data["base_mode"] & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
+    #                     )
+
+    #             self._log_telemetry()
+
+    #         except Exception as e:
+    #             self.logger.exception("Telemetry loop error")
+    #             time.sleep(0.1)
+
+    #     self.logger.info("Telemetry loop stopped")
+
     def _telemetry_loop(self):
         self.logger.info("Telemetry loop started")
+        msg_count = 0
+        last_log = time.time()
 
-        while self.running.is_set():   # ensure Event is used
+        while self.running.is_set():
             try:
                 conn = self.connection
                 if not conn:
                     time.sleep(0.1)
                     continue
 
+                # ONLY place in entire codebase that calls recv_match
                 msg = conn.recv_match(blocking=True, timeout=1)
                 if not msg:
                     continue
 
                 msg_type = msg.get_type()
                 data = msg.to_dict()
+                msg_count += 1
+
+                now = time.time()
 
                 with self.telemetry_lock:
-                    self.telemetry.timestamp = time.time()
+                    self.telemetry.timestamp = now
 
                     if msg_type == "SYS_STATUS":
                         self.telemetry.battery = data.get("battery_remaining", -1)
@@ -362,13 +422,28 @@ class DroneController:
                             data["base_mode"] & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
                         )
 
-                self._log_telemetry()
+                        # 🔥 CRITICAL FIX
+                        with self.heartbeat_lock:
+                            self.last_heartbeat = now
 
-            except Exception as e:
+                # Log CSV at fixed rate (10 Hz max)
+                if now - last_log >= 0.1:
+                    self._log_telemetry()
+                    last_log = now
+
+                # Debug visibility
+                if msg_count % 100 == 0:
+                    self.logger.debug(
+                        f"Telemetry OK: {msg_count} msgs | "
+                        f"Lat={self.telemetry.lat:.6f} Lon={self.telemetry.lon:.6f}"
+                    )
+
+            except Exception:
                 self.logger.exception("Telemetry loop error")
                 time.sleep(0.1)
 
         self.logger.info("Telemetry loop stopped")
+
     # ==========================================================================
     # HEARTBEAT MONITOR
     # ==========================================================================
