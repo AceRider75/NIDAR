@@ -266,9 +266,8 @@ class DroneController:
         """Initialize telemetry CSV log file with headers"""
         try:
             # Ensure directory exists
-            log_dir = os.path(self.telemetry_log_dir)
-            if log_dir and not os.path.exists(log_dir):
-                os.makedirs(log_dir)
+            if self.telemetry_log_dir and not os.path.exists(self.telemetry_log_dir):
+                os.makedirs(self.telemetry_log_dir)
             
             # Write CSV headers
             log_file_name = f"telemetry_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
