@@ -319,21 +319,27 @@ class DroneController:
     def _telemetry_loop(self):
         """Background thread for receiving telemetry"""
         self.logger.info("Telemetry loop started")
+        msg_count = 0
 
         while self.running.is_set():
             try:
                 with self.connection_lock:
                     if not self.connection:
+                        self.logger.warning("No connection in telemetry loop, waiting...")
                         time.sleep(0.1)
                         continue
 
-                    msg = self.connection.recv_match(
-                        blocking=True, timeout=0.5)
+                    msg = self.connection.recv_match(blocking=True, timeout=0.5)
 
                 if not msg:
                     continue
 
                 msg_type = msg.get_type()
+                msg_count += 1
+                
+                # Log every 100th message to avoid spam
+                if msg_count % 100 == 0:
+                    self.logger.info(f"Telemetry: received {msg_count} messages, last type: {msg_type}")
 
                 # Update telemetry based on message type
                 with self.telemetry_lock:
