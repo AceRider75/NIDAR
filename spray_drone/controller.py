@@ -309,7 +309,8 @@ class DroneController:
                         # Check if armed
                         self.telemetry.armed = (
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED) != 0
-
+                    self.logger.info(f"Telemetry updated: lat {self.telemetry.lat} lon {self.telemetry.lon} alt {self.telemetry.alt}m")
+                    
             except Exception as e:
                 self.logger.error(f"Telemetry error: {e}")
                 time.sleep(0.1)
@@ -526,6 +527,7 @@ class DroneController:
             with self.telemetry_lock:
                 start_lat = self.telemetry.lat
                 start_lon = self.telemetry.lon
+                self.logger.info(f"staring lat {start_lat} lon {start_lon}")
 
             # Validate and optimize using mission planner
             if self.config.optimize_waypoint_order:
