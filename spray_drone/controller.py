@@ -13,6 +13,7 @@ from config import DroneConfig
 from utils import setup_logger, haversine_dist, DroneState, FlightMode, Waypoint
 from telemetry import Telemetry
 from geofence import GeoFence
+from mission_plan import MissionPlanner
 
 class DroneController:
     """

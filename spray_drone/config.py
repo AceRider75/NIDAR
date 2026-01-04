@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 import logging
-
+import os
 
 @dataclass
 class DroneConfig:
@@ -18,7 +18,11 @@ class DroneConfig:
     # Geofence configuration
     geofence_mode: str = "polygon"  # "polygon" or "radius"
     geofence_radius: float = 500.0  # meters from home (used if mode="radius")
-    kml_file: str = "data/JU.kml"  # Path to KML file (used if mode="polygon")
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    kml_file: str = os.path.join(BASE_DIR, "data", "JUs.kml")
+
+    # kml_file: str = "data/JUs.kml"  # Path to KML file (used if mode="polygon")
     polygon_name: str = "Field"  # Name of polygon in KML
     
     # Mission parameters
