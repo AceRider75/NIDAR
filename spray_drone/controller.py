@@ -154,17 +154,17 @@ class DroneController:
                 
                 # Step 4: CRITICAL - Wait for data to actually start flowing
                 self.logger.info("Verifying data stream...")
-                # if not self._verify_data_stream(timeout=10):
-                #     self.logger.warning("Data stream verification failed, retrying...")
-                #     with self.connection_lock:
-                #         if self.connection:
-                #             try:
-                #                 self.connection.close()
-                #             except:
-                #                 pass
-                #         self.connection = None
-                #     time.sleep(2)
-                #     continue
+                if not self._verify_data_stream(timeout=10):
+                    self.logger.warning("Data stream verification failed, retrying...")
+                    with self.connection_lock:
+                        if self.connection:
+                            try:
+                                self.connection.close()
+                            except:
+                                pass
+                        self.connection = None
+                    time.sleep(2)
+                    continue
 
                 self.logger.info("Waiting for data streams to initialize...")
                 time.sleep(3)  # Give streams time to start
@@ -541,6 +541,27 @@ class DroneController:
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
                         )
 
+                elif msg_type == "HOME_POSITION":
+                    with self.telemetry_lock:
+                        new_lat = msg.latitude / 1e7
+                        new_lon = msg.longitude / 1e7
+                        new_alt = msg.altitude / 1000.0
+                        
+                        # Only log if changed significantly
+                        if (abs(new_lat - self.telemetry.home_lat) > 1e-7 or 
+                            abs(new_lon - self.telemetry.home_lon) > 1e-7 or 
+                            abs(new_alt - self.telemetry.home_alt) > 0.1):
+                            
+                            self.telemetry.home_lat = new_lat
+                            self.telemetry.home_lon = new_lon
+                            self.telemetry.home_alt = new_alt
+                            self.logger.info(f"Home position updated: ({self.telemetry.home_lat}, {self.telemetry.home_lon})")
+                        else:
+                            # Update without logging if change is negligible
+                            self.telemetry.home_lat = new_lat
+                            self.telemetry.home_lon = new_lon
+                            self.telemetry.home_alt = new_alt
+
                 elif msg_type == "COMMAND_ACK":
                     # Store for waiting threads (single reader pattern)
                     with self.command_ack_lock:
@@ -674,6 +695,7 @@ class DroneController:
                 # Check for emergency conditions
                 if self.emergency_rtl.is_set():
                     self.logger.critical("Emergency RTL triggered")
+                    self.mission_active.clear()
                     self._execute_rtl()
                     self.emergency_rtl.clear()
                     continue
@@ -907,6 +929,39 @@ class DroneController:
     # HIGH-LEVEL COMMANDS - FLIGHT OPERATIONS
     # ==========================================================================
     
+    def request_home_position(self, timeout: float = 10) -> bool:
+        """Request home position from flight controller"""
+        self.logger.info("Requesting home position...")
+        
+        # Send request for HOME_POSITION (242)
+        with self.connection_lock:
+            self.connection.mav.command_long_send(
+                self.connection.target_system,
+                self.connection.target_component,
+                mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,
+                0,
+                242, # param1: Message ID (HOME_POSITION)
+                0, 0, 0, 0, 0, 0
+            )
+            
+        # Wait for home position to be updated
+        start = time.time()
+        while time.time() - start < timeout:
+            with self.telemetry_lock:
+                if abs(self.telemetry.home_lat) > 0.001 and abs(self.telemetry.home_lon) > 0.001:
+                    self.logger.info(f"Home position received: ({self.telemetry.home_lat:.6f}, {self.telemetry.home_lon:.6f})")
+                    
+                    # Update geofence home if in radius mode
+                    if self.geofence.mode == "radius":
+                        self.geofence.home_lat = self.telemetry.home_lat
+                        self.geofence.home_lon = self.telemetry.home_lon
+                        
+                    return True
+            time.sleep(0.5)
+            
+        self.logger.warning("Home position request timed out")
+        return False
+
     def arm_and_takeoff(self, altitude: float = None) -> bool:
         """Arm and takeoff sequence"""
         altitude = altitude or self.config.default_altitude
@@ -961,6 +1016,7 @@ class DroneController:
         
         self.logger.info("Arm and takeoff complete")
         self._add_log("Takeoff complete")
+        self._change_state(DroneState.ARMED)
         return True
     
     def start_mission(self) -> bool:

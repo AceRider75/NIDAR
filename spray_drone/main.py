@@ -9,7 +9,7 @@ def main():
 
     # Configure
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
+    KML_PATH = os.path.join(BASE_DIR, "data", "JU.kml")
     
     config = DroneConfig(
         connection_string='127.0.0.1:14551',
@@ -34,6 +34,17 @@ def main():
         controller.start()
         time.sleep(2)
         
+        # Wait for Home Position
+        if not controller.request_home_position(timeout=60):
+            print("Failed to get Home Position")
+            return
+            
+        # Hard check for valid home position
+        telemetry = controller.get_telemetry()
+        if abs(telemetry['home_lat']) < 0.001 and abs(telemetry['home_lon']) < 0.001:
+            print("ERROR: Home position is still (0,0) after request")
+            return
+
         # Define mission waypoints
         waypoints = [
             (22.497764, 88.372255, 3.0),
