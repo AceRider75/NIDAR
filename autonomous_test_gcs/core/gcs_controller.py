@@ -92,8 +92,8 @@ class GCSController:
                 return
 
             # --- BASIC STATE ---
-            if "status" in packet:
-                state.status = packet["status"]
+            # Accept either 'status' or 'state' from incoming packets
+            state.status = packet.get("status", packet.get("state", state.status))
 
             if "battery" in packet:
                 state.battery = packet["battery"]
