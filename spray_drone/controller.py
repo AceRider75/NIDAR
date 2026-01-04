@@ -120,61 +120,175 @@ class DroneController:
     # ==========================================================================
 
     def connect(self) -> bool:
-        """Establish connection to flight controller with retry"""
+        """
+        Establish connection to flight controller with retry
+        FIXED: Ensures data is actually flowing before returning
+        """
         self.logger.info(f"Connecting to {self.config.connection_string}")
         self._add_log(f"Connecting to {self.config.connection_string}")
 
         for attempt in range(3):
             try:
+                # Step 1: Create connection
+                self.logger.info(f"Connection attempt {attempt + 1}/3...")
                 with self.connection_lock:
                     self.connection = mavutil.mavlink_connection(
                         self.config.connection_string,
                         baud=57600
                     )
 
-                # Wait for heartbeat
+                # Step 2: Wait for heartbeat (blocks until received)
+                self.logger.info("Waiting for heartbeat...")
+                self.connection.wait_heartbeat(timeout=self.config.connection_timeout)
+                
                 self.logger.info(
-                    f"Waiting for heartbeat (attempt {attempt + 1}/3)...")
-                self.connection.wait_heartbeat(
-                    timeout=self.config.connection_timeout)
-
-                self.logger.info(
-                    f"Heartbeat received from system {self.connection.target_system}, "
+                    f"Heartbeat from system {self.connection.target_system}, "
                     f"component {self.connection.target_component}"
                 )
-                self._add_log(
-                    f"Connected to system {self.connection.target_system}")
+                self._add_log(f"Connected to system {self.connection.target_system}")
 
-                # Request data streams
+                # Step 3: Request data streams
+                self.logger.info("Requesting data streams...")
                 self._request_data_streams()
-
+                
+                # Step 4: CRITICAL - Wait for data to actually start flowing
+                self.logger.info("Verifying data stream...")
+                if not self._verify_data_stream(timeout=10):
+                    self.logger.warning("Data stream verification failed, retrying...")
+                    with self.connection_lock:
+                        if self.connection:
+                            self.connection.close()
+                        self.connection = None
+                    time.sleep(2)
+                    continue
+                
+                # Step 5: Initialize tracking variables
                 self.connected.set()
                 self._change_state(DroneState.CONNECTED)
                 self.last_heartbeat = time.time()
                 self.health_ok.set()
+                
+                # Initialize system status
+                with self.system_status_lock:
+                    self.system_status = mavutil.mavlink.MAV_STATE_UNINIT
 
+                self.logger.info("✓ Connection established and verified")
                 return True
 
             except Exception as e:
-                self.logger.error(
-                    f"Connection attempt {attempt + 1} failed: {e}")
+                self.logger.error(f"Connection attempt {attempt + 1} failed: {e}")
+                with self.connection_lock:
+                    if self.connection:
+                        try:
+                            self.connection.close()
+                        except:
+                            pass
+                    self.connection = None
                 time.sleep(2)
 
         self.logger.error("Failed to connect after 3 attempts")
         self._add_log("ERROR: Failed to connect after 3 attempts")
         return False
 
+    # def _request_data_streams(self):
+    #     """Request telemetry data streams from flight controller"""
+    #     with self.connection_lock:
+    #         self.connection.mav.request_data_stream_send(
+    #             self.connection.target_system,
+    #             self.connection.target_component,
+    #             mavutil.mavlink.MAV_DATA_STREAM_ALL,
+    #             self.config.telemetry_rate_hz,
+    #             1
+    #         )
+    #     self.logger.debug("Data streams requested")
+
     def _request_data_streams(self):
         """Request telemetry data streams from flight controller"""
         with self.connection_lock:
+            if not self.connection:
+                return
+            
+            # Request all data streams at specified rate
             self.connection.mav.request_data_stream_send(
                 self.connection.target_system,
                 self.connection.target_component,
                 mavutil.mavlink.MAV_DATA_STREAM_ALL,
                 self.config.telemetry_rate_hz,
-                1
+                1  # Start streaming
             )
-        self.logger.debug("Data streams requested")
+            
+            # Also request individual important streams to be sure
+            # This is redundant but ensures we get critical data
+            for stream_id in [
+                mavutil.mavlink.MAV_DATA_STREAM_POSITION,
+                mavutil.mavlink.MAV_DATA_STREAM_EXTRA1,  # ATTITUDE
+                mavutil.mavlink.MAV_DATA_STREAM_RAW_SENSORS,
+            ]:
+                self.connection.mav.request_data_stream_send(
+                    self.connection.target_system,
+                    self.connection.target_component,
+                    stream_id,
+                    self.config.telemetry_rate_hz,
+                    1
+                )
+        
+        self.logger.debug(f"Data streams requested at {self.config.telemetry_rate_hz} Hz")
+
+
+    def _verify_data_stream(self, timeout: float = 10) -> bool:
+        """
+        CRITICAL: Verify that telemetry data is actually flowing
+        This prevents the telemetry loop from starting before data arrives
+        
+        Returns:
+            True if GPS and attitude data received within timeout
+        """
+        self.logger.info("Verifying data stream reception...")
+        
+        start = time.time()
+        received_messages = {
+            'HEARTBEAT': False,
+            'GLOBAL_POSITION_INT': False,
+            'ATTITUDE': False,
+            'SYS_STATUS': False
+        }
+        
+        with self.connection_lock:
+            conn = self.connection
+        
+        while time.time() - start < timeout:
+            try:
+                # Read messages synchronously during verification
+                msg = conn.recv_match(blocking=True, timeout=1.0)
+                
+                if msg:
+                    msg_type = msg.get_type()
+                    
+                    if msg_type in received_messages:
+                        received_messages[msg_type] = True
+                        self.logger.debug(f"✓ Received {msg_type}")
+                    
+                    # Check if we got all critical messages
+                    if all(received_messages.values()):
+                        self.logger.info("✓ All critical data streams verified")
+                        return True
+                    
+            except Exception as e:
+                self.logger.error(f"Error during data stream verification: {e}")
+                return False
+        
+        # Report what we got
+        missing = [k for k, v in received_messages.items() if not v]
+        if missing:
+            self.logger.warning(f"Missing message types: {missing}")
+        
+        # Consider it OK if we at least got GPS data
+        if received_messages['GLOBAL_POSITION_INT']:
+            self.logger.info("✓ GPS data verified (partial)")
+            return True
+        
+        self.logger.error("✗ Data stream verification failed")
+        return False
 
     # ==========================================================================
     # STATE MACHINE
@@ -327,37 +441,57 @@ class DroneController:
 
     def _telemetry_loop(self):
         """
-        CRITICAL: This is the ONLY method that calls recv_match()
-        All other threads must use shared state instead
+        Background thread for receiving telemetry
+        ONLY place that reads from MAVLink connection
         """
         self.logger.info("Telemetry loop started")
+        
+        # Statistics
         msg_count = 0
-        last_log = time.time()
-        last_debug = time.time()
+        msg_types_received = {}
+        last_log_time = time.time()
+        last_debug_time = time.time()
+        last_csv_time = time.time()
+        
+        # Track if we're receiving data
+        first_message_received = False
 
         while self.running.is_set():
             try:
-                # Check connection
+                # Get connection
                 with self.connection_lock:
                     conn = self.connection
                 
                 if not conn:
+                    if not first_message_received:
+                        self.logger.warning("No connection in telemetry loop")
                     time.sleep(0.1)
                     continue
 
-                # ============================================
-                # ONLY PLACE IN ENTIRE CODEBASE THAT READS
-                # ============================================
-                msg = conn.recv_match(blocking=True, timeout=0.5)
+                # Read message (ONLY place in entire codebase)
+                msg = conn.recv_match(blocking=True, timeout=1.0)
                 
                 if not msg:
+                    # Log if we're not getting messages
+                    now = time.time()
+                    if now - last_log_time > 5.0:
+                        self.logger.warning("No messages received in 5 seconds")
+                        last_log_time = now
                     continue
+                
+                # First message received
+                if not first_message_received:
+                    self.logger.info("✓ First telemetry message received")
+                    first_message_received = True
 
                 msg_type = msg.get_type()
                 msg_count += 1
                 now = time.time()
+                
+                # Track message types
+                msg_types_received[msg_type] = msg_types_received.get(msg_type, 0) + 1
 
-                # Process message based on type
+                # Process based on message type
                 if msg_type == "SYS_STATUS":
                     with self.telemetry_lock:
                         self.telemetry.timestamp = now
@@ -387,7 +521,7 @@ class DroneController:
                         self.telemetry.yacc = msg.yacc / 1000.0
 
                 elif msg_type == "HEARTBEAT":
-                    # Update heartbeat timestamp
+                    # Update heartbeat
                     with self.heartbeat_lock:
                         self.last_heartbeat = now
                     
@@ -398,40 +532,48 @@ class DroneController:
                     # Update telemetry
                     with self.telemetry_lock:
                         self.telemetry.timestamp = now
-                        with self.connection_lock:
-                            self.telemetry.flight_mode = conn.flightmode
+                        self.telemetry.flight_mode = conn.flightmode
                         self.telemetry.armed = bool(
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
                         )
 
                 elif msg_type == "COMMAND_ACK":
-                    # Store ACK for waiting threads
+                    # Store for waiting threads
                     with self.command_ack_lock:
                         self.last_command_ack = msg
-                        self.ack_received_event.set()  # Wake up waiting thread
+                        self.ack_received_event.set()
                     
-                    self.logger.debug(f"ACK received: cmd={msg.command}, result={msg.result}")
+                    self.logger.debug(f"ACK: cmd={msg.command}, result={msg.result}")
 
                 # Log to CSV at fixed rate (10 Hz)
-                if now - last_log >= 0.1:
+                if now - last_csv_time >= 0.1:
                     self._log_telemetry()
-                    last_log = now
+                    last_csv_time = now
 
-                # Debug visibility every 5 seconds
-                if now - last_debug >= 5.0:
+                # Debug output every 10 seconds
+                if now - last_debug_time >= 10.0:
                     with self.telemetry_lock:
-                        self.logger.debug(
-                            f"Telemetry OK: {msg_count} msgs | "
-                            f"Lat={self.telemetry.lat:.6f} Lon={self.telemetry.lon:.6f} "
-                            f"Alt={self.telemetry.alt:.2f}m | Battery={self.telemetry.battery}%"
+                        self.logger.info(
+                            f"Telemetry: {msg_count} msgs | "
+                            f"GPS: ({self.telemetry.lat:.6f}, {self.telemetry.lon:.6f}, {self.telemetry.alt:.2f}m) | "
+                            f"Battery: {self.telemetry.battery}% | "
+                            f"Mode: {self.telemetry.flight_mode}"
                         )
-                    last_debug = now
+                    
+                    # Show message type distribution
+                    top_types = sorted(msg_types_received.items(), key=lambda x: x[1], reverse=True)[:5]
+                    self.logger.debug(f"Top message types: {dict(top_types)}")
+                    
+                    last_debug_time = now
 
             except Exception as e:
                 self.logger.exception(f"Telemetry loop error: {e}")
                 time.sleep(0.1)
 
-        self.logger.info(f"Telemetry loop stopped after {msg_count} messages")
+        self.logger.info(f"Telemetry loop stopped. Total messages: {msg_count}")
+        self.logger.info(f"Message type distribution: {dict(sorted(msg_types_received.items()))}")
+
+
 
     # ==========================================================================
     # HEARTBEAT MONITOR
@@ -896,35 +1038,28 @@ class DroneController:
     # ==========================================================================
 
     def _wait_for_armable(self, timeout: float = 30) -> bool:
-        """
-        Wait for drone to become armable
-        FIXED: Uses shared system_status instead of calling recv_match()
-        """
+        """Wait for drone to become armable - uses shared state"""
         start = time.time()
         self.logger.info("Waiting for drone to become armable...")
         
         while time.time() - start < timeout:
-            try:
-                # Read from shared state (updated by telemetry loop)
-                with self.system_status_lock:
-                    status = self.system_status
-                
-                if status == mavutil.mavlink.MAV_STATE_STANDBY:
-                    self.logger.info("Drone is armable")
-                    return True
-                
-                # Log status every 2 seconds
-                if int(time.time() - start) % 2 == 0:
-                    self.logger.debug(f"Waiting for armable... current status: {status}")
-                
-                time.sleep(0.5)
-                
-            except Exception as e:
-                self.logger.error(f"Error checking armable: {e}")
-                time.sleep(1)
+            with self.system_status_lock:
+                status = self.system_status
+            
+            if status == mavutil.mavlink.MAV_STATE_STANDBY:
+                self.logger.info("✓ Drone is armable")
+                return True
+            
+            # Log progress
+            elapsed = int(time.time() - start)
+            if elapsed % 5 == 0 and elapsed > 0:
+                self.logger.info(f"Still waiting for armable... ({elapsed}s)")
+            
+            time.sleep(0.5)
         
         self.logger.error(f"Armable timeout after {timeout}s")
         return False
+
     
     def _arm(self) -> bool:
         """Arm the drone with retry"""
@@ -1083,37 +1218,29 @@ class DroneController:
         else:
             self.logger.error("Failed to enter RTL mode")
             return False
-
+        
     def _wait_for_ack(self, command: int, timeout: float = None) -> Optional[Any]:
-        """
-        Wait for command acknowledgement
-        FIXED: Uses Event and shared state instead of calling recv_match()
-        """
+        """Wait for command acknowledgement - uses Event"""
         timeout = timeout or self.config.command_ack_timeout
         
-        # Clear previous ACK
+        # Clear previous state
         with self.command_ack_lock:
             self.last_command_ack = None
             self.ack_received_event.clear()
         
         start = time.time()
-        
         while time.time() - start < timeout:
-            # Wait for ACK event (set by telemetry loop)
-            ack_received = self.ack_received_event.wait(timeout=0.1)
-            
-            if ack_received:
+            # Wait for event
+            if self.ack_received_event.wait(timeout=0.1):
                 with self.command_ack_lock:
                     ack = self.last_command_ack
-                    
                     if ack and ack.command == command:
-                        self.logger.debug(f"ACK matched for command {command}")
+                        self.logger.debug(f"✓ ACK received for command {command}")
                         return ack
-                    
                     # Wrong command, keep waiting
                     self.ack_received_event.clear()
         
-        self.logger.warning(f"ACK timeout for command {command} after {timeout}s")
+        self.logger.warning(f"✗ ACK timeout for command {command}")
         return None
 
     # ==========================================================================
@@ -1169,36 +1296,93 @@ class DroneController:
         return True
 
 
-def check_mavlink_connection(connection_string: str):
+# def check_mavlink_connection(connection_string: str):
+#     """
+#     Simple test to verify MAVLink connection is working
+#     Run this separately to isolate connection issues
+#     """
+#     print(f"Testing MAVLink connection to {connection_string}")
+    
+#     try:
+#         # Connect
+#         print("Connecting...")
+#         conn = mavutil.mavlink_connection(connection_string, baud=57600)
+        
+#         # Wait for heartbeat
+#         print("Waiting for heartbeat...")
+#         conn.wait_heartbeat(timeout=10)
+#         print(f"✓ Connected to system {conn.target_system}")
+        
+#         # Request data stream
+#         print("Requesting data stream...")
+#         conn.mav.request_data_stream_send(
+#             conn.target_system,
+#             conn.target_component,
+#             mavutil.mavlink.MAV_DATA_STREAM_ALL,
+#             10,  # 10 Hz
+#             1
+#         )
+        
+#         # Read messages for 10 seconds
+#         print("Reading messages for 10 seconds...")
+#         start = time.time()
+#         msg_types = {}
+        
+#         while time.time() - start < 10:
+#             msg = conn.recv_match(blocking=True, timeout=1)
+#             if msg:
+#                 msg_type = msg.get_type()
+#                 msg_types[msg_type] = msg_types.get(msg_type, 0) + 1
+        
+#         # Report
+#         print(f"\n✓ Received {sum(msg_types.values())} messages:")
+#         for msg_type, count in sorted(msg_types.items()):
+#             print(f"  {msg_type}: {count}")
+        
+#         if 'GLOBAL_POSITION_INT' in msg_types:
+#             print("\n✓ Connection is working properly!")
+#             return True
+#         else:
+#             print("\n✗ No GPS data received - check connection")
+#             return False
+            
+#     except Exception as e:
+#         print(f"\n✗ Connection test failed: {e}")
+#         return False
+
+def test_connection_simple(connection_string: str = '127.0.0.1:14551'):
     """
-    Simple test to verify MAVLink connection is working
-    Run this separately to isolate connection issues
+    Simple connection test - mimics your old working code
+    Run this first to verify basic connectivity
     """
-    print(f"Testing MAVLink connection to {connection_string}")
+    print(f"\n{'='*70}")
+    print("SIMPLE CONNECTION TEST (mimicking old code)")
+    print(f"{'='*70}\n")
     
     try:
         # Connect
-        print("Connecting...")
+        print(f"1. Connecting to {connection_string}...")
         conn = mavutil.mavlink_connection(connection_string, baud=57600)
         
         # Wait for heartbeat
-        print("Waiting for heartbeat...")
-        conn.wait_heartbeat(timeout=10)
-        print(f"✓ Connected to system {conn.target_system}")
+        print("2. Waiting for heartbeat...")
+        conn.wait_heartbeat()
+        print(f"   ✓ Heartbeat from system {conn.target_system}, component {conn.target_component}")
         
-        # Request data stream
-        print("Requesting data stream...")
+        # Request data
+        print("3. Requesting data streams at 20 Hz...")
         conn.mav.request_data_stream_send(
             conn.target_system,
             conn.target_component,
             mavutil.mavlink.MAV_DATA_STREAM_ALL,
-            10,  # 10 Hz
+            20,
             1
         )
         
-        # Read messages for 10 seconds
-        print("Reading messages for 10 seconds...")
+        # Read some messages
+        print("4. Reading messages for 10 seconds...")
         start = time.time()
+        msg_count = 0
         msg_types = {}
         
         while time.time() - start < 10:
@@ -1206,54 +1390,35 @@ def check_mavlink_connection(connection_string: str):
             if msg:
                 msg_type = msg.get_type()
                 msg_types[msg_type] = msg_types.get(msg_type, 0) + 1
+                msg_count += 1
+                
+                # Show GPS data when received
+                if msg_type == "GLOBAL_POSITION_INT":
+                    lat = msg.lat / 1e7
+                    lon = msg.lon / 1e7
+                    alt = msg.relative_alt / 1000.0
+                    print(f"   GPS: ({lat:.6f}, {lon:.6f}, {alt:.2f}m)")
         
-        # Report
-        print(f"\n✓ Received {sum(msg_types.values())} messages:")
-        for msg_type, count in sorted(msg_types.items()):
+        # Results
+        print(f"\n{'='*70}")
+        print(f"RESULTS: Received {msg_count} messages in 10 seconds")
+        print(f"{'='*70}")
+        for msg_type, count in sorted(msg_types.items(), key=lambda x: x[1], reverse=True):
             print(f"  {msg_type}: {count}")
         
         if 'GLOBAL_POSITION_INT' in msg_types:
-            print("\n✓ Connection is working properly!")
+            print(f"\n✓ CONNECTION TEST PASSED")
             return True
         else:
-            print("\n✗ No GPS data received - check connection")
+            print(f"\n✗ CONNECTION TEST FAILED - No GPS data")
             return False
             
     except Exception as e:
-        print(f"\n✗ Connection test failed: {e}")
+        print(f"\n✗ CONNECTION TEST FAILED")
+        print(f"Error: {e}")
         return False
 
 
 if __name__ == "__main__":
-    from config import DroneConfig
-    
-    # First, test basic connection
-    print("Step 1: Testing basic MAVLink connection")
-    if not check_mavlink_connection('127.0.0.1:14551'):
-        print("Fix connection issues before proceeding")
-        exit(1)
-    
-    print("\n" + "="*60)
-    print("Step 2: Testing DroneController")
-    print("="*60 + "\n")
-    
-    # Create and start controller
-    config = DroneConfig(
-        connection_string='127.0.0.1:14551',
-        telemetry_rate_hz=10
-    )
-    
-    controller = DroneController(config)
-    
-    if not controller.connect():
-        print("Failed to connect controller")
-        exit(1)
-    
-    controller.start()
-    
-    # Run diagnostics
-    diagnose_telemetry(controller, duration=20)
-    
-    # Cleanup
-    controller.stop()
-    print("Test complete!")
+    test_connection_simple('127.0.0.1:14551')
+
