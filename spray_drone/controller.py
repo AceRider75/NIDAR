@@ -99,7 +99,7 @@ class DroneController:
         self.log_buffer_lock = threading.Lock()
 
         # Telemetry CSV logger
-        self.telemetry_log_file = self.config.telemetry_log_file
+        self.telemetry_log_dir = self.config.telemetry_log_dir
         self.telemetry_log_lock = threading.Lock()
         self._init_telemetry_log()
 
@@ -266,11 +266,14 @@ class DroneController:
         """Initialize telemetry CSV log file with headers"""
         try:
             # Ensure directory exists
-            log_dir = os.path.dirname(self.telemetry_log_file)
+            log_dir = os.path(self.telemetry_log_dir)
             if log_dir and not os.path.exists(log_dir):
                 os.makedirs(log_dir)
             
             # Write CSV headers
+            log_file_name = f"telemetry_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            self.telemetry_log_file = os.path.join(self.telemetry_log_dir, log_file_name)
+
             with open(self.telemetry_log_file, 'w', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow([
@@ -370,6 +373,7 @@ class DroneController:
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED) != 0
 
                     # Log telemetry to CSV file
+                    print(self.telemetry)
                     self._log_telemetry()
 
             except Exception as e:

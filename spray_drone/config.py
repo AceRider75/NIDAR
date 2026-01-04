@@ -47,6 +47,6 @@ class DroneConfig:
     
     # Logging
     log_file: str = "drone_flight.log"
-    telemetry_log_file: str = "data/telemetry/telemetry_live.csv"
+    telemetry_log_dir: str = "telemetry/"
     log_level: int = logging.INFO
 
