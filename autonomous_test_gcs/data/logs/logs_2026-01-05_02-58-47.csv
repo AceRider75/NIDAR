@@ -1,0 +1,7 @@
+time,device,message
+02:58:47,GCS,Radio Connected
+02:58:47,GCS,Radio Connection Failed: [Errno 2] could not open port : [Errno 2] No such file or directory: ''
+02:58:47,GCS,Radio start failed — no serial connection
+02:58:47,GCS,Radio listener started
+02:59:38,GCS,Command sent: START (ID: 991bfc2b)
+02:59:40,GCS,Command failed: 991bfc2b

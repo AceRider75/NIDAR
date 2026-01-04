@@ -13,10 +13,10 @@ class GCSController:
         self.drone_states: List[DroneState] = [None] * len(DroneName)   
         self.sprayer_state = DroneState(name = "Sprayer",
                                         password = "vihang@2025",
-                                        radio = RadioComm(port=r"\\.\COM5"))    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0")
+                                        radio = RadioComm(port=r"/dev/ttyUSB0"))    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0")
         self.scanner_state = DroneState(name = "Scanner", 
                                         password = "vihang@2025",
-                                        radio = RadioComm(port = ""))
+                                        radio = RadioComm(port = ""))    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0002-if00-port0")
 
 
         self.lock = threading.Lock()

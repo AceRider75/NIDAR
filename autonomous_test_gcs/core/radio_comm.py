@@ -4,9 +4,12 @@ import serial
 from core.message_parser import json_to_dict, dict_to_json
 from utils.logger import log_message
 
+# Global mapping of serial port -> Lock to serialize writes from multiple RadioComm instances
+_port_locks = {}
+
 class RadioComm:                #Handles low-level radio communication with the drone
     def __init__(self, 
-                 port=r"\\.\COM5",    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0")
+                 port=r"/dev/ttyUSB0",    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0")
                  baud=57600):
         self.port = port
         self.baud = baud
@@ -16,6 +19,8 @@ class RadioComm:                #Handles low-level radio communication with the 
         self.listener_thread = None
         self._latest_packet = None          #Holds the latest received data packet
         self._packet_lock = threading.Lock()
+        # write lock ensures multiple RadioComm instances (same process) won't interleave writes
+        self._write_lock = _port_locks.setdefault(self.port, threading.Lock())
 
         self._connect()
 
@@ -68,7 +73,9 @@ class RadioComm:                #Handles low-level radio communication with the 
             log_message("GCS","Radio TX failed — JSON generation failed\n")
             return
         try:
-            self.serial.write((json_msg + "\n").encode("utf-8"))       #Send JSON string with newline delimiter 
+            # Acquire per-port write lock so writes from multiple instances are atomic
+            with self._write_lock:
+                self.serial.write((json_msg + "\n").encode("utf-8"))       #Send JSON string with newline delimiter 
         except Exception as e:
             print(f"[RadioComm] Send Error: {e}")
             log_message("GCS",f"Radio TX error: {e}\n")
@@ -95,14 +102,41 @@ class RadioComm:                #Handles low-level radio communication with the 
                 buffer += data
                 if "\n" in buffer:
                     line, buffer = buffer.split("\n", 1)
-                    packet = json_to_dict(line)
-                    if packet:
-                        self._update_state(packet)
+                    # Attempt to extract one or more JSON objects from the received line.
+                    # This is defensive: noisy/concatenated input can contain 0..N JSON objects.
+                    packets = self._extract_json_objects(line)
+                    for packet in packets:
+                        if packet:
+                            self._update_state(packet)
 
             except Exception as e:
                 print(f"[RadioComm] Listen Error: {e}")
                 
                 time.sleep(0.5)
+
+    def _extract_json_objects(self, line: str):
+        """Return a list of parsed JSON dicts found in the line.
+        This scans for balanced JSON objects delimited by braces and tries to parse each.
+        """
+        results = []
+        start = line.find('{')
+        while start != -1:
+            end = line.find('}', start)
+            if end == -1:
+                break
+            # try progressively larger spans until a parse succeeds or we run out
+            parsed = None
+            scan_end = end
+            while scan_end != -1:
+                candidate = line[start:scan_end+1]
+                parsed = json_to_dict(candidate)
+                if parsed is not None:
+                    results.append(parsed)
+                    break
+                scan_end = line.find('}', scan_end+1)
+            # move to next '{' after current start (avoid infinite loop)
+            start = line.find('{', start+1)
+        return results
 
     def _update_state(self, packet: dict) -> None:          #Update the latest received packet in a thread-safe manner
         with self._packet_lock:
