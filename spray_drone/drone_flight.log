@@ -1,0 +1,5 @@
+2026-01-04 11:34:55 - DroneController - [ERROR] - Failed to load KML file: name 'MissionPlanner' is not defined
+2026-01-04 11:34:55 - DroneController - [INFO] - DroneController initialized
+2026-01-04 11:34:55 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-04 11:34:55 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-04 11:34:55 - DroneController - [INFO] - Waiting for heartbeat (attempt 1/3)...
