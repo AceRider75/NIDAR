@@ -3,6 +3,8 @@ import time
 import serial
 from core.message_parser import json_to_dict, dict_to_json
 from utils.logger import log_message
+from collections import deque
+
 
 # Global mapping of serial port -> Lock to serialize writes from multiple RadioComm instances
 _port_locks = {}
@@ -14,6 +16,8 @@ class RadioComm:                #Handles low-level radio communication with the 
         self.port = port
         self.baud = baud
         self.serial = None
+        self.lock = threading.Lock()
+
 
         self._running = False
         self.listener_thread = None
@@ -21,6 +25,8 @@ class RadioComm:                #Handles low-level radio communication with the 
         self._packet_lock = threading.Lock()
         # write lock ensures multiple RadioComm instances (same process) won't interleave writes
         self._write_lock = _port_locks.setdefault(self.port, threading.Lock())
+        self._rx_queue = deque(maxlen=200)
+
 
         self._connect()
 
@@ -97,19 +103,25 @@ class RadioComm:                #Handles low-level radio communication with the 
 
 
     def _listen_loop(self) -> None:         #Continuously listen for incoming packets from the drone
-        buffer = "" 
+        
+
+        buffer = ""
 
         while self._running:
             try:
-                data = self.serial.read().decode("utf-8", errors="ignore")
-                if not data:
+                chunk = self.serial.readline().decode("utf-8", errors="ignore")
+                if not chunk:
                     continue
 
-                buffer += data
-                if "\n" in buffer:
+                buffer += chunk
+
+                # Only process when we actually have a full frame
+                while "\n" in buffer:
                     line, buffer = buffer.split("\n", 1)
-                    # Attempt to extract one or more JSON objects from the received line.
-                    # This is defensive: noisy/concatenated input can contain 0..N JSON objects.
+                    line = line.strip()
+                    if not line:
+                        continue
+
                     packets = self._extract_json_objects(line)
                     for packet in packets:
                         if packet:
@@ -117,40 +129,41 @@ class RadioComm:                #Handles low-level radio communication with the 
 
             except Exception as e:
                 print(f"[RadioComm] Listen Error: {e}")
-                
                 time.sleep(0.5)
 
     def _extract_json_objects(self, line: str):
-        """Return a list of parsed JSON dicts found in the line.
-        This scans for balanced JSON objects delimited by braces and tries to parse each.
+        """Extract only top-level JSON objects from a line using brace depth scanning.
+
+        This returns parsed JSON objects where brace depth returns to zero, so nested
+        objects are included inside their parent and not emitted separately.
         """
         results = []
-        start = line.find('{')
-        while start != -1:
-            end = line.find('}', start)
-            if end == -1:
-                break
-            # try progressively larger spans until a parse succeeds or we run out
-            parsed = None
-            scan_end = end
-            while scan_end != -1:
-                candidate = line[start:scan_end+1]
-                parsed = json_to_dict(candidate)
-                if parsed is not None:
-                    results.append(parsed)
-                    break
-                scan_end = line.find('}', scan_end+1)
-            # move to next '{' after current start (avoid infinite loop)
-            start = line.find('{', start+1)
+        depth = 0
+        start_idx = None
+        for i, ch in enumerate(line):
+            if ch == '{':
+                if depth == 0:
+                    start_idx = i
+                depth += 1
+            elif ch == '}':
+                if depth > 0:
+                    depth -= 1
+                    if depth == 0 and start_idx is not None:
+                        candidate = line[start_idx:i+1]
+                        parsed = json_to_dict(candidate)
+                        if parsed is not None:
+                            results.append(parsed)
+                        start_idx = None
         return results
 
-    def _update_state(self, packet: dict) -> None:          #Update the latest received packet in a thread-safe manner
-        with self._packet_lock:
+    def _update_state(self, packet: dict) -> None:
+        print("[GCS RX]", packet)
+        with self.lock:
             self._latest_packet = packet
 
-
-    def get_latest_packet(self) -> dict:        #Retrieve and clear the latest received packet in a thread-safe manner
-        with self._packet_lock:
+    def get_latest_packet(self):
+        with self.lock:
             pkt = self._latest_packet
-            self._latest_packet = None   
+            self._latest_packet = None
             return pkt
+
