@@ -60,7 +60,7 @@ def main():
             return
         
         # Add return home
-        controller.add_return_home_waypoint()
+        # controller.add_return_home_waypoint()
         
         # Arm and takeoff
         print("Arming and taking off...")
@@ -89,6 +89,12 @@ def main():
             time.sleep(2)
         
         print("Mission complete!")
+        
+        # return to home and land
+        print("Returning to home and landing...")
+        if not controller.return_to_home_and_land():
+            print("Failed to return home and land")
+            return
         
         # Wait for landing
         time.sleep(10)

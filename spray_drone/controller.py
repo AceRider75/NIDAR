@@ -762,9 +762,12 @@ class DroneController:
                     else:
                         # Mission complete
                         self.logger.info("All waypoints reached")
-                        self._add_log("All waypoints reached - landing")
+
+                        # send waypoint to home and land
+
+                        self._add_log("All waypoints reached - returning control to main")
                         self.mission_active.clear()
-                        self._execute_land()
+                        # self._execute_land()
 
                 time.sleep(0.1)
 
@@ -773,6 +776,46 @@ class DroneController:
                 time.sleep(0.5)
 
         self.logger.info("Mission controller stopped")
+
+    def return_to_home_and_land(self):
+        """Command drone to return to home and land"""
+        self.logger.info("Returning to home and landing")
+        self._add_log("Returning to home and landing")
+
+        # execute return to self.home_lat and self.home_lon
+        wp = Waypoint(
+                    lat=self.telemetry.home_lat,
+                    lon=self.telemetry.home_lon,
+                    alt=self.telemetry.alt,
+                    radius=self.config.waypoint_radius,
+                    validated=True
+                )
+
+        self._send_waypoint(wp, val_geofence=False)
+
+        # Wait for some time to reach home
+        # time.sleep(10)
+
+        # check tollerance to home before landing
+        while True:
+            with self.telemetry_lock:
+                current_lat = self.telemetry.lat
+                current_lon = self.telemetry.lon
+                current_alt = self.telemetry.alt
+
+            dist_h = haversine_dist(
+                current_lat, current_lon, self.telemetry.home_lat, self.telemetry.home_lon)
+            dist_v = abs(current_alt - self.telemetry.alt)
+
+            if dist_h <= self.config.home_tolerance and dist_v <= self.config.altitude_tolerance:
+                self.logger.info("Reached home position, initiating landing")
+                self._add_log("Reached home position, initiating landing")
+                break
+
+            time.sleep(1)
+
+        time.sleep(2)  # brief pause before landing
+        self._execute_land()
 
     # ==========================================================================
     # HIGH-LEVEL COMMANDS - MISSION PLANNING
@@ -806,7 +849,7 @@ class DroneController:
                 start_lon = self.telemetry.lon
                 self.telemetry.home_lat=start_lat
                 self.telemetry.home_lon=start_lon
-                self.logger.info(f"Starting position: lat={start_lat:.6f}, lon={start_lon:.6f}")
+                self.logger.info(f"Starting and home position: lat={start_lat:.6f}, lon={start_lon:.6f}")
 
             # Validate and optimize using mission planner
             if self.config.optimize_waypoint_order:
@@ -1196,17 +1239,18 @@ class DroneController:
         self.logger.error(f"Altitude timeout. Current: {current_alt:.2f}m, Target: {target_alt:.2f}m")
         return False
     
-    def _send_waypoint(self, waypoint: Waypoint):
+    def _send_waypoint(self, waypoint: Waypoint, val_geofence: bool = True):
         """Send waypoint to flight controller"""
         self.logger.info(f"Sending waypoint: ({waypoint.lat:.6f}, {waypoint.lon:.6f}, {waypoint.alt:.2f})")
         
         # Validate geofence one more time before sending
-        valid, msg = self.geofence.is_within_bounds(waypoint.lat, waypoint.lon, waypoint.alt)
-        if not valid:
-            self.logger.error(f"Waypoint violates geofence: {msg}")
-            self._add_log(f"ERROR: Waypoint violates geofence")
-            self.emergency_rtl.set()
-            return
+        if val_geofence:
+            valid, msg = self.geofence.is_within_bounds(waypoint.lat, waypoint.lon, waypoint.alt)
+            if not valid:
+                self.logger.error(f"Waypoint violates geofence: {msg}")
+                self._add_log(f"ERROR: Waypoint violates geofence")
+                self.emergency_rtl.set()
+                return
         
         with self.connection_lock:
             self.connection.mav.set_position_target_global_int_send(
