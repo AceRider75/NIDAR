@@ -797,7 +797,15 @@ class DroneController:
         # time.sleep(10)
 
         # check tollerance to home before landing
+        start_wait_time = time.time()
+        timeout_seconds = 240  # 4 minutes
+
         while True:
+            if time.time() - start_wait_time > timeout_seconds:
+                self.logger.warning("Timeout waiting for home position - initiating landing anyway")
+                self._add_log("Timeout waiting for home - Landing")
+                return False
+
             with self.telemetry_lock:
                 current_lat = self.telemetry.lat
                 current_lon = self.telemetry.lon

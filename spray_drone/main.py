@@ -96,6 +96,7 @@ def main():
         print("Returning to home and landing...")
         if not controller.return_to_home_and_land():
             print("Failed to return home and land")
+            controller.emergency_stop()
             return
         
         # Wait for landing
