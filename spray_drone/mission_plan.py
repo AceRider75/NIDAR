@@ -56,7 +56,64 @@ class MissionPlanner:
                 inside = not inside
             j = i
 
-        return inside
+        if inside:
+            return True
+
+        # Check tolerance if outside
+        tolerance = 10.0  # meters
+        dist = self._get_distance_to_polygon(lat, lon)
+        if dist <= tolerance:
+            print(f"Point outside polygon but within tolerance: {dist:.2f}m <= {tolerance}m")
+            return True
+
+        return False
+
+    def _get_distance_to_polygon(self, lat: float, lon: float) -> float:
+        """Calculate minimum distance from point to polygon boundary in meters"""
+        min_dist = float('inf')
+        poly = self.polygon
+        if not poly:
+            return float('inf')
+
+        # Local approximation constants
+        meters_per_lat = 111320.0
+        meters_per_lon = 40075000.0 * math.cos(math.radians(lat)) / 360.0
+
+        for i in range(len(poly)):
+            p1 = poly[i]
+            p2 = poly[(i + 1) % len(poly)]
+
+            # Convert to local meters relative to point (lat, lon)
+            x1 = (p1[1] - lon) * meters_per_lon
+            y1 = (p1[0] - lat) * meters_per_lat
+            x2 = (p2[1] - lon) * meters_per_lon
+            y2 = (p2[0] - lat) * meters_per_lat
+
+            # Point is at (0,0)
+            # Distance from (0,0) to segment (x1,y1)-(x2,y2)
+
+            # Squared length of segment
+            l2 = (x2 - x1)**2 + (y2 - y1)**2
+
+            if l2 == 0:
+                dist = math.sqrt(x1**2 + y1**2)
+            else:
+                # Project point onto line, clamped to segment
+                # t = dot(p - p1, p2 - p1) / l2
+                # p is (0,0), so p - p1 is (-x1, -y1)
+                # p2 - p1 is (x2-x1, y2-y1)
+                t = ((-x1) * (x2 - x1) + (-y1) * (y2 - y1)) / l2
+                t = max(0, min(1, t))
+
+                proj_x = x1 + t * (x2 - x1)
+                proj_y = y1 + t * (y2 - y1)
+
+                dist = math.sqrt(proj_x**2 + proj_y**2)
+
+            if dist < min_dist:
+                min_dist = dist
+
+        return min_dist
 
     # def _haversine_dist(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     #     """Calculate distance between two GPS coordinates in meters."""
