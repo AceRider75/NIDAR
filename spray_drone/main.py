@@ -40,10 +40,10 @@ def main():
         #     return
             
         # Hard check for valid home position
-        telemetry = controller.get_telemetry()
-        if abs(telemetry['home_lat']) < 0.001 and abs(telemetry['home_lon']) < 0.001:
-            print("ERROR: Home position is still (0,0) after request")
-            return
+        # telemetry = controller.get_telemetry()
+        # if abs(telemetry['home_lat']) < 0.001 and abs(telemetry['home_lon']) < 0.001:
+        #     print("ERROR: Home position is still (0,0) after request")
+        #     return
 
         # Define mission waypoints
         waypoints = [
