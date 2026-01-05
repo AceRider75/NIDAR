@@ -816,6 +816,9 @@ class DroneController:
 
         time.sleep(2)  # brief pause before landing
         self._execute_land()
+        self.logger.info("Landing command sent")
+        time.sleep(5)
+        return True
 
     # ==========================================================================
     # HIGH-LEVEL COMMANDS - MISSION PLANNING

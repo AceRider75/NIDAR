@@ -12,7 +12,7 @@ def main():
     KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
     
     config = DroneConfig(
-        connection_string='/dev/ttyACM0',
+        connection_string='127.0.0.1:14551',
         geofence_mode="polygon",
         kml_file=KML_PATH,
         polygon_name="Field",
@@ -51,6 +51,8 @@ def main():
             (22.497701, 88.372401, 3.0),
             (22.497600, 88.372300, 3.0),
             (22.497943, 88.372148, 3.0),
+            (22.597600, 88.372300, 3.0),#outside geofence
+            (22.497943, 88.472148, 3.0),#outside geofence
             (22.498022, 88.372386, 3.0),
         ]
         
@@ -108,7 +110,7 @@ def main():
     finally:
         print("Stopping controller...")
         controller.stop()
-        print("Test finished.")
+        print("All good. Bye bye!")
 
 if __name__ == "__main__":
     main()
