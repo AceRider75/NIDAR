@@ -36,7 +36,7 @@ class GCSUI(ctk.CTk):
 
         try:
             #Get drone state from the controller: (Controller handles all logic)
-            #scanner = self.controller.get_drone_state(DroneName.Scanner)      #dictionary
+            scanner = self.controller.get_drone_state(DroneName.Scanner)      #dictionary
             sprayer = self.controller.get_drone_state(DroneName.Sprayer)      #dictionary
             
             '''
@@ -61,8 +61,8 @@ class GCSUI(ctk.CTk):
             '''
 
             # Update drone panels
-            #self.dashboard.scanner_panel.update_status(scanner["status"], scanner["battery"])   #Update Battery and Status 
-            #self.dashboard.scanner_panel.update_telemetry(scanner["ui_telemetry"])              #Update Telemetry
+            self.dashboard.scanner_panel.update_status(scanner["status"], scanner["battery"])   #Update Battery and Status 
+            self.dashboard.scanner_panel.update_telemetry(scanner["ui_telemetry"])              #Update Telemetry
             #self.dashboard.scanner_logs.append_text(scanner["raw_latest"])                      #Update Logs --> To be changed
 
             self.dashboard.sprayer_panel.update_status(sprayer["status"], sprayer["battery"])   #Update Battery and Status 
@@ -83,7 +83,7 @@ class GCSUI(ctk.CTk):
 
     def _update_graphs(self) -> None:
         try:
-            #scanner = self.controller.get_drone_state(DroneName.Scanner)      #dictionary
+            scanner = self.controller.get_drone_state(DroneName.Scanner)      #dictionary
             sprayer = self.controller.get_drone_state(DroneName.Sprayer)      #dictionary
 
             if not hasattr(self, "t0"):
@@ -91,7 +91,7 @@ class GCSUI(ctk.CTk):
             t = time.time() - self.t0
 
             sprayer_tele = sprayer["telemetry"]             #dictionary
-            #scanner_tele = scanner["telemetry"]
+            scanner_tele = scanner["telemetry"]
 
             # --- RPY graph ---
             sprayer_roll  = sprayer_tele["roll"]           
@@ -99,10 +99,10 @@ class GCSUI(ctk.CTk):
             sprayer_yaw   = sprayer_tele["yaw"]
             self.dashboard.sprayer_rpy_graph.update_graph(t, sprayer_roll, sprayer_pitch, sprayer_yaw)
 
-            #scanner_roll  = scanner_tele["roll"]
-            #scanner_pitch = scanner_tele["pitch"]
-            #scanner_yaw   = scanner_tele["yaw"]
-            #self.dashboard.scanner_rpy_graph.update_graph(t, scanner_roll, scanner_pitch, scanner_yaw)           
+            scanner_roll  = scanner_tele["roll"]
+            scanner_pitch = scanner_tele["pitch"]
+            scanner_yaw   = scanner_tele["yaw"]
+            self.dashboard.scanner_rpy_graph.update_graph(t, scanner_roll, scanner_pitch, scanner_yaw)           
 
             # --- XYZ (position) graph ---
             meters_per_deg_lat = 111320
@@ -115,14 +115,14 @@ class GCSUI(ctk.CTk):
             if self.controller.drone_states[DroneName.Sprayer.value].started:
                 self.dashboard.sprayer_xyz_graph.update_graph(t, sprayer_x, sprayer_y, sprayer_z)
 
-            #scanner_meters_per_deg_lon = 111320 * math.cos(math.radians(self.controller.drone_states[DroneName.Scanner.value].lat0))
-            #scanner_lat = scanner_tele["lat"] - self.controller.drone_states[DroneName.Scanner.value].lat0
-            #scanner_lon = scanner_tele["lon"] - self.controller.drone_states[DroneName.Scanner.value].lon0
-            #scanner_x = scanner_lat * meters_per_deg_lat
-            #scanner_y = scanner_lon * scanner_meters_per_deg_lon
-            #scanner_z = scanner_tele["alt"]
-            #if self.controller.drone_states[DroneName.Scanner.value].started:
-            #    self.dashboard.scanner_xyz_graph.update_graph(t, scanner_x, scanner_y, scanner_z)
+            scanner_meters_per_deg_lon = 111320 * math.cos(math.radians(self.controller.drone_states[DroneName.Scanner.value].lat0))
+            scanner_lat = scanner_tele["lat"] - self.controller.drone_states[DroneName.Scanner.value].lat0
+            scanner_lon = scanner_tele["lon"] - self.controller.drone_states[DroneName.Scanner.value].lon0
+            scanner_x = scanner_lat * meters_per_deg_lat
+            scanner_y = scanner_lon * scanner_meters_per_deg_lon
+            scanner_z = scanner_tele["alt"]
+            if self.controller.drone_states[DroneName.Scanner.value].started:
+                self.dashboard.scanner_xyz_graph.update_graph(t, scanner_x, scanner_y, scanner_z)
         except Exception as e:
             print(f"[UI] UI Update Error: {e} \t {DroneName.Sprayer}")
         
