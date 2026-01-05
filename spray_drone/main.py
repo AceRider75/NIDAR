@@ -9,7 +9,7 @@ def main():
 
     # Configure
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    KML_PATH = os.path.join(BASE_DIR, "data", "JU.kml")
+    KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
     
     config = DroneConfig(
         connection_string='/dev/ttyACM0',
@@ -35,9 +35,9 @@ def main():
         time.sleep(2)
         
         # Wait for Home Position
-        if not controller.request_home_position(timeout=60):
-            print("Failed to get Home Position")
-            return
+        # if not controller.request_home_position(timeout=60):
+        #     print("Failed to get Home Position")
+        #     return
             
         # Hard check for valid home position
         telemetry = controller.get_telemetry()

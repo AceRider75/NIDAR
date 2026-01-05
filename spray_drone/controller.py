@@ -541,26 +541,26 @@ class DroneController:
                             msg.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
                         )
 
-                elif msg_type == "HOME_POSITION":
-                    with self.telemetry_lock:
-                        new_lat = msg.latitude / 1e7
-                        new_lon = msg.longitude / 1e7
-                        new_alt = msg.altitude / 1000.0
+                # elif msg_type == "HOME_POSITION":
+                #     with self.telemetry_lock:
+                #         new_lat = msg.latitude / 1e7
+                #         new_lon = msg.longitude / 1e7
+                #         new_alt = msg.altitude / 1000.0
                         
-                        # Only log if changed significantly
-                        if (abs(new_lat - self.telemetry.home_lat) > 1e-7 or 
-                            abs(new_lon - self.telemetry.home_lon) > 1e-7 or 
-                            abs(new_alt - self.telemetry.home_alt) > 0.1):
+                #         # Only log if changed significantly
+                #         if (abs(new_lat - self.telemetry.home_lat) > 1e-7 or 
+                #             abs(new_lon - self.telemetry.home_lon) > 1e-7 or 
+                #             abs(new_alt - self.telemetry.home_alt) > 0.1):
                             
-                            self.telemetry.home_lat = new_lat
-                            self.telemetry.home_lon = new_lon
-                            self.telemetry.home_alt = new_alt
-                            self.logger.info(f"Home position updated: ({self.telemetry.home_lat}, {self.telemetry.home_lon})")
-                        else:
-                            # Update without logging if change is negligible
-                            self.telemetry.home_lat = new_lat
-                            self.telemetry.home_lon = new_lon
-                            self.telemetry.home_alt = new_alt
+                #             self.telemetry.home_lat = new_lat
+                #             self.telemetry.home_lon = new_lon
+                #             self.telemetry.home_alt = new_alt
+                #             self.logger.info(f"Home position updated: ({self.telemetry.home_lat}, {self.telemetry.home_lon})")
+                #         else:
+                #             # Update without logging if change is negligible
+                #             self.telemetry.home_lat = new_lat
+                #             self.telemetry.home_lon = new_lon
+                #             self.telemetry.home_alt = new_alt
 
                 elif msg_type == "COMMAND_ACK":
                     # Store for waiting threads (single reader pattern)
@@ -804,6 +804,8 @@ class DroneController:
             with self.telemetry_lock:
                 start_lat = self.telemetry.lat
                 start_lon = self.telemetry.lon
+                self.telemetry.home_lat=start_lat
+                self.telemetry.home_lon=start_lon
                 self.logger.info(f"Starting position: lat={start_lat:.6f}, lon={start_lon:.6f}")
 
             # Validate and optimize using mission planner
@@ -904,13 +906,13 @@ class DroneController:
         else:
             # For polygon mode, use first waypoint or current position
             with self.mission_lock:
-                if self.waypoints:
-                    home_lat = self.waypoints[0].lat
-                    home_lon = self.waypoints[0].lon
-                else:
-                    with self.telemetry_lock:
-                        home_lat = self.telemetry.lat
-                        home_lon = self.telemetry.lon
+                # if self.waypoints:
+                #     home_lat = self.waypoints[0].lat
+                #     home_lon = self.waypoints[0].lon
+                # else:
+                with self.telemetry_lock:
+                    home_lat = self.telemetry.lat
+                    home_lon = self.telemetry.lon
         
         with self.mission_lock:
             home_wp = Waypoint(
@@ -929,38 +931,38 @@ class DroneController:
     # HIGH-LEVEL COMMANDS - FLIGHT OPERATIONS
     # ==========================================================================
     
-    def request_home_position(self, timeout: float = 10) -> bool:
-        """Request home position from flight controller"""
-        self.logger.info("Requesting home position...")
+    # def request_home_position(self, timeout: float = 10) -> bool:
+    #     """Request home position from flight controller"""
+    #     self.logger.info("Requesting home position...")
         
-        # Send request for HOME_POSITION (242)
-        with self.connection_lock:
-            self.connection.mav.command_long_send(
-                self.connection.target_system,
-                self.connection.target_component,
-                mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,
-                0,
-                242, # param1: Message ID (HOME_POSITION)
-                0, 0, 0, 0, 0, 0
-            )
+    #     # Send request for HOME_POSITION (242)
+    #     with self.connection_lock:
+    #         self.connection.mav.command_long_send(
+    #             self.connection.target_system,
+    #             self.connection.target_component,
+    #             mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,
+    #             0,
+    #             242, # param1: Message ID (HOME_POSITION)
+    #             0, 0, 0, 0, 0, 0
+    #         )
             
-        # Wait for home position to be updated
-        start = time.time()
-        while time.time() - start < timeout:
-            with self.telemetry_lock:
-                if abs(self.telemetry.home_lat) > 0.001 and abs(self.telemetry.home_lon) > 0.001:
-                    self.logger.info(f"Home position received: ({self.telemetry.home_lat:.6f}, {self.telemetry.home_lon:.6f})")
+    #     # Wait for home position to be updated
+    #     start = time.time()
+    #     while time.time() - start < timeout:
+    #         with self.telemetry_lock:
+    #             if abs(self.telemetry.home_lat) > 0.001 and abs(self.telemetry.home_lon) > 0.001:
+    #                 self.logger.info(f"Home position received: ({self.telemetry.home_lat:.6f}, {self.telemetry.home_lon:.6f})")
                     
-                    # Update geofence home if in radius mode
-                    if self.geofence.mode == "radius":
-                        self.geofence.home_lat = self.telemetry.home_lat
-                        self.geofence.home_lon = self.telemetry.home_lon
+    #                 # Update geofence home if in radius mode
+    #                 if self.geofence.mode == "radius":
+    #                     self.geofence.home_lat = self.telemetry.home_lat
+    #                     self.geofence.home_lon = self.telemetry.home_lon
                         
-                    return True
-            time.sleep(0.5)
+    #                 return True
+    #         time.sleep(0.5)
             
-        self.logger.warning("Home position request timed out")
-        return False
+    #     self.logger.warning("Home position request timed out")
+    #     return False
 
     def arm_and_takeoff(self, altitude: float = None) -> bool:
         """Arm and takeoff sequence"""
