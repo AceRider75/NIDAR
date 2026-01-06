@@ -865,8 +865,8 @@ def main():
 
                     payload["spots"].append({
                         "id": spot.id,
-                        "lat": spot_lat,
-                        "lon": spot_lon,
+                        "lat": f"{spot_lat:.7f}",
+                        "lon": f"{spot_lon:.7f}",
                         # "lat": spot.
                         "cx": spot.center[0],
                         "cy": spot.center[1],
