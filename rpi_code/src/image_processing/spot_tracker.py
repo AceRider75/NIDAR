@@ -833,26 +833,6 @@ def main():
             # Update tracker with mask for dilation
             tracked_spots = tracker.update(centers, contours, mask=mask)
 
-            if tracked_spots:
-                payload = {
-                    "type": "yellow_spots",
-                    "timestamp": time.time(),
-                    "image_size": [width, height],
-                    "spots": []
-                }
-
-                for spot in tracked_spots.values():
-                    payload["spots"].append({
-                        "id": spot.id,
-                        "cx": spot.center[0],
-                        "cy": spot.center[1],
-                        "area": spot.area,
-                        "rank": spot.area_rank
-                    })
-
-                socket_client.send_spots(payload)
-
-
             # Read latest telemetry
             telemetry = get_latest_telemetry(telemetry_file)
 
@@ -864,6 +844,13 @@ def main():
 
             # Log spot data continuously
             if telemetry and tracked_spots:
+                payload = {
+                    "type": "yellow_spots",
+                    "timestamp": time.time(),
+                    "image_size": [width, height],
+                    "spots": []
+                }
+
                 for spot in tracked_spots.values():
                     spot_lat, spot_lon = calculate_real_coords(
                         telemetry["lat"], telemetry["lon"], telemetry["alt"], telemetry["yaw"],
@@ -876,13 +863,26 @@ def main():
                         telemetry_file
                     )
 
+                    payload["spots"].append({
+                        "id": spot.id,
+                        "lat": spot_lat,
+                        "lon": spot_lon,
+                        # "lat": spot.
+                        "cx": spot.center[0],
+                        "cy": spot.center[1],
+                        "area": spot.area,
+                        "rank": spot.area_rank
+                    })
+
+                socket_client.send_spots(payload)
+
                     # Write telemetry for all tracked spots (queue of last 30)
-                    write_telemetry(
-                        spot_list=list(tracked_spots.values()),
-                        telemetry_file=telemetry_file,
-                        drone_coords=(telemetry["lat"], telemetry["lon"], telemetry["alt"]),
-                        max_queue_size=30
-                    )
+                    # write_telemetry(
+                    #     spot_list=list(tracked_spots.values()),
+                    #     telemetry_file=telemetry_file,
+                    #     drone_coords=(telemetry["lat"], telemetry["lon"], telemetry["alt"]),
+                    #     max_queue_size=30
+                    # )
 
             # Visualize overlay
             overlay = tracker.visualize_tracks(frame, show_history=True, show_rank=True)
