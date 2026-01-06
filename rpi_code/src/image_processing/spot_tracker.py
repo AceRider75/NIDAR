@@ -5,11 +5,16 @@ import logging
 import os
 import math
 import csv
+import socket
+import json
+
+
 try:
     # Prefer shared constants so paths stay consistent across processes
     from paths import TELEMETRY_FILE as DEFAULT_TELEMETRY_FILE
 except Exception:
     DEFAULT_TELEMETRY_FILE = None
+    
 from dataclasses import dataclass, field
 from collections import defaultdict
 from datetime import datetime
@@ -566,6 +571,36 @@ class SpotTracker:
         self.current_frame = 0
 
 
+class SpotSocketClient:
+    def __init__(self, host="127.0.0.1", port=5005):
+        self.host = host
+        self.port = port
+        self.sock = None
+        self.connected = False
+        self._connect()
+
+    def _connect(self):
+        try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.connect((self.host, self.port))
+            self.connected = True
+            print("[SpotSocket] Connected to drone controller")
+        except Exception as e:
+            print(f"[SpotSocket] Connection failed: {e}")
+            self.connected = False
+
+    def send_spots(self, payload: dict):
+        if not self.connected:
+            self._connect()
+            return
+
+        try:
+            msg = json.dumps(payload).encode()
+            self.sock.sendall(msg + b"\n")  # newline = message delimiter
+        except Exception as e:
+            print(f"[SpotSocket] Send failed: {e}")
+            self.connected = False
+
 
 
 def get_latest_telemetry(telemetry_file: str) -> Optional[Dict[str, float]]:
@@ -759,6 +794,12 @@ def main():
         min_cluster_samples=1
     )
 
+    socket_client = SpotSocketClient(
+        host="127.0.0.1",  # same machine
+        port=5005
+    )
+
+
     # Telemetry and spot log files (use shared constant when available)
     telemetry_file = DEFAULT_TELEMETRY_FILE or os.path.join(root_dir, "data", "telemetry", "telemetry_live.csv")
     spot_log_file = os.path.join(LOG_DIR, "spot_data.log")
@@ -791,6 +832,26 @@ def main():
 
             # Update tracker with mask for dilation
             tracked_spots = tracker.update(centers, contours, mask=mask)
+
+            if tracked_spots:
+                payload = {
+                    "type": "yellow_spots",
+                    "timestamp": time.time(),
+                    "image_size": [width, height],
+                    "spots": []
+                }
+
+                for spot in tracked_spots.values():
+                    payload["spots"].append({
+                        "id": spot.id,
+                        "cx": spot.center[0],
+                        "cy": spot.center[1],
+                        "area": spot.area,
+                        "rank": spot.area_rank
+                    })
+
+                socket_client.send_spots(payload)
+
 
             # Read latest telemetry
             telemetry = get_latest_telemetry(telemetry_file)

@@ -74,13 +74,13 @@ class DroneManager:
     # -------------------------------------------------
     def send_telemetry(self):
         state = self.Controller.get_drone_state()
-        self.log = self.log + state.get("log", "")
+        # self.log = self.log + state.get("log", "")
         self.status = state.get("status", self.status)
         self.battery = state.get("battery", self.battery)
         self.telemetry.update(state.get("telemetry", {}))
         packet = {
             "name": DRONE_NAME,
-            "password": PASSWORD,
+            # "password": PASSWORD,
             "status": self.status,
             # "battery": self.battery,
             "telemetry": self.telemetry,
