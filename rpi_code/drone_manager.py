@@ -279,6 +279,7 @@ class DroneManager:
             "status": self.status,
             # "battery": self.battery,
             "telemetry": self.telemetry,
+            "yellow_spots": self.detected_spots,
             # "log": self.log
         }
         self.radio.send_packet(packet)
