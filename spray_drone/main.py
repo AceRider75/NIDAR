@@ -70,37 +70,37 @@ def main():
             print("Failed to arm and takeoff")
             return
         
-        # Start mission
-        print("Starting mission...")
-        if not controller.start_mission():
-            print("Failed to start mission")
-            return
+        # # Start mission
+        # print("Starting mission...")
+        # if not controller.start_mission():
+        #     print("Failed to start mission")
+        #     return
         
-        # Monitor mission
-        while controller.mission_active.is_set():
-            status = controller.get_status()
+        # # Monitor mission
+        # while controller.mission_active.is_set():
+        #     status = controller.get_status()
             
-            print(
-                f"State: {status['state']} | "
-                f"Progress: {status['mission']['progress']} | "
-                f"Pos: ({status['telemetry']['lat']:.6f}, {status['telemetry']['lon']:.6f}, {status['telemetry']['alt']:.2f}m) | "
-                f"Battery: {status['telemetry']['battery']}% | "
-                f"Healthy: {status['healthy']}"
-            )
+        #     print(
+        #         f"State: {status['state']} | "
+        #         f"Progress: {status['mission']['progress']} | "
+        #         f"Pos: ({status['telemetry']['lat']:.6f}, {status['telemetry']['lon']:.6f}, {status['telemetry']['alt']:.2f}m) | "
+        #         f"Battery: {status['telemetry']['battery']}% | "
+        #         f"Healthy: {status['healthy']}"
+        #     )
             
-            time.sleep(2)
+        #     time.sleep(2)
         
-        print("Mission complete!")
+        # print("Mission complete!")
         
-        # return to home and land
-        print("Returning to home and landing...")
-        if not controller.return_to_home_and_land():
-            print("Failed to return home and land")
-            controller.emergency_stop()
-            return
+        # # return to home and land
+        # print("Returning to home and landing...")
+        # if not controller.return_to_home_and_land():
+        #     print("Failed to return home and land")
+        #     controller.emergency_stop()
+        #     return
         
-        # Wait for landing
-        time.sleep(10)
+        # # Wait for landing
+        time.sleep(3)
 
     except KeyboardInterrupt:
         print("Interrupted by user")

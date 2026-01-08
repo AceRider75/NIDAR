@@ -1058,20 +1058,21 @@ class DroneController:
         
         self._change_state(DroneState.ARMED)
         
-        # Takeoff
-        self._change_state(DroneState.TAKING_OFF)
-        if not self._takeoff(altitude):
-            self._change_state(DroneState.ERROR)
-            return False
+        # # Takeoff
+        # self._change_state(DroneState.TAKING_OFF)
+        # if not self._takeoff(altitude):
+        #     self._change_state(DroneState.ERROR)
+        #     return False
         
-        # Wait for altitude
-        if not self._wait_for_altitude(altitude, timeout=60):
-            self.logger.error("Takeoff altitude not reached")
-            self._add_log("WARNING: Takeoff altitude not fully reached")
-            # Don't fail completely, might be close enough
+        # # Wait for altitude
+        # if not self._wait_for_altitude(altitude, timeout=60):
+        #     self.logger.error("Takeoff altitude not reached")
+        #     self._add_log("WARNING: Takeoff altitude not fully reached")
+        #     # Don't fail completely, might be close enough
         
         self.logger.info("Arm and takeoff complete")
-        self._add_log("Takeoff complete")
+        print("skipping takeoff")
+        # self._add_log("Takeoff complete")
         self._change_state(DroneState.ARMED)
         return True
     
