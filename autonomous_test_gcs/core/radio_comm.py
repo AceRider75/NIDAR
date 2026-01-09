@@ -104,12 +104,12 @@ class RadioComm:                #Handles low-level radio communication with the 
 
     def _listen_loop(self) -> None:         #Continuously listen for incoming packets from the drone
         
-
         buffer = ""
 
         while self._running:
             try:
                 chunk = self.serial.readline().decode("utf-8", errors="ignore")
+                # print(chunk)
                 if not chunk:
                     continue
 
