@@ -336,7 +336,7 @@ class Controller:
         # else:
         #     self.log += log_message("PixHawk", f"No Ack for Takeoff Command\n")
 
-        ack = self.take_off_with_retry(height=3, retries=3)
+        ack = self.take_off_with_retry(height=4, retries=3)
 
         if ack and ack.result == mavutil.mavlink.MAV_RESULT_ACCEPTED:
             self.log += log_message("PixHawk", "Takeoff Command Accepted. Climbing...\n")
@@ -357,7 +357,7 @@ class Controller:
             error_code = ack.result if ack else "TIMEOUT"
             self.log += log_message("PixHawk", f"Takeoff Failed or Rejected. Error Code: {error_code}\n")
             return # Stop execution if takeoff fails
-
+        time.sleep(2)
         self.the_connection.mav.request_data_stream_send(
             self.the_connection.target_system,
             self.the_connection.target_component,
