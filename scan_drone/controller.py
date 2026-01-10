@@ -1061,6 +1061,8 @@ class DroneController:
             return False
         
         self._change_state(DroneState.ARMED)
+
+        time.sleep(2)  # brief pause before takeoff
         
         # Takeoff
         self._change_state(DroneState.TAKING_OFF)

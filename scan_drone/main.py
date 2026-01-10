@@ -12,7 +12,7 @@ def main():
     KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
     
     config = DroneConfig(
-        connection_string='127.0.0.1:14551',
+        connection_string='/dev/ttyACM0',
         geofence_mode="polygon",
         kml_file=KML_PATH,
         polygon_name="Field",
@@ -47,13 +47,13 @@ def main():
 
         # Define mission waypoints
         waypoints = [
-            (22.497764, 88.372255, 3.0),
-            (22.497701, 88.372401, 3.0),
-            (22.497600, 88.372300, 3.0),
-            (22.497943, 88.372148, 3.0),
-            (22.597600, 88.372300, 3.0),#outside geofence
-            (22.497943, 88.472148, 3.0),#outside geofence
-            (22.498022, 88.372386, 3.0),
+            # (22.497764, 88.372255, 3.0),
+            # (22.497701, 88.372401, 3.0),
+            # (22.497600, 88.372300, 3.0),
+            # (22.497943, 88.372148, 3.0),
+            # # (22.597600, 88.372300, 3.0),#outside geofence
+            # # (22.497943, 88.472148, 3.0),#outside geofence
+            # (22.498022, 88.372386, 3.0),
         ]
         
         # Load mission (validates against KML polygon)
@@ -66,7 +66,7 @@ def main():
         
         # Arm and takeoff
         print("Arming and taking off...")
-        if not controller.arm_and_takeoff(altitude=3.0):
+        if not controller.arm_and_takeoff(altitude=.0):
             print("Failed to arm and takeoff")
             return
         
