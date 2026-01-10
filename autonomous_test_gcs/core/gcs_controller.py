@@ -22,7 +22,7 @@ class GCSController:
         self.scanner_state = DroneState(
             name="Scanner",
             password="vihang@2025",
-            radio=RadioComm(port="")
+            radio=RadioComm(port="/dev/ttyUSB0")
         )
 
         self.lock = threading.Lock()

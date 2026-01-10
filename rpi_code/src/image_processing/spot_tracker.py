@@ -7,6 +7,7 @@ import math
 import csv
 import socket
 import json
+from pathlib import Path
 
 
 try:
@@ -907,6 +908,55 @@ def log_spot_data(spot_id: int, drone_coords: Tuple[float, float, float],
         print(f"Failed to log spot data: {e}")
 
 
+# ========= IMAGE SAVE CONFIGURATION =========
+MISSIONS_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/rpi_code/missions"
+os.makedirs(MISSIONS_DIR, exist_ok=True)
+
+def get_current_mission_dir() -> str:
+    """
+    Get or create the current mission directory based on timestamp.
+    Returns path to mission folder.
+    """
+    mission_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    mission_dir = os.path.join(MISSIONS_DIR, f"mission_{mission_timestamp}")
+    os.makedirs(mission_dir, exist_ok=True)
+    return mission_dir
+
+def save_detection_image(frame: np.ndarray, mission_dir: str, 
+                         spot_id: int, frame_count: int,
+                         telemetry: Optional[Dict] = None) -> str:
+    """
+    Save image when yellow spot is detected.
+    
+    Args:
+        frame: The image frame to save
+        mission_dir: Directory for current mission
+        spot_id: ID of detected spot
+        frame_count: Current frame number
+        telemetry: Optional telemetry data to include in filename
+        
+    Returns:
+        Path to saved image
+    """
+    timestamp = datetime.now().strftime("%H%M%S_%f")[:-3]  # milliseconds
+    
+    # Build descriptive filename
+    if telemetry:
+        filename = f"spot_{spot_id}_frame_{frame_count}_{timestamp}_alt{telemetry['alt']:.1f}m.jpg"
+    else:
+        filename = f"spot_{spot_id}_frame_{frame_count}_{timestamp}.jpg"
+    
+    filepath = os.path.join(mission_dir, filename)
+    
+    try:
+        cv2.imwrite(filepath, frame)
+        logger.info(f"Saved detection image: {filepath}")
+        return filepath
+    except Exception as e:
+        logger.error(f"Failed to save detection image: {e}")
+        return ""
+
+
 def main():
     """Run SpotTracker service safely with proper logging and video recording."""
     from color_detector import ColorDetector
@@ -919,6 +969,10 @@ def main():
     root_dir = os.path.dirname(os.path.dirname(current_dir))
     LOG_DIR = os.path.join(root_dir, "logs")
     os.makedirs(LOG_DIR, exist_ok=True)
+    
+    # Initialize mission directory
+    mission_dir = get_current_mission_dir()
+    logger.info(f"Mission directory: {mission_dir}")
 
     # Initialize camera
     picam2 = Picamera2()
@@ -966,8 +1020,12 @@ def main():
 
     spot_log_file = os.path.join(LOG_DIR, "spot_data.log")
     print(f"Spot tracking service started. Logs: {LOG_DIR}")
+    print(f"Mission images: {mission_dir}")
     print(f"Drone manager socket: 127.0.0.1:5005")
     print(f"Spot log file: {spot_log_file}")
+    
+    frame_count = 0
+    detected_spots_this_mission = set()  # Track which spots we've saved images for
 
     try:
         while True:
@@ -976,6 +1034,7 @@ def main():
                 time.sleep(0.01)
                 continue
 
+            frame_count += 1
             height, width = frame.shape[:2]
 
             # Initialize video writers only once
@@ -997,16 +1056,26 @@ def main():
             # Read latest telemetry from drone_manager via socket
             telemetry = drone_socket.get_latest_telemetry()
 
-            # ========= OLD FILE-BASED TELEMETRY READ (COMMENTED OUT) =========
-            # telemetry = get_latest_telemetry(telemetry_file)
-            # ========= END OLD FILE-BASED TELEMETRY READ =========
-
-            if telemetry is None:
-                # Surface a gentle warning once per run to highlight telemetry pipeline issues
-                if not hasattr(main, "warned_no_telemetry"):
-                    print(
-                        "Warning: No telemetry data available yet; check that drone_manager is running and sending telemetry via socket")
-                    main.warned_no_telemetry = True
+            # Save images for newly detected spots
+            if tracked_spots:
+                for spot in tracked_spots.values():
+                    # Save image for each new spot (first detection only)
+                    if spot.id not in detected_spots_this_mission:
+                        save_detection_image(
+                            frame.copy(),  # Save a copy to avoid modifications
+                            mission_dir,
+                            spot.id,
+                            frame_count,
+                            telemetry
+                        )
+                        detected_spots_this_mission.add(spot.id)
+                        
+                        # Also save annotated version
+                        overlay = tracker.visualize_tracks(
+                            frame.copy(), show_history=True, show_rank=True)
+                        annotated_filename = f"spot_{spot.id}_frame_{frame_count}_annotated.jpg"
+                        annotated_path = os.path.join(mission_dir, annotated_filename)
+                        cv2.imwrite(annotated_path, overlay)
 
             # Log spot data continuously
             if telemetry and tracked_spots:
@@ -1079,6 +1148,8 @@ def main():
 
         print(f"Videos saved: {raw_path}, {annotated_path}")
         print(f"Spot log saved: {spot_log_file}")
+        print(f"Mission images saved to: {mission_dir}")
+        print(f"Total spots detected: {len(detected_spots_this_mission)}")
 
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ class Controller:
         self.running = True
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        KML_PATH = os.path.join(BASE_DIR, "data", "JU.kml")
+        KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
 
         self.Planner = MissionPlanner(KML_PATH)
 

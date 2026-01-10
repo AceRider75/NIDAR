@@ -5,8 +5,10 @@ import json
 from radio_comm import RadioComm
 from controller import Controller
 from utils import log_message
+import os
+from datetime import datetime
 
-DRONE_NAME = "Sprayer"
+DRONE_NAME = "Scanner"
 PASSWORD = "vihang@2025"
 
 
@@ -206,6 +208,14 @@ class DroneManager:
         self.battery = -1
         self.log = ""
 
+        # Mission logging
+        # logs directory (project root /logs)
+        self.logs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "logs"))
+        os.makedirs(self.logs_dir, exist_ok=True)
+        self.mission_file = None
+        self.mission_path = None
+        self.mission_id = None
+
         # Example telemetry state
         self.telemetry = {
             "lat": 0.0,
@@ -225,7 +235,56 @@ class DroneManager:
         self.detected_spots = []
 
         self._last_tx = time.time()
+    # -------------------------------------------------
+    # Mission logging helpers
+    # -------------------------------------------------
+    def _start_mission_log(self):
+        # Close existing mission if any
+        if self.mission_file:
+            self._end_mission_log()
 
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        self.mission_id = f"mission_{ts}"
+        self.mission_path = os.path.join(self.logs_dir, f"{self.mission_id}.log")
+        try:
+            self.mission_file = open(self.mission_path, "a", encoding="utf-8")
+            header = f"=== Mission {self.mission_id} START {ts} UTC ===\n"
+            self.mission_file.write(header)
+            self.mission_file.flush()
+        except Exception as e:
+            print(f"[DroneManager] Failed to open mission log: {e}")
+            self.mission_file = None
+
+    def _write_mission_log(self, msg: str):
+        # timestamped append to mission file if open
+        if not self.mission_file:
+            return
+        ts = datetime.utcnow().isoformat() + "Z"
+        try:
+            self.mission_file.write(f"[{ts}] {msg}\n")
+            self.mission_file.flush()
+        except Exception as e:
+            print(f"[DroneManager] Failed to write mission log: {e}")
+
+    def _end_mission_log(self):
+        if not self.mission_file:
+            return
+        # Append detected spots JSON
+        try:
+            spots_section = "\n=== DETECTED_YELLOW_SPOTS ===\n"
+            self.mission_file.write(spots_section)
+            self.mission_file.write(json.dumps(self.detected_spots, indent=2))
+            self.mission_file.write("\n=== MISSION END ===\n")
+            self.mission_file.flush()
+        except Exception as e:
+            print(f"[DroneManager] Failed to write detected spots to mission log: {e}")
+        try:
+            self.mission_file.close()
+        except:
+            pass
+        self.mission_file = None
+        self.mission_path = None
+        self.mission_id = None
     # -------------------------------------------------
     # COMMAND HANDLING
     # -------------------------------------------------
@@ -238,29 +297,41 @@ class DroneManager:
         if cmd == "START":
             self.status = "Flying"
             self.log = log_message("RPi", "Starting Drone\n")
+            # Start a new mission log
+            self._start_mission_log()
+            self._write_mission_log("Command: START - Starting Drone")
             self.Controller.start_drone()
 
         elif cmd == "LAND":
             self.status = "Landing"
             self.log = log_message("RPi", "Landing Drone\n")
+            self._write_mission_log("Command: LAND - Landing Drone")
+            # End mission and save detected spots
+            self._end_mission_log()
             self.Controller.land_drone()
 
         elif cmd == "RTL":
             self.status = "Returning"
             self.log = log_message("RPi", "Activating RTL\n")
+            self._write_mission_log("Command: RTL - Returning to Launch")
+            # End mission and save detected spots
+            self._end_mission_log()
             self.Controller.return_to_launch()
 
         elif cmd == "SET_MODE":
             self.log = log_message(
                 "RPi", f"Setting Mode to {params.get('mode')}\n")
+            self._write_mission_log(f"Command: SET_MODE - {params.get('mode')}")
             self.Controller.set_mode(params.get('mode'))
 
         elif cmd == "MOVE":
             self.log = log_message("RPi", f"Setting Waypoint to {params}\n")
+            self._write_mission_log(f"Command: MOVE - {params}")
             self.Controller.send_coords(params)
 
         else:
             self.log = log_message("RPi", f"Unknown Command: {cmd}\n")
+            self._write_mission_log(f"Unknown Command: {cmd}")
     # -------------------------------------------------
     # TELEMETRY TX
     # -------------------------------------------------
@@ -286,6 +357,9 @@ class DroneManager:
 
         # Send telemetry to SpotTracker via socket
         self.spot_socket.send_telemetry(self.telemetry)
+        # Also write a short telemetry line to mission log if active
+        if self.mission_file:
+            self._write_mission_log(f"Telemetry: {json.dumps(self.telemetry)}")
 
     # -------------------------------------------------
     # SPOT TRACKING
@@ -321,10 +395,10 @@ class DroneManager:
 
     def stop(self):
         """Clean shutdown of all components."""
+        # Ensure mission log is closed and spots saved
+        try:
+            self._end_mission_log()
+        except:
+            pass
         self.spot_socket.stop()
         print("DroneManager shutdown complete")
-
-
-if __name__ == "__main__":
-    drone = DroneManager()
-    drone.run()

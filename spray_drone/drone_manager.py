@@ -116,7 +116,7 @@ class DroneManager:
         
         packet = {
             "name": DRONE_NAME,
-            # "password": PASSWORD,
+            "password": PASSWORD,
             "state": status['state'],
             "battery": status['telemetry']['battery'],
             "telemetry": status['telemetry'],
