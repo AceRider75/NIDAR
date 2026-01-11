@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional, Dict, Any
 import threading
+import time
 
 class MissionLogger:
     """
@@ -16,24 +17,17 @@ class MissionLogger:
     - video/ (folder for mission videos)
     """
     
-    _instance = None
-    _lock = threading.Lock()
-    
-    def __new__(cls):
-        """Singleton pattern to ensure one logger per mission"""
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-    
-    def __init__(self):
-        if hasattr(self, '_initialized'):
-            return
+    def __init__(self, base_logs_dir: str = "/home/sajjad/NIDAR/scan_drone/logs"):
+        """
+        Initialize mission logger (NOT singleton - created per mission)
         
-        self._initialized = True
+        Args:
+            base_logs_dir: Base directory for all missions
+        """
+        self.base_logs_dir = base_logs_dir
         self.mission_dir = None
         self.mission_id = None
+        self.active = False
         
         # File paths
         self.controller_log_file = None
@@ -50,19 +44,16 @@ class MissionLogger:
         self.telemetry_csv_handle = None
         self._csv_lock = threading.Lock()
         
-    def start_mission(self, base_logs_dir: str = "/home/sajjad/NIDAR/scan_drone/logs") -> str:
+    def start_mission(self) -> str:
         """
         Start a new mission and create logging structure.
-        
-        Args:
-            base_logs_dir: Base directory for all missions
             
         Returns:
             Mission directory path
         """
         # Create mission ID from timestamp
         self.mission_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.mission_dir = os.path.join(base_logs_dir, f"mission_{self.mission_id}")
+        self.mission_dir = os.path.join(self.base_logs_dir, f"mission_{self.mission_id}")
         
         # Create directories
         os.makedirs(self.mission_dir, exist_ok=True)
@@ -75,7 +66,7 @@ class MissionLogger:
         self.spot_log_file = os.path.join(self.mission_dir, "spot_tracker.log")
         
         # Initialize controller logger
-        self.controller_logger = logging.getLogger(f"Controller_{self.mission_id}")
+        self.controller_logger = logging.getLogger(f"MissionController_{self.mission_id}")
         self.controller_logger.setLevel(logging.INFO)
         self.controller_logger.handlers.clear()
         
@@ -86,7 +77,7 @@ class MissionLogger:
         self.controller_logger.addHandler(controller_handler)
         
         # Initialize spot tracker logger
-        self.spot_logger = logging.getLogger(f"SpotTracker_{self.mission_id}")
+        self.spot_logger = logging.getLogger(f"MissionSpot_{self.mission_id}")
         self.spot_logger.setLevel(logging.INFO)
         self.spot_logger.handlers.clear()
         
@@ -97,6 +88,7 @@ class MissionLogger:
         # Initialize telemetry CSV
         self._init_telemetry_csv()
         
+        self.active = True
         self.controller_logger.info(f"Mission started: {self.mission_id}")
         self.controller_logger.info(f"Mission directory: {self.mission_dir}")
         
@@ -124,7 +116,7 @@ class MissionLogger:
             level: Log level (INFO, WARNING, ERROR, CRITICAL)
             message: Log message
         """
-        if not self.controller_logger:
+        if not self.active or not self.controller_logger:
             return
         
         level_map = {
@@ -146,7 +138,7 @@ class MissionLogger:
             telemetry: Dictionary with telemetry data
             state: Current drone state
         """
-        if not self.telemetry_csv_writer:
+        if not self.active or not self.telemetry_csv_writer:
             return
         
         with self._csv_lock:
@@ -183,7 +175,7 @@ class MissionLogger:
             drone_coords: (lat, lon, alt) of drone
             spot_coords: (lat, lon) of spot
         """
-        if not self.spot_logger:
+        if not self.active or not self.spot_logger:
             return
         
         timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
@@ -207,12 +199,15 @@ class MissionLogger:
         Returns:
             Full path to video file
         """
-        if not self.video_dir:
+        if not self.active or not self.video_dir:
             return None
         return os.path.join(self.video_dir, filename)
     
     def end_mission(self):
         """Close all log files and finalize mission"""
+        if not self.active:
+            return
+            
         if self.controller_logger:
             self.controller_logger.info(f"Mission ended: {self.mission_id}")
         
@@ -234,13 +229,9 @@ class MissionLogger:
                 handler.close()
             self.spot_logger.handlers.clear()
         
+        self.active = False
         print(f"Mission logs saved to: {self.mission_dir}")
     
-    @property
     def is_active(self) -> bool:
         """Check if mission logging is active"""
-        return self.mission_dir is not None
-
-
-# Global singleton instance
-mission_logger = MissionLogger()
+        return self.active

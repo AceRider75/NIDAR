@@ -25,7 +25,7 @@ class SpotTrackerSocketServer:
         self.buffer = ""
         self.latest_spots = []
         self._lock = threading.Lock()
-        self.logger = setup_logger("SpotSocket")
+        self.logger = setup_logger("SpotSocket", "spot_socket.log")
 
     def start(self):
         """Start the socket server."""
