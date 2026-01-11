@@ -1,9 +1,10 @@
+import json
+import serial
 import threading
 import time
-import serial
+from collections import deque
 from core.message_parser import json_to_dict, dict_to_json
 from utils.logger import log_message
-from collections import deque
 
 
 # Global mapping of serial port -> Lock to serialize writes from multiple RadioComm instances
@@ -92,15 +93,22 @@ class RadioComm:                #Handles low-level radio communication with the 
             print(f"[RadioComm] Send Error: {e}")
             log_message("GCS",f"Radio TX error: {e}\n")
 
-    def send_command(self, command: str, params=None) -> None:      #Send a command packet to the drone
-        packet = {
+    def send_command(self, command: str, params: dict = None) -> None:      #Send a command packet to the drone
+        msg = {
             "type": "command",
             "command": command,
             "params": params or {},
             "timestamp": time.time()
         }
-        self._send_json(packet)
+        data = json.dumps(msg) + "\n"  # newline frame
+        self.serial.write(data.encode('utf-8'))
+        self.serial.flush()
 
+    def send_packet(self, packet: dict) -> None:
+        packet["timestamp"] = time.time()
+        data = json.dumps(packet) + "\n"  # newline frame
+        self.serial.write(data.encode('utf-8'))
+        self.serial.flush()
 
     def _listen_loop(self) -> None:         #Continuously listen for incoming packets from the drone
         

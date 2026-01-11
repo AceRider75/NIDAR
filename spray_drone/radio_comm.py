@@ -1,6 +1,7 @@
+import json
+import serial
 import threading
 import time
-import serial
 from utils import json_to_dict, dict_to_json
 from utils import log_message
 
@@ -14,6 +15,8 @@ class RadioComm:
         self._rx_thread = None
         self._latest_command = None
         self._lock = threading.Lock()
+        self._cmd_queue = []
+        self._cmd_lock = threading.Lock()
 
         self._connect()
 
@@ -121,24 +124,7 @@ class RadioComm:
     # TX
     # -------------------------------------------------
     def send_packet(self, packet: dict):
-        if not self.serial or not self.serial.is_open:
-            return
-
-        json_msg = dict_to_json(packet, indent=None)
-        if json_msg is None:
-            log_message("RPi","Radio JSON encoding failed\n")
-            return
-
-        try:
-            self.serial.write((json_msg + "\n").encode("utf-8"))
-        except serial.SerialException as e:
-            log_message("RPi",f"Radio TX SerialException: {e}\n")
-            # Mark connection as bad
-            if self.serial:
-                try:
-                    self.serial.close()
-                except:
-                    pass
-                self.serial = None
-        except Exception as e:
-            log_message("RPi",f"Radio TX error: {e}\n")
+        packet["timestamp"] = time.time()
+        data = json.dumps(packet) + "\n"  # newline frame
+        self.serial.write(data.encode('utf-8'))
+        self.serial.flush()

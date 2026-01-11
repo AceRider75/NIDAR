@@ -109,22 +109,21 @@ class DroneManager:
                 True
             )
 
-        # NEW: incremental waypoint protocol
+        # Incremental waypoint protocol
         elif cmd == "START_WAYPOINTS":
             self._expected_waypoints = int(params.get("expected_count", 0))
             self._pending_altitude = float(params.get("altitude", 3.0))
             self._pending_waypoints = []
-            # Optionally log
-            # print(f"Init waypoint batch: expected={self._expected_waypoints}, alt={self._pending_altitude}")
 
         elif cmd == "ADD_WAYPOINT":
             lat = params.get("lat")
             lon = params.get("lon")
             alt = params.get("alt", self._pending_altitude)
-            # Basic validation
             if lat is not None and lon is not None:
-                self._pending_waypoints.append([float(lat), float(lon), float(alt)])
-            # Optionally check index consistency: params.get("index")
+                try:
+                    self._pending_waypoints.append([float(lat), float(lon), float(alt)])
+                except (ValueError, TypeError):
+                    print(f"Ignoring malformed waypoint: {params}")
 
         elif cmd == "END_WAYPOINTS":
             expected = int(params.get("expected_count", self._expected_waypoints))
@@ -132,7 +131,7 @@ class DroneManager:
                 print(f"Waypoint count mismatch: start={self._expected_waypoints}, end={expected}")
             if len(self._pending_waypoints) != self._expected_waypoints:
                 print(f"Received {len(self._pending_waypoints)} of {self._expected_waypoints}, aborting mission load")
-                # Reset buffer to avoid partial load
+                # Reset buffer
                 self._pending_waypoints = []
                 self._expected_waypoints = 0
                 return
@@ -141,7 +140,7 @@ class DroneManager:
             self.controller.queue_command(
                 self.controller.load_mission_from_points,
                 self._pending_waypoints,
-                True  # validate_geofence
+                True
             )
             self.controller.queue_command(
                 self.controller.add_return_home_waypoint
