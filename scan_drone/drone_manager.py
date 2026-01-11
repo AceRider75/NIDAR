@@ -335,30 +335,38 @@ class DroneManager:
         print(f"[DroneManager] Received command: {cmd}")
 
         if cmd == "START":
-            # NEW: Load mission from params, then start
+            # Get mission parameters from command (or use defaults)
             waypoints = params.get("waypoints", [])
             altitude = params.get("altitude", 3.0)
             
+            print(f"[DroneManager] START command received")
+            print(f"[DroneManager] Waypoints: {len(waypoints)}, Altitude: {altitude}m")
+            
+            # Load mission waypoints if provided (validates against KML polygon)
             if waypoints:
-                # Waypoints should be list of [lat, lon, alt]
+                print("[DroneManager] Loading mission waypoints...")
                 self.controller.queue_command(
                     self.controller.load_mission_from_points,
                     waypoints,
                     True  # validate_geofence
                 )
-                self.controller.queue_command(
-                    self.controller.add_return_home_waypoint
-                )
             
+            # Arm and takeoff
+            print(f"[DroneManager] Queuing arm and takeoff to {altitude}m...")
             self.controller.queue_command(
                 self.controller.arm_and_takeoff,
                 altitude
             )
             
+            # Start mission if waypoints were provided
             if waypoints:
+                print("[DroneManager] Queuing mission start...")
                 self.controller.queue_command(
                     self.controller.start_mission
                 )
+            
+            # Note: Mission monitoring happens in send_telemetry() 
+            # and mission completion triggers return_to_home_and_land via state machine
 
         elif cmd == "LAND":
             self.controller.queue_command(self.controller.land)
