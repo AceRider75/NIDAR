@@ -33,7 +33,7 @@ from sklearn.cluster import DBSCAN
 
 # ========= SPOT LOGGING CONFIGURATION =========
 # DO NOT CHANGE THIS PATH (your requested directory)
-LOG_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/scan_drone/image_processing/logs"
+LOG_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/rpi_code/logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(LOG_DIR, "spot_data.log")
@@ -964,7 +964,7 @@ def main():
     import sys
     import time
     import signal
-
+    
     # Setup directories
     current_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(os.path.dirname(current_dir))
@@ -989,12 +989,7 @@ def main():
     annotated_video_path = os.path.join(LOG_DIR, f"feed_annotated_{timestamp}.mkv")
     raw_writer = None
     annotated_writer = None
-    # Use a codec suited for MKV. FFV1 is lossless and very robust with MKV.
-    # Fallback to MJPG if FFV1 is unavailable.
-    preferred_fourccs = [
-        cv2.VideoWriter_fourcc(*"FFV1"),
-        cv2.VideoWriter_fourcc(*"MJPG"),
-    ]
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # codec; container chosen by extension
 
     # Initialize detector and tracker
     detector = ColorDetector()
@@ -1065,51 +1060,17 @@ def main():
             frame_count += 1
             height, width = frame.shape[:2]
 
-            # Convert camera RGB to BGR for OpenCV writers and drawing
-            bgr_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-
             # Initialize video writers only once
             if raw_writer is None:
-                # Try FFmpeg backend first, then default backend as fallback
-                opened = False
-                for fourcc in preferred_fourccs:
-                    try:
-                        raw_writer = cv2.VideoWriter(
-                            raw_video_path, cv2.CAP_FFMPEG, fourcc, 30.0, (width, height)
-                        )
-                        annotated_writer = cv2.VideoWriter(
-                            annotated_video_path, cv2.CAP_FFMPEG, fourcc, 30.0, (width, height)
-                        )
-                        if raw_writer.isOpened() and annotated_writer.isOpened():
-                            opened = True
-                            break
-                        # Fallback without explicit backend
-                        raw_writer.release()
-                        annotated_writer.release()
-                        raw_writer = cv2.VideoWriter(
-                            raw_video_path, fourcc, 30.0, (width, height)
-                        )
-                        annotated_writer = cv2.VideoWriter(
-                            annotated_video_path, fourcc, 30.0, (width, height)
-                        )
-                        if raw_writer.isOpened() and annotated_writer.isOpened():
-                            opened = True
-                            break
-                        raw_writer.release()
-                        annotated_writer.release()
-                    except Exception:
-                        try:
-                            raw_writer.release()
-                            annotated_writer.release()
-                        except Exception:
-                            pass
-
-                if not opened:
-                    print("Failed to open video writers (MKV). Ensure FFmpeg is installed. Exiting.")
+                raw_writer = cv2.VideoWriter(
+                    raw_video_path, fourcc, 30.0, (width, height))
+                annotated_writer = cv2.VideoWriter(
+                    annotated_video_path, fourcc, 30.0, (width, height))
+                if not raw_writer.isOpened() or not annotated_writer.isOpened():
+                    print("Failed to open video writers. Exiting.")
                     break
 
-            # Detect yellow spots (use the original frame if your detector expects RGB;
-            # otherwise pass bgr_frame)
+            # Detect yellow spots
             centers, contours, mask = detector.detect_yellow_spots(frame)
 
             # Update tracker with mask for dilation
@@ -1121,9 +1082,10 @@ def main():
             # Save images for newly detected spots
             if tracked_spots:
                 for spot in tracked_spots.values():
+                    # Save image for each new spot (first detection only)
                     if spot.id not in detected_spots_this_mission:
                         save_detection_image(
-                            frame.copy(),  # keep as-is for stills, or switch to bgr_frame.copy() if desired
+                            frame.copy(),  # Save a copy to avoid modifications
                             mission_dir,
                             spot.id,
                             frame_count,
@@ -1131,13 +1093,12 @@ def main():
                         )
                         detected_spots_this_mission.add(spot.id)
                         
-                        # Also save annotated version (draw on BGR)
-                        overlay_save = tracker.visualize_tracks(
-                            bgr_frame.copy(), show_history=True, show_rank=True
-                        )
+                        # Also save annotated version
+                        overlay = tracker.visualize_tracks(
+                            frame.copy(), show_history=True, show_rank=True)
                         annotated_filename = f"spot_{spot.id}_frame_{frame_count}_annotated.jpg"
                         annotated_image_path = os.path.join(mission_dir, annotated_filename)
-                        cv2.imwrite(annotated_image_path, overlay_save)
+                        cv2.imwrite(annotated_image_path, overlay)
 
             # Log spot data continuously
             if telemetry and tracked_spots:
@@ -1172,18 +1133,17 @@ def main():
                 # Send spots via unified drone_manager socket
                 drone_socket.send_spots(payload)
 
-            # Visualize overlay (draw on BGR)
-            overlay_bgr = tracker.visualize_tracks(
-                bgr_frame.copy(), show_history=True, show_rank=True
-            )
+            # Visualize overlay
+            overlay = tracker.visualize_tracks(
+                frame, show_history=True, show_rank=True)
             if telemetry:
                 telem_str = f"Alt: {telemetry['alt']:.1f}m Yaw: {telemetry['yaw']:.1f}"
-                cv2.putText(overlay_bgr, telem_str, (10, height - 20),
+                cv2.putText(overlay, telem_str, (10, height - 20),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
-            # Write frames to MKV videos
-            raw_writer.write(bgr_frame)
-            annotated_writer.write(overlay_bgr)
+            # Write frames to video
+            raw_writer.write(frame)
+            annotated_writer.write(overlay)
 
             # Optional: print largest spot info
             largest = tracker.get_largest_spot()
