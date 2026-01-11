@@ -495,26 +495,6 @@ class SpotTracker:
                          show_rank: bool = True) -> np.ndarray:
         """
         Visualize tracked spots on image.
-
-
-    def visualize_tracks(self, image: np.ndarray, 
-                        show_history: bool = True,
-                        show_r
-
-    def visualize_tracks(self, image: np.ndarray, 
-                        show_history: bool = True,
-                        show_r
-    def visualize_tracks(self, image: np.ndarray, 
-                        show_history: bool = True,
-                        show_r
-
-        Args:
-            image: Input image
-            show_history: Whether to show track history
-            show_rank: Whether to show area rank
-
-        Returns:
-            Image with visualizations
         """
         overlay = image.copy()
 
@@ -1050,11 +1030,16 @@ def main():
     signal.signal(signal.SIGINT, _graceful_exit)
     signal.signal(signal.SIGTERM, _graceful_exit)
 
+    # After picam2.start()
+    logger.info("Camera started. Capturing frames...")
+
     try:
         while True:
             frame = picam2.capture_array()
             if frame is None:
-                time.sleep(0.01)
+                if frame_count % 100 == 0:
+                    logger.warning("No frame from camera. Check Picamera2 and camera connection.")
+                time.sleep(0.1)
                 continue
 
             frame_count += 1
@@ -1078,6 +1063,8 @@ def main():
 
             # Read latest telemetry from drone_manager via socket
             telemetry = drone_socket.get_latest_telemetry()
+            if telemetry is None and frame_count % 150 == 0:
+                logger.info("No telemetry yet from drone_manager. Waiting...")
 
             # Save images for newly detected spots
             if tracked_spots:
