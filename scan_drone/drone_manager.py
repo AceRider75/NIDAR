@@ -339,9 +339,25 @@ class DroneManager:
             waypoints = params.get("waypoints", [])
             altitude = params.get("altitude", 3.0)
             
+            # If no waypoints provided, generate spiral pattern from KML
+            if not waypoints and self.controller.mission_planner:
+                print("[DroneManager] No waypoints provided. Generating spiral mission from KML...")
+                # Use current position as start for optimization
+                curr_lat = self.controller.telemetry.lat
+                curr_lon = self.controller.telemetry.lon
+                
+                points_2d = self.controller.mission_planner.generate_mission_from_points(
+                    start_lat=curr_lat if curr_lat != 0 else None,
+                    start_lon=curr_lon if curr_lon != 0 else None
+                )
+                
+                # Convert to waypoints with altitude
+                waypoints = [[lat, lon, altitude] for lat, lon in points_2d]
+                print(f"[DroneManager] Generated {len(waypoints)} waypoints from KML")
+
             print(f"[DroneManager] START command received")
             print(f"[DroneManager] Waypoints: {len(waypoints)}, Altitude: {altitude}m")
-            
+             
             # Load mission waypoints if provided (validates against KML polygon)
             if waypoints:
                 print("[DroneManager] Loading mission waypoints...")
@@ -462,9 +478,7 @@ class DroneManager:
                 start_packet = {
                     "command": "START",
                     "params": {
-                        "altitude": 3.0,
-                        # For simulation, we can add some dummy waypoints or just test takeoff
-                        "waypoints": [] 
+                        "altitude": 3.0
                     }
                 }
                 self.handle_command(start_packet)
