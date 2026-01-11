@@ -938,30 +938,44 @@ def save_detection_image(frame: np.ndarray, mission_dir: str,
 
 
 def main():
-    """Run SpotTracker service safely with proper logging and video recording."""
+    """Run SpotTracker service with drone_manager socket integration"""
     from color_detector import ColorDetector
     from picamera2 import Picamera2
     import sys
     import time
     import signal
     
+    print("=" * 60)
+    print("SPOT TRACKER - Starting")
+    print("=" * 60)
+    
     # Setup directories
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.dirname(os.path.dirname(current_dir))
-    LOG_DIR = os.path.join(root_dir, "logs")
+    LOG_DIR = os.path.join(current_dir, "logs")
     os.makedirs(LOG_DIR, exist_ok=True)
     
     # Initialize mission directory
     mission_dir = get_current_mission_dir()
     logger.info(f"Mission directory: {mission_dir}")
+    print(f"[SpotTracker] Mission directory: {mission_dir}")
 
     # Initialize camera
-    picam2 = Picamera2()
-    config = picam2.create_preview_configuration(
-        main={"size": (640, 480), "format": "RGB888"})
-    picam2.configure(config)
-    picam2.start()
-    time.sleep(1)  # Give camera time to start
+    print("[SpotTracker] Initializing camera...")
+    try:
+        picam2 = Picamera2()
+        config = picam2.create_preview_configuration(
+            main={"size": (640, 480), "format": "RGB888"})
+        picam2.configure(config)
+        picam2.start()
+        time.sleep(2)  # Give camera time to start properly
+        print("[SpotTracker] ✓ Camera started")
+    except Exception as e:
+        print(f"[SpotTracker] ERROR: Camera initialization failed: {e}")
+        print("[SpotTracker] Make sure:")
+        print("  1. Camera is connected")
+        print("  2. Camera is enabled in raspi-config")
+        print("  3. You have permissions (try: sudo usermod -a -G video $USER)")
+        return
 
     # Prepare video output (use MKV for resilience)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -969,9 +983,10 @@ def main():
     annotated_video_path = os.path.join(LOG_DIR, f"feed_annotated_{timestamp}.mkv")
     raw_writer = None
     annotated_writer = None
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # codec; container chosen by extension
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 
     # Initialize detector and tracker
+    print("[SpotTracker] Initializing detector and tracker...")
     detector = ColorDetector()
     tracker = SpotTracker(
         max_distance=80,
@@ -980,65 +995,99 @@ def main():
         clustering_distance=60.0,
         min_cluster_samples=1
     )
+    print("[SpotTracker] ✓ Detector and tracker ready")
 
-    # Unified socket connection to drone_manager for both telemetry and spot data
-    drone_socket = DroneManagerSocket(
-        host="127.0.0.1",
-        port=5005  # Single port for bidirectional communication with drone_manager
-    )
+    # Connect to drone_manager socket
+    print("[SpotTracker] Connecting to drone_manager...")
+    drone_socket = DroneManagerSocket(host="127.0.0.1", port=5005)
+    
+    # Wait for connection with retry
+    max_retries = 10
+    connected = False
+    for i in range(max_retries):
+        if drone_socket.connected:
+            print(f"[SpotTracker] ✓ Connected to drone_manager")
+            connected = True
+            break
+        print(f"[SpotTracker] Waiting for drone_manager... ({i+1}/{max_retries})")
+        time.sleep(2)
+        drone_socket._reconnect()
+    
+    if not connected:
+        print("[SpotTracker] ERROR: Failed to connect to drone_manager")
+        print("[SpotTracker] Make sure drone_manager.py is running!")
+        print("[SpotTracker] You can still run for testing, but no telemetry will be available")
+        # Don't exit - continue for testing without telemetry
+
+    # Register with drone_manager
+    if drone_socket.connected:
+        try:
+            drone_socket.send_spots({"type": "register", "name": "spot_tracker"})
+            print("[SpotTracker] ✓ Registered with drone_manager")
+        except Exception as e:
+            print(f"[SpotTracker] Registration failed: {e}")
 
     spot_log_file = os.path.join(LOG_DIR, "spot_data.log")
-    print(f"Spot tracking service started. Logs: {LOG_DIR}")
-    print(f"Mission images: {mission_dir}")
-    print(f"Drone manager socket: 127.0.0.1:5005")
-    print(f"Spot log file: {spot_log_file}")
+    
+    print("=" * 60)
+    print("SPOT TRACKER - Ready")
+    print("=" * 60)
+    print(f"  Mission images: {mission_dir}")
+    print(f"  Spot log: {spot_log_file}")
+    print(f"  Videos: {LOG_DIR}")
+    print(f"  Socket: {'Connected' if drone_socket.connected else 'NOT CONNECTED'}")
+    print("=" * 60)
     
     frame_count = 0
-    detected_spots_this_mission = set()  # Track which spots we've saved images for
+    detected_spots_this_mission = set()
+    last_telemetry_check = time.time()
+    last_status_print = time.time()
+    telemetry_warnings_shown = 0
 
-    # Graceful shutdown to finalize video files
+    # Graceful shutdown
     shutting_down = {"flag": False}
-    def _graceful_exit(signum, frame):
+    def _graceful_exit(signum, frame_arg):
         if shutting_down["flag"]:
             return
         shutting_down["flag"] = True
-        print("Received signal, shutting down cleanly...")
+        print("\n[SpotTracker] Received signal, shutting down cleanly...")
         try:
             if raw_writer is not None:
                 raw_writer.release()
             if annotated_writer is not None:
                 annotated_writer.release()
-        except Exception:
+        except:
             pass
         try:
             picam2.stop()
-        except Exception:
+        except:
             pass
         try:
             cv2.destroyAllWindows()
-        except Exception:
+        except:
             pass
         try:
             drone_socket.close()
-        except Exception:
+        except:
             pass
-        print(f"Videos saved: {raw_video_path}, {annotated_video_path}")
-        print(f"Spot log saved: {os.path.join(LOG_DIR, 'spot_data.log')}")
-        print(f"Mission images saved to: {mission_dir}")
+        print(f"[SpotTracker] Videos saved: {raw_video_path}, {annotated_video_path}")
+        print(f"[SpotTracker] Spot log: {spot_log_file}")
+        print(f"[SpotTracker] Mission images: {mission_dir}")
+        print(f"[SpotTracker] Total spots detected: {len(detected_spots_this_mission)}")
         sys.exit(0)
 
     signal.signal(signal.SIGINT, _graceful_exit)
     signal.signal(signal.SIGTERM, _graceful_exit)
 
-    # After picam2.start()
     logger.info("Camera started. Capturing frames...")
+    print("[SpotTracker] Starting frame capture loop...\n")
 
     try:
         while True:
             frame = picam2.capture_array()
             if frame is None:
                 if frame_count % 100 == 0:
-                    logger.warning("No frame from camera. Check Picamera2 and camera connection.")
+                    logger.warning("No frame from camera")
                 time.sleep(0.1)
                 continue
 
@@ -1047,13 +1096,14 @@ def main():
 
             # Initialize video writers only once
             if raw_writer is None:
-                raw_writer = cv2.VideoWriter(
-                    raw_video_path, fourcc, 30.0, (width, height))
-                annotated_writer = cv2.VideoWriter(
-                    annotated_video_path, fourcc, 30.0, (width, height))
+                raw_writer = cv2.VideoWriter(raw_video_path, fourcc, 30.0, (width, height))
+                annotated_writer = cv2.VideoWriter(annotated_video_path, fourcc, 30.0, (width, height))
+                
                 if not raw_writer.isOpened() or not annotated_writer.isOpened():
-                    print("Failed to open video writers. Exiting.")
+                    print("[SpotTracker] ERROR: Failed to open video writers")
                     break
+                
+                print(f"[SpotTracker] ✓ Video writers initialized: {width}x{height}")
 
             # Detect yellow spots
             centers, contours, mask = detector.detect_yellow_spots(frame)
@@ -1063,16 +1113,30 @@ def main():
 
             # Read latest telemetry from drone_manager via socket
             telemetry = drone_socket.get_latest_telemetry()
-            if telemetry is None and frame_count % 150 == 0:
-                logger.info("No telemetry yet from drone_manager. Waiting...")
+            
+            # Log telemetry status periodically
+            now = time.time()
+            if now - last_telemetry_check > 10:
+                if telemetry:
+                    print(f"[SpotTracker] Telemetry: Lat={telemetry['lat']:.6f}, "
+                          f"Lon={telemetry['lon']:.6f}, Alt={telemetry['alt']:.1f}m, "
+                          f"Yaw={telemetry['yaw']:.1f}°")
+                    telemetry_warnings_shown = 0  # Reset warnings
+                else:
+                    if telemetry_warnings_shown < 3:  # Limit warning spam
+                        print("[SpotTracker] WARNING: No telemetry data from drone_manager")
+                        telemetry_warnings_shown += 1
+                        if telemetry_warnings_shown >= 3:
+                            print("[SpotTracker] (Further telemetry warnings suppressed)")
+                last_telemetry_check = now
 
             # Save images for newly detected spots
             if tracked_spots:
                 for spot in tracked_spots.values():
-                    # Save image for each new spot (first detection only)
                     if spot.id not in detected_spots_this_mission:
+                        # Save raw detection image
                         save_detection_image(
-                            frame.copy(),  # Save a copy to avoid modifications
+                            frame.copy(),
                             mission_dir,
                             spot.id,
                             frame_count,
@@ -1081,13 +1145,14 @@ def main():
                         detected_spots_this_mission.add(spot.id)
                         
                         # Also save annotated version
-                        overlay = tracker.visualize_tracks(
-                            frame.copy(), show_history=True, show_rank=True)
+                        overlay = tracker.visualize_tracks(frame.copy(), show_history=True, show_rank=True)
                         annotated_filename = f"spot_{spot.id}_frame_{frame_count}_annotated.jpg"
-                        annotated_image_path = os.path.join(mission_dir, annotated_filename)
-                        cv2.imwrite(annotated_image_path, overlay)
+                        annotated_path = os.path.join(mission_dir, annotated_filename)
+                        cv2.imwrite(annotated_path, overlay)
+                        
+                        print(f"[SpotTracker] ✓ NEW SPOT #{spot.id} detected and saved")
 
-            # Log spot data continuously
+            # Log spot data continuously if we have telemetry
             if telemetry and tracked_spots:
                 payload = {
                     "type": "yellow_spots",
@@ -1098,15 +1163,19 @@ def main():
 
                 for spot in tracked_spots.values():
                     spot_lat, spot_lon = calculate_real_coords(
-                        telemetry["lat"], telemetry["lon"], telemetry["alt"], telemetry["yaw"],
+                        telemetry["lat"], telemetry["lon"], 
+                        telemetry["alt"], telemetry["yaw"],
                         spot.center, (width, height)
                     )
+                    
+                    # Log to file
                     log_spot_data_logfile(
                         spot.id,
                         (telemetry["lat"], telemetry["lon"], telemetry["alt"]),
                         (spot_lat, spot_lon)
                     )
 
+                    # Add to payload
                     payload["spots"].append({
                         "id": spot.id,
                         "lat": f"{spot_lat:.7f}",
@@ -1117,52 +1186,82 @@ def main():
                         "rank": spot.area_rank
                     })
 
-                # Send spots via unified drone_manager socket
-                drone_socket.send_spots(payload)
+                # Send spots to drone_manager
+                if drone_socket.connected:
+                    drone_socket.send_spots(payload)
 
             # Visualize overlay
-            overlay = tracker.visualize_tracks(
-                frame, show_history=True, show_rank=True)
+            overlay = tracker.visualize_tracks(frame, show_history=True, show_rank=True)
+            
+            # Add telemetry and status to overlay
             if telemetry:
                 telem_str = f"Alt: {telemetry['alt']:.1f}m Yaw: {telemetry['yaw']:.1f}"
                 cv2.putText(overlay, telem_str, (10, height - 20),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            else:
+                cv2.putText(overlay, "NO TELEMETRY", (10, height - 20),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+            
+            # Add connection status
+            conn_str = "CONNECTED" if drone_socket.connected else "DISCONNECTED"
+            conn_color = (0, 255, 0) if drone_socket.connected else (0, 0, 255)
+            cv2.putText(overlay, conn_str, (width - 150, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, conn_color, 2)
 
             # Write frames to video
             raw_writer.write(frame)
             annotated_writer.write(overlay)
 
-            # Optional: print largest spot info
-            largest = tracker.get_largest_spot()
-            if largest:
-                print(f"Largest spot: ID={largest.id}, Rank={largest.area_rank}, "
-                      f"Center={largest.center}, Area={largest.area:.2f}px²")
+            # Print status periodically (every 5 seconds)
+            if now - last_status_print > 5:
+                print(f"[SpotTracker] Frame {frame_count} | "
+                      f"Spots: {len(tracked_spots)} | "
+                      f"Total detected: {len(detected_spots_this_mission)} | "
+                      f"Telemetry: {'OK' if telemetry else 'NO'} | "
+                      f"Socket: {'OK' if drone_socket.connected else 'DOWN'}")
+                last_status_print = now
 
-            # Sleep briefly to avoid CPU overload (adjust as needed)
+            # Sleep briefly
             time.sleep(0.01)
-            # If shutdown requested, break to finally to release writers
+            
             if shutting_down["flag"]:
                 break
 
     except KeyboardInterrupt:
-        print("Spot tracker service stopped by user.")
+        print("\n[SpotTracker] Stopped by user")
+
+    except Exception as e:
+        print(f"\n[SpotTracker] ERROR in main loop: {e}")
+        import traceback
+        traceback.print_exc()
 
     finally:
-        # Release resources safely
+        # Release resources
+        print("\n[SpotTracker] Cleaning up resources...")
+        
         if raw_writer is not None:
             raw_writer.release()
         if annotated_writer is not None:
             annotated_writer.release()
+        
         try:
             picam2.stop()
-        except Exception:
+        except:
             pass
+        
         cv2.destroyAllWindows()
-
-        # Close socket connection
         drone_socket.close()
 
-        print(f"Videos saved: {raw_video_path}, {annotated_video_path}")
-        print(f"Spot log saved: {os.path.join(LOG_DIR, 'spot_data.log')}")
-        print(f"Mission images saved to: {mission_dir}")
-        print(f"Total spots detected: {len(detected_spots_this_mission)}")
+        print("=" * 60)
+        print("SPOT TRACKER - Shutdown Complete")
+        print("=" * 60)
+        print(f"  Videos: {raw_video_path}")
+        print(f"           {annotated_video_path}")
+        print(f"  Spot log: {spot_log_file}")
+        print(f"  Mission images: {mission_dir}")
+        print(f"  Total spots detected: {len(detected_spots_this_mission)}")
+        print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()
