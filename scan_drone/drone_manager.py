@@ -252,6 +252,7 @@ class DroneManager:
         try:
             spot_tracker_path = os.path.join(
                 os.path.dirname(__file__), 
+                "image_processing",
                 "spot_tracker.py"
             )
             
