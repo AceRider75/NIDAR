@@ -342,28 +342,39 @@ class DroneManager:
             print(f"[DroneManager] START command received")
             print(f"[DroneManager] Waypoints: {len(waypoints)}, Altitude: {altitude}m")
             
-            # Load mission waypoints if provided (validates against KML polygon)
-            if waypoints:
-                print("[DroneManager] Loading mission waypoints...")
-                self.controller.queue_command(
-                    self.controller.load_mission_from_points,
-                    waypoints,
-                    True  # validate_geofence
-                )
+            # Execute mission sequence in a separate thread to maintain proper order
+            def execute_mission_sequence():
+                try:
+                    # Load mission waypoints if provided (validates against KML polygon)
+                    if waypoints:
+                        print("[DroneManager] Loading mission waypoints...")
+                        if not self.controller.load_mission_from_points(waypoints, validate_geofence=True):
+                            print("[DroneManager] ERROR: Failed to load mission waypoints")
+                            return
+                        print("[DroneManager] Mission waypoints loaded successfully")
+                    
+                    # Arm and takeoff
+                    print(f"[DroneManager] Arming and taking off to {altitude}m...")
+                    if not self.controller.arm_and_takeoff(altitude):
+                        print("[DroneManager] ERROR: Failed to arm and takeoff")
+                        return
+                    print("[DroneManager] Takeoff successful")
+                    
+                    # Start mission if waypoints were provided
+                    if waypoints:
+                        print("[DroneManager] Starting mission...")
+                        if not self.controller.start_mission():
+                            print("[DroneManager] ERROR: Failed to start mission")
+                            return
+                        print("[DroneManager] Mission started successfully")
+                    
+                except Exception as e:
+                    print(f"[DroneManager] ERROR in mission sequence: {e}")
+                    import traceback
+                    traceback.print_exc()
             
-            # Arm and takeoff
-            print(f"[DroneManager] Queuing arm and takeoff to {altitude}m...")
-            self.controller.queue_command(
-                self.controller.arm_and_takeoff,
-                altitude
-            )
-            
-            # Start mission if waypoints were provided
-            if waypoints:
-                print("[DroneManager] Queuing mission start...")
-                self.controller.queue_command(
-                    self.controller.start_mission
-                )
+            # Queue the entire sequence as a single command to ensure proper ordering
+            self.controller.queue_command(execute_mission_sequence)
             
             # Note: Mission monitoring happens in send_telemetry() 
             # and mission completion triggers return_to_home_and_land via state machine
