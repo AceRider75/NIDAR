@@ -11,7 +11,7 @@ _port_locks = {}
 
 class RadioComm:                #Handles low-level radio communication with the drone
     def __init__(self, 
-                 port=r"/dev/ttyUSB0",    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0")
+                 port=r"//./COM4",    #Windows style COM port (For Linux/Mac, use "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0")
                  baud=57600):
         self.port = port
         self.baud = baud
@@ -104,12 +104,12 @@ class RadioComm:                #Handles low-level radio communication with the 
 
     def _listen_loop(self) -> None:         #Continuously listen for incoming packets from the drone
         
+
         buffer = ""
 
         while self._running:
             try:
                 chunk = self.serial.readline().decode("utf-8", errors="ignore")
-                # print(chunk)
                 if not chunk:
                     continue
 

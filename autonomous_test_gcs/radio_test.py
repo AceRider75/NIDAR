@@ -3,8 +3,8 @@ import threading
 import time
 import sys
 
-# PORT = "COM5"          # Windows → COMx
-PORT = "/dev/ttyUSB0"  # Linux / macOS
+PORT = r"\\.\COM4"          # Windows → COMx
+# PORT = "/dev/ttyUSB0"  # Linux / macOS
 BAUD = 57600
 TIMEOUT = 1
 
