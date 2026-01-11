@@ -181,49 +181,49 @@ class DroneManager:
         self.spot_socket.start()
         
         # Start SpotTracker subprocess
-        self.spot_tracker_process = None
-        self._start_spot_tracker()
+        # self.spot_tracker_process = None
+        # self._start_spot_tracker()
         
         self.detected_spots = []
         self._last_tx = time.time()
 
-    def _start_spot_tracker(self):
-        """Start the SpotTracker as a separate process."""
-        try:
-            spot_tracker_path = os.path.join(
-                os.path.dirname(__file__), 
-                "image_processing", 
-                "spot_tracker.py"
-            )
+    # def _start_spot_tracker(self):
+    #     """Start the SpotTracker as a separate process."""
+    #     try:
+    #         spot_tracker_path = os.path.join(
+    #             os.path.dirname(__file__), 
+    #             "image_processing", 
+    #             "spot_tracker.py"
+    #         )
             
-            self.spot_tracker_process = subprocess.Popen(
-                ["/usr/bin/python", spot_tracker_path],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                preexec_fn=os.setsid,
-                env={},            # do not inherit parent env
-                close_fds=True
-            )
+    #         self.spot_tracker_process = subprocess.Popen(
+    #             ["/usr/bin/python", spot_tracker_path],
+    #             stdout=subprocess.PIPE,
+    #             stderr=subprocess.PIPE,
+    #             preexec_fn=os.setsid,
+    #             env={},            # do not inherit parent env
+    #             close_fds=True
+    #         )
             
-            print(f"[DroneManager] SpotTracker started (PID: {self.spot_tracker_process.pid})")
+    #         print(f"[DroneManager] SpotTracker started (PID: {self.spot_tracker_process.pid})")
             
-        except Exception as e:
-            print(f"[DroneManager] Failed to start SpotTracker: {e}")
-            self.spot_tracker_process = None
+    #     except Exception as e:
+    #         print(f"[DroneManager] Failed to start SpotTracker: {e}")
+    #         self.spot_tracker_process = None
 
-    def _stop_spot_tracker(self):
-        """Stop the SpotTracker process gracefully."""
-        if self.spot_tracker_process:
-            try:
-                os.killpg(os.getpgid(self.spot_tracker_process.pid), signal.SIGTERM)
-                try:
-                    self.spot_tracker_process.wait(timeout=5)
-                    print("[DroneManager] SpotTracker stopped gracefully")
-                except subprocess.TimeoutExpired:
-                    os.killpg(os.getpgid(self.spot_tracker_process.pid), signal.SIGKILL)
-                    print("[DroneManager] SpotTracker force killed")
-            except Exception as e:
-                print(f"[DroneManager] Error stopping SpotTracker: {e}")
+    # def _stop_spot_tracker(self):
+    #     """Stop the SpotTracker process gracefully."""
+    #     if self.spot_tracker_process:
+    #         try:
+    #             os.killpg(os.getpgid(self.spot_tracker_process.pid), signal.SIGTERM)
+    #             try:
+    #                 self.spot_tracker_process.wait(timeout=5)
+    #                 print("[DroneManager] SpotTracker stopped gracefully")
+    #             except subprocess.TimeoutExpired:
+    #                 os.killpg(os.getpgid(self.spot_tracker_process.pid), signal.SIGKILL)
+    #                 print("[DroneManager] SpotTracker force killed")
+    #         except Exception as e:
+    #             print(f"[DroneManager] Error stopping SpotTracker: {e}")
 
     # -------------------------------------------------
     # COMMAND HANDLING - UPDATED
@@ -342,7 +342,7 @@ class DroneManager:
     def stop(self):
         """Clean shutdown of all components."""
         print("[DroneManager] Stopping components...")
-        self._stop_spot_tracker()
+        # self._stop_spot_tracker()
         self.spot_socket.stop()
         self.controller.stop()
         self.radio.stop()
