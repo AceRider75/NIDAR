@@ -5,6 +5,7 @@ import os
 from config import DroneConfig
 # from utils import log_message
 from utils import setup_logger
+from decimal import Decimal, InvalidOperation
 
 DRONE_NAME = "Sprayer"
 PASSWORD = "vihang@2025"
@@ -13,6 +14,11 @@ class DroneManager:
     def __init__(self):
         self.radio = RadioComm(port="/dev/ttyAMA0")
         self.radio.start()
+        # Buffer for framed waypoint transfer
+        self._wp_transfer_active = False
+        self._wp_buffer = []
+        self._wp_expected_count = 0
+        self._wp_altitude = None
 
         # NEW: Configure controller with KML geofencing
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -44,37 +50,80 @@ class DroneManager:
     # -------------------------------------------------
     # COMMAND HANDLING - UPDATED
     # -------------------------------------------------
+    def _parse_coord(self, v):
+        """
+        Parse coordinate values that may arrive as strings to avoid scientific notation issues.
+        Returns float without altering the value beyond float precision.
+        """
+        if isinstance(v, (int, float)):
+            return float(v)
+        if isinstance(v, str):
+            try:
+                # Use Decimal to parse fixed-point strings exactly, then convert to float
+                return float(Decimal(v))
+            except (InvalidOperation, ValueError):
+                return float('nan')
+        return float('nan')
+
+    def _normalize_waypoint(self, wp):
+        """
+        Normalize a waypoint to [lat, lon, alt] floats without reformatting.
+        """
+        if not isinstance(wp, (list, tuple)) or len(wp) < 2:
+            return None
+        lat = self._parse_coord(wp[0])
+        lon = self._parse_coord(wp[1])
+        alt = self._parse_coord(wp[2] if len(wp) > 2 else self.controller.config.default_altitude)
+        if any(map(lambda x: x != x, [lat, lon, alt])):  # NaN check
+            return None
+        return [lat, lon, alt]
+
     def handle_command(self, packet):
         cmd = packet.get("command")
         params = packet.get("params", {})
         
-        # log_message("RPi", f"Received command: {cmd}\n")
-
         if cmd == "START":
-            # NEW: Load mission from params, then start
             waypoints = params.get("waypoints", [])
             altitude = params.get("altitude", 3.0)
-            
+
+            # If framed transfer buffered waypoints exist, prefer them
+            if self._wp_transfer_active and self._wp_buffer:
+                waypoints = self._wp_buffer.copy()
+                # Use provided altitude if any from framing
+                if isinstance(self._wp_altitude, (int, float)):
+                    altitude = self._wp_altitude
+
             if waypoints:
-                # Waypoints should be list of [lat, lon, alt]
-                self.controller.queue_command(
-                    self.controller.load_mission_from_points,
-                    waypoints,
-                    True  # validate_geofence
-                )
-                self.controller.queue_command(
-                    self.controller.add_return_home_waypoint
-                )
-            
+                normalized = []
+                for wp in waypoints:
+                    n = self._normalize_waypoint(wp)
+                    if n:
+                        normalized.append(n)
+                if normalized:
+                    self.controller.queue_command(
+                        self.controller.load_mission_from_points,
+                        normalized,
+                        True
+                    )
+                    self.controller.queue_command(
+                        self.controller.add_return_home_waypoint
+                    )
+
             self.controller.queue_command(
                 self.controller.arm_and_takeoff,
                 altitude
             )
-            
+
             if waypoints:
                 self.controller.queue_command(
                     self.controller.start_mission
                 )
+
+            # Clear buffer after starting
+            self._wp_transfer_active = False
+            self._wp_buffer.clear()
+            self._wp_expected_count = 0
+            self._wp_altitude = None
 
         elif cmd == "LAND":
             self.controller.queue_command(self.controller.land)
@@ -93,16 +142,63 @@ class DroneManager:
 
         elif cmd == "SET_MODE":
             mode = params.get('mode')
-            # Mode changes are handled internally by state machine
-            # log_message("RPi", f"Mode change requests handled by state machine\n")
+            # Mode handled internally
+
+        # ---- Framed waypoint transfer handling ----
+        elif cmd == "LOAD_WAYPOINTS_START":
+            # Begin buffered transfer
+            self._wp_transfer_active = True
+            self._wp_buffer.clear()
+            self._wp_expected_count = int(params.get("count", 0) or 0)
+            alt_str = params.get("altitude")
+            self._wp_altitude = self._parse_coord(alt_str) if alt_str is not None else None
+            # Optional: acknowledge start (if RadioComm supports)
+            # self.radio.send_packet({"name": DRONE_NAME, "password": PASSWORD, "ack": "LOAD_WAYPOINTS_START"})
+
+        elif cmd == "LOAD_WAYPOINTS_BATCH":
+            if self._wp_transfer_active:
+                batch = params.get("waypoints", [])
+                for wp in batch:
+                    n = self._normalize_waypoint(wp)
+                    if n:
+                        self._wp_buffer.append(n)
+            # Optional: ack per batch
+            # self.radio.send_packet({"name": DRONE_NAME, "password": PASSWORD, "ack": "LOAD_WAYPOINTS_BATCH", "received": len(batch)})
+
+        elif cmd == "LOAD_WAYPOINTS_END":
+            if self._wp_transfer_active:
+                # Validate count if provided
+                if self._wp_expected_count and len(self._wp_buffer) != self._wp_expected_count:
+                    # You can log or handle mismatch; still proceed
+                    pass
+                # Load mission immediately upon end
+                if self._wp_buffer:
+                    self.controller.queue_command(
+                        self.controller.load_mission_from_points,
+                        self._wp_buffer.copy(),
+                        True
+                    )
+                    self.controller.queue_command(
+                        self.controller.add_return_home_waypoint
+                    )
+                # Clear transfer state
+                self._wp_transfer_active = False
+                self._wp_expected_count = 0
 
         elif cmd == "LOAD_WAYPOINTS":
+            # Legacy single-command transfer
             waypoints = params.get('waypoints', [])
-            self.controller.queue_command(
-                self.controller.load_mission_from_points,
-                waypoints,
-                True
-            )
+            normalized = []
+            for wp in waypoints:
+                n = self._normalize_waypoint(wp)
+                if n:
+                    normalized.append(n)
+            if normalized:
+                self.controller.queue_command(
+                    self.controller.load_mission_from_points,
+                    normalized,
+                    True
+                )
 
         else:
             print(f"Unknown Command: {cmd}")

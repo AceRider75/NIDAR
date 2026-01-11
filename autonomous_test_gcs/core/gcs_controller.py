@@ -58,7 +58,7 @@ class GCSController:
             # --- Sprayer ---
             pkt = self.sprayer_state.radio.get_latest_packet()
             if pkt:
-                print("GCS GOT SPRAYER PACKET", pkt)
+                # print("GCS GOT SPRAYER PACKET", pkt)
                 try:
                     self._process_packet(DroneName.Sprayer, pkt)
                 except Exception as e:
@@ -67,7 +67,7 @@ class GCSController:
             # --- Scanner ---
             pkt = self.scanner_state.radio.get_latest_packet()
             if pkt:
-                print("GCS GOT SCANNER PACKET", pkt)
+                # print("GCS GOT SCANNER PACKET", pkt)
                 try:
                     self._process_packet(DroneName.Scanner, pkt)
                 except Exception as e:
@@ -323,40 +323,53 @@ class GCSController:
             {"x": x, "y": y, "z": z}
         )
 
+    def _format_coord_str(self, value: float, decimals: int = 12) -> str:
+        """
+        Format float as fixed-point string to avoid scientific notation.
+        Decimals controls precision; 12 keeps sub-centimeter for lat/lon deltas.
+        """
+        # Use fixed-point, no scientific notation
+        return f"{value:.{decimals}f}"
+
+    def _format_waypoint(self, lat: float, lon: float, alt: float, decimals: int = 12) -> List[str]:
+        """
+        Return waypoint values as strings to avoid scientific notation and rounding changes.
+        """
+        return [
+            self._format_coord_str(lat, decimals),
+            self._format_coord_str(lon, decimals),
+            self._format_coord_str(alt, 3),  # altitude usually needs fewer decimals
+        ]
+
     def transfer_waypoints_to_sprayer(self, scanner_drone: DroneName = DroneName.Scanner) -> bool:
         """
         Transfer detected yellow spot centers from scanner to sprayer drone as waypoints.
-        
-        Args:
-            scanner_drone: The drone that detected the spots (default: Scanner)
-            
-        Returns:
-            True if waypoints were sent successfully, False otherwise
+        Sends in batches to avoid serial fragmentation; formats coords as strings.
         """
         try:
-            # Get averaged center coordinates from scanner
             centers = self.get_spot_centers(scanner_drone)
-            
             if not centers:
                 log_message("GCSController", "No yellow spots detected to transfer")
                 return False
-            
-            # Format waypoints as [lat, lon, alt] for the sprayer
-            # Use a default altitude (can be made configurable)
+
             default_alt = 3.0
-            waypoints = [[lat, lon, default_alt] for lat, lon in centers]
-            
-            # Send LOAD_WAYPOINTS command to sprayer
-            self.drone_states[DroneName.Sprayer.value].radio.send_command(
-                "LOAD_WAYPOINTS",
-                {"waypoints": waypoints}
-            )
-            
-            log_message("GCSController", 
-                f"Transferred {len(waypoints)} waypoints to Sprayer drone")
-            
+            # Format as strings to avoid scientific notation
+            formatted = [self._format_waypoint(lat, lon, default_alt) for lat, lon in centers]
+
+            # Framed, batched transfer to mitigate serial fragmentation
+            sprayer_radio = self.drone_states[DroneName.Sprayer.value].radio
+            sprayer_radio.send_command("LOAD_WAYPOINTS_START", {"count": len(formatted)})
+
+            batch_size = 5  # tune based on radio throughput
+            for i in range(0, len(formatted), batch_size):
+                batch = formatted[i:i + batch_size]
+                sprayer_radio.send_command("LOAD_WAYPOINTS_BATCH", {"offset": i, "waypoints": batch})
+                time.sleep(0.05)  # small delay to let receiver parse
+
+            sprayer_radio.send_command("LOAD_WAYPOINTS_END", {})
+            log_message("GCSController", f"Transferred {len(formatted)} waypoints to Sprayer drone")
             return True
-            
+
         except Exception as e:
             log_message("GCSController", f"Failed to transfer waypoints: {e}")
             return False
@@ -366,14 +379,7 @@ class GCSController:
                                    use_weighted_centers: bool = True) -> bool:
         """
         Transfer yellow spots with more detailed options.
-        
-        Args:
-            scanner_drone: The drone that detected the spots
-            altitude: Altitude for waypoints in meters
-            use_weighted_centers: If True, weight centers by spot area (larger spots get more weight)
-            
-        Returns:
-            True if successful, False otherwise
+        Sends in batches to avoid serial fragmentation; formats coords as strings.
         """
         try:
             with self.lock:
@@ -382,41 +388,39 @@ class GCSController:
                     if not state.yellow_spots:
                         log_message("GCSController", "No spots to transfer")
                         return False
-                    
+
                     waypoints = []
-                    
                     for spot_id, coords in state.yellow_spots.items():
                         if not coords:
                             continue
-                        
                         if use_weighted_centers:
-                            # Weight by area (larger detections get more weight)
                             total_weight = sum(c.get("area", 1.0) for c in coords)
                             if total_weight > 0:
                                 weighted_lat = sum(c["lat"] * c.get("area", 1.0) for c in coords) / total_weight
                                 weighted_lon = sum(c["lon"] * c.get("area", 1.0) for c in coords) / total_weight
-                                waypoints.append([weighted_lat, weighted_lon, altitude])
+                                waypoints.append(self._format_waypoint(weighted_lat, weighted_lon, altitude))
                         else:
-                            # Simple average
                             avg_lat = sum(c["lat"] for c in coords) / len(coords)
                             avg_lon = sum(c["lon"] for c in coords) / len(coords)
-                            waypoints.append([avg_lat, avg_lon, altitude])
-            
+                            waypoints.append(self._format_waypoint(avg_lat, avg_lon, altitude))
+
             if not waypoints:
                 log_message("GCSController", "No valid waypoints to transfer")
                 return False
-            
-            # Send to sprayer
-            self.drone_states[DroneName.Sprayer.value].radio.send_command(
-                "LOAD_WAYPOINTS",
-                {"waypoints": waypoints, "altitude": altitude}
-            )
-            
-            log_message("GCSController", 
-                f"Transferred {len(waypoints)} waypoints (alt={altitude}m) to Sprayer")
-            
+
+            sprayer_radio = self.drone_states[DroneName.Sprayer.value].radio
+            sprayer_radio.send_command("LOAD_WAYPOINTS_START", {"count": len(waypoints), "altitude": self._format_coord_str(altitude, 3)})
+
+            batch_size = 5
+            for i in range(0, len(waypoints), batch_size):
+                batch = waypoints[i:i + batch_size]
+                sprayer_radio.send_command("LOAD_WAYPOINTS_BATCH", {"offset": i, "waypoints": batch})
+                time.sleep(0.05)
+
+            sprayer_radio.send_command("LOAD_WAYPOINTS_END", {})
+            log_message("GCSController", f"Transferred {len(waypoints)} waypoints (alt={altitude}m) to Sprayer")
             return True
-            
+
         except Exception as e:
             log_message("GCSController", f"Failed to transfer waypoints: {e}")
             return False
