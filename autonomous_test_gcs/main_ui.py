@@ -128,6 +128,27 @@ class GCSUI(ctk.CTk):
         
         self.after(self.GRAPH_UPDATE_INTERVAL_MS, self._update_graphs)  
 
+    def on_transfer_waypoints_clicked(self):
+        """Handle Transfer Waypoints button click."""
+        try:
+            # Option 1: Simple transfer with default settings
+            success = self.controller.transfer_waypoints_to_sprayer()
+            
+            # Option 2: Transfer with custom altitude (if you have an input field)
+            # altitude = float(self.altitude_input.text() or "3.0")
+            # success = self.gcs_controller.transfer_waypoints_detailed(
+            #     altitude=altitude,
+            #     use_weighted_centers=True
+            # )
+            
+            if success:
+                self.show_message("Success", "Waypoints transferred to Sprayer drone", "success")
+            else:
+                self.show_message("Error", "No waypoints to transfer or transfer failed", "error")
+                
+        except Exception as e:
+            self.show_message("Error", f"Failed to transfer waypoints: {e}", "error")
+
 
 def run_app() -> None:
     app = GCSUI()
