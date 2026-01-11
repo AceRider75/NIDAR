@@ -16,14 +16,14 @@ class GCSController:
         self.sprayer_state = DroneState(
             name="Sprayer",
             password="vihang@2025",
-            # radio=RadioComm(port="/dev/ttyUSB0")
-            radio=RadioComm(port=r"")
+            radio=RadioComm(port="/dev/ttyUSB1")
+            # radio=RadioComm(port=r"")
         )
 
         self.scanner_state = DroneState(
             name="Scanner",
             password="vihang@2025",
-            radio=RadioComm(port=r"//./COM4")
+            radio=RadioComm(port=r"/dev/ttyUSB0")
         )
 
         self.lock = threading.Lock()
@@ -79,6 +79,15 @@ class GCSController:
     # ---------------------------------------------------------
     # PACKET PROCESSING
     # ---------------------------------------------------------
+    def _sanitize_value(self, value, default=0.0):
+        """Convert value to float, return default if None or invalid."""
+        if value is None:
+            return default
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            return default
+
     def _process_packet(self, drone: DroneName, packet: Dict[str, Any]) -> None:
         with self.lock:
             state = self.drone_states[drone.value]
@@ -95,7 +104,7 @@ class GCSController:
             state.status = packet.get("status", packet.get("state", state.status))
 
             if "battery" in packet:
-                state.battery = packet["battery"]
+                state.battery = self._sanitize_value(packet["battery"], -1)
 
             if packet.get("log") is not None:
                 state.log = packet["log"]
@@ -106,10 +115,7 @@ class GCSController:
             if isinstance(incoming_telemetry, dict):
                 for key, value in incoming_telemetry.items():
                     if key in state.telemetry:
-                        try:
-                            state.telemetry[key] = float(value)
-                        except (ValueError, TypeError):
-                            state.telemetry[key] = value
+                        state.telemetry[key] = self._sanitize_value(value, 0.0)
             else:
                 log_message("GCSController", f"Unexpected telemetry format: {incoming_telemetry}")
 
@@ -121,32 +127,34 @@ class GCSController:
         """Process and store yellow spot detections with full details."""
         with state.yellow_spots_lock:
             for spot in spots:
-                spot_id = str(spot.get("id"))  # Convert to string for consistent key type
+                spot_id = str(spot.get("id"))
                 if not spot_id:
                     continue
                 
-                # Create coordinate entry with all available data
-                coord_data = {
-                    "lat": float(spot.get("lat", 0)),
-                    "lon": float(spot.get("lon", 0)),
-                    "cx": int(spot.get("cx", 0)),        # Image x coordinate
-                    "cy": int(spot.get("cy", 0)),        # Image y coordinate
-                    "area": float(spot.get("area", 0)),  # Pixel area
-                    "rank": int(spot.get("rank", 0)),    # Area rank
-                    "timestamp": time.time()
-                }
-                
-                # Append to existing spot or create new entry
-                if spot_id not in state.yellow_spots:
-                    state.yellow_spots[spot_id] = []
-                    log_message("GCSController", f"New spot detected: ID={spot_id}")
-                
-                state.yellow_spots[spot_id].append(coord_data)
-                
-                log_message("GCSController", 
-                    f"Spot {spot_id}: ({coord_data['lat']:.7f}, {coord_data['lon']:.7f}) "
-                    f"Rank={coord_data['rank']}, Area={coord_data['area']:.0f}px - "
-                    f"Total coords: {len(state.yellow_spots[spot_id])}")
+                try:
+                    coord_data = {
+                        "lat": float(spot.get("lat", 0)),
+                        "lon": float(spot.get("lon", 0)),
+                        "cx": int(spot.get("cx", 0)),
+                        "cy": int(spot.get("cy", 0)),
+                        "area": float(spot.get("area", 0)),
+                        "rank": int(spot.get("rank", 0)),
+                        "timestamp": time.time()
+                    }
+                    
+                    if spot_id not in state.yellow_spots:
+                        state.yellow_spots[spot_id] = []
+                        log_message("GCSController", f"New spot detected: ID={spot_id}")
+                    
+                    state.yellow_spots[spot_id].append(coord_data)
+                    
+                    log_message("GCSController", 
+                        f"Spot {spot_id}: ({coord_data['lat']:.7f}, {coord_data['lon']:.7f}) "
+                        f"Rank={coord_data['rank']}, Area={coord_data['area']:.0f}px - "
+                        f"Total coords: {len(state.yellow_spots[spot_id])}")
+                        
+                except (ValueError, TypeError) as e:
+                    log_message("GCSController", f"Error processing spot {spot_id}: {e}")
 
     # PUBLIC STATE ACCESS
     # ---------------------------------------------------------

@@ -38,7 +38,6 @@ class GCSUI(ctk.CTk):
             #Get drone state from the controller: (Controller handles all logic)
             scanner = self.controller.get_drone_state(DroneName.Scanner)      #dictionary
             sprayer = self.controller.get_drone_state(DroneName.Sprayer)      #dictionary
-            
             '''
             State Format:
             "status": str,
@@ -93,36 +92,56 @@ class GCSUI(ctk.CTk):
             sprayer_tele = sprayer["telemetry"]             #dictionary
             scanner_tele = scanner["telemetry"]
 
-            # --- RPY graph ---
-            sprayer_roll  = sprayer_tele["roll"]           
-            sprayer_pitch = sprayer_tele["pitch"]
-            sprayer_yaw   = sprayer_tele["yaw"]
-            self.dashboard.sprayer_rpy_graph.update_graph(t, sprayer_roll, sprayer_pitch, sprayer_yaw)
+            # --- helpers to validate numbers ---
+            def _num(v, default=None):
+                # returns v if it's a real number, otherwise default
+                return v if isinstance(v, (int, float)) else default
 
-            scanner_roll  = scanner_tele["roll"]
-            scanner_pitch = scanner_tele["pitch"]
-            scanner_yaw   = scanner_tele["yaw"]
-            self.dashboard.scanner_rpy_graph.update_graph(t, scanner_roll, scanner_pitch, scanner_yaw)           
+            # --- RPY graph ---
+            sry = (_num(sprayer_tele.get("roll")),
+                   _num(sprayer_tele.get("pitch")),
+                   _num(sprayer_tele.get("yaw")))
+            if all(v is not None for v in sry):
+                self.dashboard.sprayer_rpy_graph.update_graph(t, *sry)
+
+            scy = (_num(scanner_tele.get("roll")),
+                   _num(scanner_tele.get("pitch")),
+                   _num(scanner_tele.get("yaw")))
+            if all(v is not None for v in scy):
+                self.dashboard.scanner_rpy_graph.update_graph(t, *scy)
 
             # --- XYZ (position) graph ---
             meters_per_deg_lat = 111320
-            sprayer_meters_per_deg_lon = 111320 * math.cos(math.radians(self.controller.drone_states[DroneName.Sprayer.value].lat0))
-            sprayer_lat = sprayer_tele["lat"] - self.controller.drone_states[DroneName.Sprayer.value].lat0
-            sprayer_lon = sprayer_tele["lon"] - self.controller.drone_states[DroneName.Sprayer.value].lon0
-            sprayer_x = sprayer_lat * meters_per_deg_lat
-            sprayer_y = sprayer_lon * sprayer_meters_per_deg_lon
-            sprayer_z = sprayer_tele["alt"]
-            if self.controller.drone_states[DroneName.Sprayer.value].started:
-                self.dashboard.sprayer_xyz_graph.update_graph(t, sprayer_x, sprayer_y, sprayer_z)
 
-            scanner_meters_per_deg_lon = 111320 * math.cos(math.radians(self.controller.drone_states[DroneName.Scanner.value].lat0))
-            scanner_lat = scanner_tele["lat"] - self.controller.drone_states[DroneName.Scanner.value].lat0
-            scanner_lon = scanner_tele["lon"] - self.controller.drone_states[DroneName.Scanner.value].lon0
-            scanner_x = scanner_lat * meters_per_deg_lat
-            scanner_y = scanner_lon * scanner_meters_per_deg_lon
-            scanner_z = scanner_tele["alt"]
-            if self.controller.drone_states[DroneName.Scanner.value].started:
-                self.dashboard.scanner_xyz_graph.update_graph(t, scanner_x, scanner_y, scanner_z)
+            # Sprayer position (guard None for lat/lon and lat0/lon0)
+            spr_lat = _num(sprayer_tele.get("lat"))
+            spr_lon = _num(sprayer_tele.get("lon"))
+            spr_alt = _num(sprayer_tele.get("alt"))
+            spr_lat0 = _num(getattr(self.controller.drone_states[DroneName.Sprayer.value], "lat0", None))
+            spr_lon0 = _num(getattr(self.controller.drone_states[DroneName.Sprayer.value], "lon0", None))
+            spr_started = getattr(self.controller.drone_states[DroneName.Sprayer.value], "started", False)
+
+            if spr_started and None not in (spr_lat, spr_lon, spr_alt, spr_lat0, spr_lon0):
+                spr_meters_per_deg_lon = 111320 * math.cos(math.radians(spr_lat0))
+                spr_x = (spr_lat - spr_lat0) * meters_per_deg_lat
+                spr_y = (spr_lon - spr_lon0) * spr_meters_per_deg_lon
+                spr_z = spr_alt
+                self.dashboard.sprayer_xyz_graph.update_graph(t, spr_x, spr_y, spr_z)
+
+            # Scanner position
+            scn_lat = _num(scanner_tele.get("lat"))
+            scn_lon = _num(scanner_tele.get("lon"))
+            scn_alt = _num(scanner_tele.get("alt"))
+            scn_lat0 = _num(getattr(self.controller.drone_states[DroneName.Scanner.value], "lat0", None))
+            scn_lon0 = _num(getattr(self.controller.drone_states[DroneName.Scanner.value], "lon0", None))
+            scn_started = getattr(self.controller.drone_states[DroneName.Scanner.value], "started", False)
+
+            if scn_started and None not in (scn_lat, scn_lon, scn_alt, scn_lat0, scn_lon0):
+                scn_meters_per_deg_lon = 111320 * math.cos(math.radians(scn_lat0))
+                scn_x = (scn_lat - scn_lat0) * meters_per_deg_lat
+                scn_y = (scn_lon - scn_lon0) * scn_meters_per_deg_lon
+                scn_z = scn_alt
+                self.dashboard.scanner_xyz_graph.update_graph(t, scn_x, scn_y, scn_z)
         except Exception as e:
             print(f"[UI] UI Update Error: {e} \t {DroneName.Sprayer}")
         
