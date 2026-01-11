@@ -180,43 +180,18 @@ class DronePanel(ctk.CTkFrame):
     def _transfer_waypoints(self) -> None:
         """Transfer waypoints from scanner drone to sprayer drone"""
         try:
-            self.transfer_status_label.configure(
-                text="Transferring...", text_color="#FFC107")
+            self.transfer_status_label.configure(text="Transferring...", text_color="#FFC107")
             self.update_idletasks()
 
-            # Get scanner state to retrieve waypoints
-            scanner_state = self.controller.get_drone_state(DroneName.Scanner)
+            # Call GCS controller to transfer waypoints from scanner → sprayer
+            success = self.controller.transfer_waypoints_to_sprayer(DroneName.Scanner)
 
-            if scanner_state is None or not scanner_state.get("telemetry"):
-                self.transfer_status_label.configure(
-                    text="Error: No scanner data", text_color="#FF5252")
-                self.after(3000, lambda: self.transfer_status_label.configure(
-                    text="Ready", text_color="#4CAF50"))
-                return
-
-            # Extract waypoint data from scanner telemetry
-            scanner_telemetry = scanner_state.get("telemetry", {})
-            waypoint_data = {
-                "scanner_waypoints": scanner_telemetry
-            }
-
-            # Send waypoints to sprayer drone
-            sprayer_state = self.controller.get_drone_state(DroneName.Sprayer)
-            if sprayer_state is not None:
-                # Update sprayer with transferred waypoints
-                # This can be expanded to send actual mission commands
-                self.transfer_status_label.configure(
-                    text="✓ Transfer Complete!", text_color="#4CAF50")
-                self.after(3000, lambda: self.transfer_status_label.configure(
-                    text="Ready", text_color="#4CAF50"))
+            if success:
+                self.transfer_status_label.configure(text="✓ Transfer Complete!", text_color="#4CAF50")
+                self.after(3000, lambda: self.transfer_status_label.configure(text="Ready", text_color="#4CAF50"))
             else:
-                self.transfer_status_label.configure(
-                    text="Error: Sprayer offline", text_color="#FF5252")
-                self.after(3000, lambda: self.transfer_status_label.configure(
-                    text="Ready", text_color="#4CAF50"))
-
+                self.transfer_status_label.configure(text="No waypoints to transfer", text_color="#FF5252")
+                self.after(3000, lambda: self.transfer_status_label.configure(text="Ready", text_color="#4CAF50"))
         except Exception as e:
-            self.transfer_status_label.configure(
-                text=f"Error: {str(e)[:20]}", text_color="#FF5252")
-            self.after(3000, lambda: self.transfer_status_label.configure(
-                text="Ready", text_color="#4CAF50"))
+            self.transfer_status_label.configure(text=f"Error: {str(e)[:20]}", text_color="#FF5252")
+            self.after(3000, lambda: self.transfer_status_label.configure(text="Ready", text_color="#4CAF50"))

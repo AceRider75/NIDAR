@@ -157,7 +157,7 @@ class RadioComm:                #Handles low-level radio communication with the 
         return results
 
     def _update_state(self, packet: dict) -> None:
-        print("[GCS RX]", packet)
+        # print("[GCS RX]", packet)
         with self.lock:
             self._latest_packet = packet
 
