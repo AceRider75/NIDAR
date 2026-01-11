@@ -197,10 +197,12 @@ class DroneManager:
             )
             
             self.spot_tracker_process = subprocess.Popen(
-                ["python3", spot_tracker_path],
+                ["/usr/bin/python", spot_tracker_path],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                preexec_fn=os.setsid
+                preexec_fn=os.setsid,
+                env={},            # do not inherit parent env
+                close_fds=True
             )
             
             print(f"[DroneManager] SpotTracker started (PID: {self.spot_tracker_process.pid})")

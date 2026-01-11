@@ -963,7 +963,8 @@ def main():
     from picamera2 import Picamera2
     import sys
     import time
-
+    import signal
+    
     # Setup directories
     current_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(os.path.dirname(current_dir))
@@ -982,13 +983,13 @@ def main():
     picam2.start()
     time.sleep(1)  # Give camera time to start
 
-    # Prepare video output
+    # Prepare video output (use MKV for resilience)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    raw_video_path = os.path.join(LOG_DIR, f"feed_raw_{timestamp}.mp4")
-    annotated_video_path = os.path.join(LOG_DIR, f"feed_annotated_{timestamp}.mp4")
+    raw_video_path = os.path.join(LOG_DIR, f"feed_raw_{timestamp}.mkv")
+    annotated_video_path = os.path.join(LOG_DIR, f"feed_annotated_{timestamp}.mkv")
     raw_writer = None
     annotated_writer = None
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # codec; container chosen by extension
 
     # Initialize detector and tracker
     detector = ColorDetector()
@@ -1014,6 +1015,40 @@ def main():
     
     frame_count = 0
     detected_spots_this_mission = set()  # Track which spots we've saved images for
+
+    # Graceful shutdown to finalize video files
+    shutting_down = {"flag": False}
+    def _graceful_exit(signum, frame):
+        if shutting_down["flag"]:
+            return
+        shutting_down["flag"] = True
+        print("Received signal, shutting down cleanly...")
+        try:
+            if raw_writer is not None:
+                raw_writer.release()
+            if annotated_writer is not None:
+                annotated_writer.release()
+        except Exception:
+            pass
+        try:
+            picam2.stop()
+        except Exception:
+            pass
+        try:
+            cv2.destroyAllWindows()
+        except Exception:
+            pass
+        try:
+            drone_socket.close()
+        except Exception:
+            pass
+        print(f"Videos saved: {raw_video_path}, {annotated_video_path}")
+        print(f"Spot log saved: {os.path.join(LOG_DIR, 'spot_data.log')}")
+        print(f"Mission images saved to: {mission_dir}")
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, _graceful_exit)
+    signal.signal(signal.SIGTERM, _graceful_exit)
 
     try:
         while True:
@@ -1118,6 +1153,9 @@ def main():
 
             # Sleep briefly to avoid CPU overload (adjust as needed)
             time.sleep(0.01)
+            # If shutdown requested, break to finally to release writers
+            if shutting_down["flag"]:
+                break
 
     except KeyboardInterrupt:
         print("Spot tracker service stopped by user.")
@@ -1128,17 +1166,16 @@ def main():
             raw_writer.release()
         if annotated_writer is not None:
             annotated_writer.release()
-        picam2.stop()
+        try:
+            picam2.stop()
+        except Exception:
+            pass
         cv2.destroyAllWindows()
 
         # Close socket connection
         drone_socket.close()
 
         print(f"Videos saved: {raw_video_path}, {annotated_video_path}")
-        print(f"Spot log saved: {spot_log_file}")
+        print(f"Spot log saved: {os.path.join(LOG_DIR, 'spot_data.log')}")
         print(f"Mission images saved to: {mission_dir}")
         print(f"Total spots detected: {len(detected_spots_this_mission)}")
-
-
-if __name__ == "__main__":
-    main()
