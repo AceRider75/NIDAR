@@ -16,14 +16,14 @@ class GCSController:
         self.sprayer_state = DroneState(
             name="Sprayer",
             password="vihang@2025",
-            radio=RadioComm(port="/dev/ttyUSB1")
+            radio=RadioComm(port="/dev/ttyUSB0")
             # radio=RadioComm(port=r"")
         )
 
         self.scanner_state = DroneState(
             name="Scanner",
             password="vihang@2025",
-            radio=RadioComm(port=r"/dev/ttyUSB0")
+            radio=RadioComm(port=r"/dev/ttyUSB1")
         )
 
         self.lock = threading.Lock()

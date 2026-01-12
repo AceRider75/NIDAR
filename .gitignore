@@ -9,3 +9,6 @@ __pycache__/
 venv
 spray_drone/drone_flight.log
 telemetry
+
+*.log
+*.csv
