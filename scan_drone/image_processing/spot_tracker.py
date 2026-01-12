@@ -1265,6 +1265,9 @@ def main():
                 time.sleep(0.1)
                 continue
 
+            # Convert RGB (from PiCamera2) to BGR (for OpenCV)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
             frame_count += 1
             height, width = frame.shape[:2]
 
@@ -1286,7 +1289,7 @@ def main():
                           f"Yaw={telemetry['yaw']:.1f}°")
                     print(msg)
                     logger.info(msg)
-                    telemetry_warnings_shown = 0  # Reset warnings
+                    telemetry_warnings_shown = 0 # Reset warnings
                 else:
                     if telemetry_warnings_shown < 3:  # Limit warning spam
                         msg = "[SpotTracker] WARNING: No telemetry data from drone_manager"
