@@ -73,7 +73,7 @@ def log_spot_data_logfile(spot_id: int, drone_coords: tuple, spot_coords: tuple)
     Log spot data continuously into the log file in LOG_DIR in this exact format:
     2026-01-01 12:44:21 | spot_id=3 | drone_lat=..., drone_lon=..., drone_alt=... | spot_lat=..., spot_lon=...
     """
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     entry = (
         f"{timestamp} | spot_id={spot_id} | "
@@ -409,7 +409,7 @@ class SpotTracker:
             new_spot.track_history.append(centers[detection_idx])
             self.tracked_spots[self.next_id] = new_spot
             self.next_id += 1
-            timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             self.logger.info(
                 f"{timestamp} | new_spot_detected | spot_id={new_spot.id}")
 
@@ -420,7 +420,7 @@ class SpotTracker:
                 self.tracked_spots[track_id].last_seen_frame
             if frames_missing > self.max_frames_missing:
                 tracks_to_remove.append(track_id)
-                timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 self.logger.info(
                     f"{timestamp} | removed_lost_track | spot_id={track_id}")
 
