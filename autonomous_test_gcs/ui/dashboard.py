@@ -24,7 +24,7 @@ class Dashboard(ctk.CTkFrame):
         self.grid_columnconfigure((0, 1, 2), weight=1, uniform="col")
 
         # Map
-        self.map_view = MapView(self)
+        self.map_view = MapView(self, controller=self.controller)
         self.map_view.grid(row=0, column=0, rowspan=2,
                            sticky="nsew", padx=5, pady=5)
 

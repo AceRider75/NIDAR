@@ -761,13 +761,13 @@ class DroneController:
                         self._send_waypoint(next_wp)
                     else:
                         # Mission complete
-                        self.logger.info("All waypoints reached")
+                        self.logger.info("All waypoints reached, returning to home and landing")
+                        self._add_log("Mission complete - Return to home and Land")
 
-                        # send waypoint to home and land
-
-                        self._add_log("All waypoints reached - returning control to main")
+                        # Execute Return to Home and Land sequence
+                        self.return_to_home_and_land()
+                        
                         self.mission_active.clear()
-                        # self._execute_land()
 
                 time.sleep(0.1)
 

@@ -197,12 +197,12 @@ class DroneManager:
 
         # Setup controller configuration
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
+        KML_PATH = os.path.join(BASE_DIR, "data", "JUxs.kml")
         
         print(f"[DroneManager] Loading KML from: {KML_PATH}")
         
         config = DroneConfig(
-            connection_string='/dev/ttyACM0',
+            connection_string='127.0.0.1:14551',
             geofence_mode="polygon",
             kml_file=KML_PATH,
             polygon_name="Field",
@@ -339,42 +339,47 @@ class DroneManager:
             waypoints = params.get("waypoints", [])
             altitude = params.get("altitude", 3.0)
             
+            # If no waypoints provided, generate spiral pattern from KML
+            if not waypoints and self.controller.mission_planner:
+                print("[DroneManager] No waypoints provided. Generating spiral mission from KML...")
+                # Use current position as start for optimization
+                curr_lat = self.controller.telemetry.lat
+                curr_lon = self.controller.telemetry.lon
+                
+                points_2d = self.controller.mission_planner.generate_mission_from_points(
+                    start_lat=curr_lat if curr_lat != 0 else None,
+                    start_lon=curr_lon if curr_lon != 0 else None
+                )
+                
+                # Convert to waypoints with altitude
+                waypoints = [[lat, lon, altitude] for lat, lon in points_2d]
+                print(f"[DroneManager] Generated {len(waypoints)} waypoints from KML")
+
             print(f"[DroneManager] START command received")
             print(f"[DroneManager] Waypoints: {len(waypoints)}, Altitude: {altitude}m")
+             
+            # Load mission waypoints if provided (validates against KML polygon)
+            if waypoints:
+                print("[DroneManager] Loading mission waypoints...")
+                self.controller.queue_command(
+                    self.controller.load_mission_from_points,
+                    waypoints,
+                    True  # validate_geofence
+                )
             
-            # Execute mission sequence in a separate thread to maintain proper order
-            def execute_mission_sequence():
-                try:
-                    # Load mission waypoints if provided (validates against KML polygon)
-                    if waypoints:
-                        print("[DroneManager] Loading mission waypoints...")
-                        if not self.controller.load_mission_from_points(waypoints, validate_geofence=True):
-                            print("[DroneManager] ERROR: Failed to load mission waypoints")
-                            return
-                        print("[DroneManager] Mission waypoints loaded successfully")
-                    
-                    # Arm and takeoff
-                    print(f"[DroneManager] Arming and taking off to {altitude}m...")
-                    if not self.controller.arm_and_takeoff(altitude):
-                        print("[DroneManager] ERROR: Failed to arm and takeoff")
-                        return
-                    print("[DroneManager] Takeoff successful")
-                    
-                    # Start mission if waypoints were provided
-                    if waypoints:
-                        print("[DroneManager] Starting mission...")
-                        if not self.controller.start_mission():
-                            print("[DroneManager] ERROR: Failed to start mission")
-                            return
-                        print("[DroneManager] Mission started successfully")
-                    
-                except Exception as e:
-                    print(f"[DroneManager] ERROR in mission sequence: {e}")
-                    import traceback
-                    traceback.print_exc()
+            # Arm and takeoff
+            print(f"[DroneManager] Queuing arm and takeoff to {altitude}m...")
+            self.controller.queue_command(
+                self.controller.arm_and_takeoff,
+                altitude
+            )
             
-            # Queue the entire sequence as a single command to ensure proper ordering
-            self.controller.queue_command(execute_mission_sequence)
+            # Start mission if waypoints were provided
+            if waypoints:
+                print("[DroneManager] Queuing mission start...")
+                self.controller.queue_command(
+                    self.controller.start_mission
+                )
             
             # Note: Mission monitoring happens in send_telemetry() 
             # and mission completion triggers return_to_home_and_land via state machine
@@ -457,6 +462,28 @@ class DroneManager:
     def run(self):
         print("\n[DroneManager] Entering main loop...")
         print("[DroneManager] Waiting for commands from GCS...")
+        
+        # SIMULATION: Auto-start if in SITL mode
+        if "127.0.0.1" in self.controller.config.connection_string:
+            print("[SIMULATOR] SITL connection detected.")
+            print("[SIMULATOR] Simulating START command in 5 seconds...")
+            
+            def simulate_start():
+                time.sleep(5)
+                print("\n" + "="*40)
+                print("[SIMULATOR] INJECTING START COMMAND")
+                print("="*40 + "\n")
+                
+                # Mock a packet from GCS
+                start_packet = {
+                    "command": "START",
+                    "params": {
+                        "altitude": 3.0
+                    }
+                }
+                self.handle_command(start_packet)
+            
+            threading.Thread(target=simulate_start, daemon=True).start()
         
         try:
             while self.controller.running.is_set():
