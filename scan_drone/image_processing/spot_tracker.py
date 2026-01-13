@@ -8,7 +8,7 @@ import csv
 import socket
 import json
 from pathlib import Path
-
+import time
 
 try:
     # Prefer shared constants so paths stay consistent across processes
@@ -18,7 +18,6 @@ except Exception:
 
 from dataclasses import dataclass, field
 from collections import defaultdict
-from datetime import datetime
 from sklearn.cluster import DBSCAN
 import cv2
 import numpy as np
@@ -33,10 +32,30 @@ from sklearn.cluster import DBSCAN
 
 # ========= SPOT LOGGING CONFIGURATION =========
 # DO NOT CHANGE THIS PATH (your requested directory)
-LOG_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/rpi_code/logs"
-os.makedirs(LOG_DIR, exist_ok=True)
+MISSIONS_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/scan_drone/missions"
+os.makedirs(MISSIONS_DIR, exist_ok=True)
 
-LOG_FILE = os.path.join(LOG_DIR, "spot_data.log")
+def get_current_mission_dir() -> str:
+    """
+    Get or create the current mission directory based on timestamp.
+    Returns path to mission folder.
+    """
+    mission_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    mission_dir = os.path.join(MISSIONS_DIR, f"mission_{mission_timestamp}")
+    os.makedirs(mission_dir, exist_ok=True)
+    return mission_dir
+
+mission_dir = get_current_mission_dir()
+
+# LOG_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/scan_drone/image_processing/logs"
+# os.makedirs(LOG_DIR, exist_ok=True)
+
+LOG_FILE = os.path.join(mission_dir, "spot_data.log")
+
+
+# Video chunk settings
+VIDEO_CHUNK_DURATION_SECONDS = 60  # 5 minutes per chunk
+VIDEO_CHUNK_MAX_FRAMES = VIDEO_CHUNK_DURATION_SECONDS*30  # ~5 min at 30fps, fallback limit
 
 logging.basicConfig(
     level=logging.INFO,
@@ -54,7 +73,7 @@ def log_spot_data_logfile(spot_id: int, drone_coords: tuple, spot_coords: tuple)
     Log spot data continuously into the log file in LOG_DIR in this exact format:
     2026-01-01 12:44:21 | spot_id=3 | drone_lat=..., drone_lon=..., drone_alt=... | spot_lat=..., spot_lon=...
     """
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     entry = (
         f"{timestamp} | spot_id={spot_id} | "
@@ -390,7 +409,7 @@ class SpotTracker:
             new_spot.track_history.append(centers[detection_idx])
             self.tracked_spots[self.next_id] = new_spot
             self.next_id += 1
-            timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             self.logger.info(
                 f"{timestamp} | new_spot_detected | spot_id={new_spot.id}")
 
@@ -401,7 +420,7 @@ class SpotTracker:
                 self.tracked_spots[track_id].last_seen_frame
             if frames_missing > self.max_frames_missing:
                 tracks_to_remove.append(track_id)
-                timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 self.logger.info(
                     f"{timestamp} | removed_lost_track | spot_id={track_id}")
 
@@ -563,39 +582,6 @@ class SpotTracker:
         self.current_frame = 0
 
 
-# ========= OLD SEPARATE SOCKET CLIENT (COMMENTED OUT) =========
-# class SpotSocketClient:
-#     def __init__(self, host="127.0.0.1", port=5005):
-#         self.host = host
-#         self.port = port
-#         self.sock = None
-#         self.connected = False
-#         self._connect()
-#
-#     def _connect(self):
-#         try:
-#             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#             self.sock.connect((self.host, self.port))
-#             self.connected = True
-#             print("[SpotSocket] Connected to drone controller")
-#         except Exception as e:
-#             print(f"[SpotSocket] Connection failed: {e}")
-#             self.connected = False
-#
-#     def send_spots(self, payload: dict):
-#         if not self.connected:
-#             self._connect()
-#             return
-#
-#         try:
-#             msg = json.dumps(payload).encode()
-#             self.sock.sendall(msg + b"\n")  # newline = message delimiter
-#         except Exception as e:
-#             print(f"[SpotSocket] Send failed: {e}")
-#             self.connected = False
-# ========= END OLD SEPARATE SOCKET CLIENT =========
-
-
 class DroneManagerSocket:
     """
     Unified socket client for communicating with drone_manager.
@@ -628,10 +614,13 @@ class DroneManagerSocket:
             self.sock.settimeout(0.05)
             self.sock.connect((self.host, self.port))
             self.connected = True
-            print(
-                f"[DroneManagerSocket] Connected to drone_manager at {self.host}:{self.port}")
+            msg = f"[DroneManagerSocket] Connected to drone_manager at {self.host}:{self.port}"
+            print(msg)
+            logger.info(msg)
         except Exception as e:
-            print(f"[DroneManagerSocket] Connection failed: {e}")
+            msg = f"[DroneManagerSocket] Connection failed: {e}"
+            print(msg)
+            logger.error(msg)
             self.connected = False
 
     def _reconnect(self):
@@ -680,10 +669,14 @@ class DroneManagerSocket:
         except socket.timeout:
             pass  # No data available
         except ConnectionResetError:
-            print("[DroneManagerSocket] Connection reset, will reconnect...")
+            msg = "[DroneManagerSocket] Connection reset, will reconnect..."
+            print(msg)
+            logger.warning(msg)
             self.connected = False
         except Exception as e:
-            print(f"[DroneManagerSocket] Receive error: {e}")
+            msg = f"[DroneManagerSocket] Receive error: {e}"
+            print(msg)
+            logger.error(msg)
             self.connected = False
 
     def get_latest_telemetry(self) -> Optional[Dict[str, float]]:
@@ -715,7 +708,9 @@ class DroneManagerSocket:
             msg = json.dumps(payload).encode('utf-8')
             self.sock.sendall(msg + b"\n")
         except Exception as e:
-            print(f"[DroneManagerSocket] Send failed: {e}")
+            err_msg = f"[DroneManagerSocket] Send failed: {e}"
+            print(err_msg)
+            logger.error(err_msg)
             self.connected = False
 
     def close(self):
@@ -726,67 +721,10 @@ class DroneManagerSocket:
             except:
                 pass
             self.connected = False
-            print("[DroneManagerSocket] Connection closed")
+            msg = "[DroneManagerSocket] Connection closed"
+            print(msg)
+            logger.info(msg)
 
-
-# ========= OLD FILE-BASED TELEMETRY READER (COMMENTED OUT) =========
-# def get_latest_telemetry(telemetry_file: str) -> Optional[Dict[str, float]]:
-#     """
-#     Read the latest telemetry data from the log file.
-#
-#     Args:
-#         telemetry_file: Path to the telemetry log file
-#
-#     Returns:
-#         Dictionary with telemetry data or None if read fails
-#     """
-#     try:
-#         if not os.path.exists(telemetry_file):
-#             return None
-#
-#         # Read the last few lines efficiently
-#         with open(telemetry_file, 'rb') as f:
-#             try:
-#                 # Go to the end of the file
-#                 f.seek(0, os.SEEK_END)
-#                 file_size = f.tell()
-#
-#                 # Read last 1KB (should cover at least one line)
-#                 seek_offset = min(file_size, 1024)
-#                 f.seek(-seek_offset, os.SEEK_END)
-#
-#                 lines = f.readlines()
-#
-#                 if not lines:
-#                     return None
-#
-#                 # Get the last non-empty line
-#                 last_line = lines[-1].decode().strip()
-#                 if not last_line and len(lines) > 1:
-#                     last_line = lines[-2].decode().strip()
-#
-#             except OSError:
-#                 return None
-#
-#         if not last_line:
-#             return None
-#
-#         # Parse CSV line
-#         # Format: time, status, battery, lat, lon, alt, vx, vy, vz, roll, pitch, yaw, xacc, yacc
-#         parts = last_line.split(',')
-#         if len(parts) < 12:
-#             return None
-#
-#         return {
-#             "lat": float(parts[3]),
-#             "lon": float(parts[4]),
-#             "alt": float(parts[5]),
-#             "yaw": float(parts[11])
-#         }
-#     except Exception as e:
-#         # logging.error(f"Error reading telemetry: {e}")
-#         return None
-# ========= END OLD FILE-BASED TELEMETRY READER =========
 
 def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, drone_yaw: float,
                           spot_center: Tuple[int, int], image_size: Tuple[int, int],
@@ -885,22 +823,173 @@ def log_spot_data(spot_id: int, drone_coords: Tuple[float, float, float],
                 f"{spot_coords[1]:.7f}"
             ])
     except Exception as e:
-        print(f"Failed to log spot data: {e}")
+        msg = f"Failed to log spot data: {e}"
+        print(msg)
+        logger.error(msg)
 
 
-# ========= IMAGE SAVE CONFIGURATION =========
-MISSIONS_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/rpi_code/missions"
-os.makedirs(MISSIONS_DIR, exist_ok=True)
-
-def get_current_mission_dir() -> str:
+class VideoChunkWriter:
     """
-    Get or create the current mission directory based on timestamp.
-    Returns path to mission folder.
+    Manages video recording in chunks to prevent file corruption and memory issues.
+    Creates a new video file every N seconds/frames.
     """
-    mission_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    mission_dir = os.path.join(MISSIONS_DIR, f"mission_{mission_timestamp}")
-    os.makedirs(mission_dir, exist_ok=True)
-    return mission_dir
+    
+    def __init__(self, output_dir: str, prefix: str, 
+                 chunk_duration_sec: int = VIDEO_CHUNK_DURATION_SECONDS,
+                 max_frames_per_chunk: int = VIDEO_CHUNK_MAX_FRAMES,
+                 fps: float = 30.0):
+        """
+        Initialize the chunk writer.
+        
+        Args:
+            output_dir: Directory to save video chunks
+            prefix: Filename prefix (e.g., 'feed_raw' or 'feed_annotated')
+            chunk_duration_sec: Maximum seconds per chunk
+            max_frames_per_chunk: Maximum frames per chunk (fallback)
+            fps: Frames per second
+        """
+        self.output_dir = output_dir
+        self.prefix = prefix
+        self.chunk_duration_sec = chunk_duration_sec
+        self.max_frames_per_chunk = max_frames_per_chunk
+        self.fps = fps
+        
+        self.current_writer = None
+        self.current_chunk_index = 0
+        self.frames_in_current_chunk = 0
+        self.chunk_start_time = None
+        self.frame_size = None
+        self.total_frames_written = 0
+        self.chunk_files = []
+        
+        # Use MJPG codec for better Pi compatibility
+        # Alternatives: 'XVID', 'mp4v', 'avc1'
+        self.fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+        self.extension = '.avi'  # AVI container is more robust with MJPG
+        
+        os.makedirs(output_dir, exist_ok=True)
+        
+    def _get_chunk_filename(self) -> str:
+        """Generate filename for current chunk."""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{self.prefix}_chunk{self.current_chunk_index:04d}_{timestamp}{self.extension}"
+        return os.path.join(self.output_dir, filename)
+    
+    def _start_new_chunk(self, frame_size: Tuple[int, int]):
+        """Start a new video chunk."""
+        # Close current writer if exists
+        self._close_current_chunk()
+        
+        self.frame_size = frame_size
+        chunk_path = self._get_chunk_filename()
+        
+        self.current_writer = cv2.VideoWriter(
+            chunk_path,
+            self.fourcc,
+            self.fps,
+            frame_size
+        )
+        
+        if not self.current_writer.isOpened():
+            logger.error(f"Failed to open video writer for {chunk_path}")
+            self.current_writer = None
+            return False
+        
+        self.chunk_start_time = time.time()
+        self.frames_in_current_chunk = 0
+        self.chunk_files.append(chunk_path)
+        
+        logger.info(f"Started new video chunk: {chunk_path}")
+        print(f"[VideoChunk] Started: {os.path.basename(chunk_path)}")
+        
+        return True
+    
+    def _close_current_chunk(self):
+        """Close and finalize the current chunk."""
+        if self.current_writer is not None:
+            try:
+                self.current_writer.release()
+                if self.frames_in_current_chunk > 0:
+                    logger.info(f"Closed chunk {self.current_chunk_index} "
+                               f"({self.frames_in_current_chunk} frames)")
+                    print(f"[VideoChunk] Closed chunk {self.current_chunk_index} "
+                          f"({self.frames_in_current_chunk} frames)")
+            except Exception as e:
+                logger.error(f"Error closing chunk: {e}")
+            finally:
+                self.current_writer = None
+                self.current_chunk_index += 1
+    
+    def _should_start_new_chunk(self) -> bool:
+        """Check if we should start a new chunk."""
+        if self.current_writer is None:
+            return True
+        
+        # Check frame limit
+        if self.frames_in_current_chunk >= self.max_frames_per_chunk:
+            return True
+        
+        # Check time limit
+        if self.chunk_start_time is not None:
+            elapsed = time.time() - self.chunk_start_time
+            if elapsed >= self.chunk_duration_sec:
+                return True
+        
+        return False
+    
+    def write(self, frame: np.ndarray) -> bool:
+        """
+        Write a frame, automatically managing chunks.
+        
+        Args:
+            frame: BGR frame to write
+            
+        Returns:
+            True if write succeeded
+        """
+        if frame is None:
+            return False
+        
+        height, width = frame.shape[:2]
+        frame_size = (width, height)
+        
+        # Check if we need a new chunk
+        if self._should_start_new_chunk():
+            if not self._start_new_chunk(frame_size):
+                return False
+        
+        # Write frame
+        try:
+            self.current_writer.write(frame)
+            self.frames_in_current_chunk += 1
+            self.total_frames_written += 1
+            return True
+        except Exception as e:
+            logger.error(f"Error writing frame: {e}")
+            return False
+    
+    def release(self):
+        """Release all resources and close current chunk."""
+        self._close_current_chunk()
+        
+        print(f"\n[VideoChunk] Summary for '{self.prefix}':")
+        print(f"  Total chunks: {self.current_chunk_index}")
+        print(f"  Total frames: {self.total_frames_written}")
+        print(f"  Chunk files:")
+        for f in self.chunk_files:
+            if os.path.exists(f):
+                size_mb = os.path.getsize(f) / (1024 * 1024)
+                print(f"    - {os.path.basename(f)} ({size_mb:.1f} MB)")
+            else:
+                print(f"    - {os.path.basename(f)} (missing)")
+        
+        logger.info(f"VideoChunkWriter '{self.prefix}' released: "
+                   f"{self.current_chunk_index} chunks, {self.total_frames_written} frames")
+    
+    def get_chunk_files(self) -> List[str]:
+        """Get list of all chunk files created."""
+        return self.chunk_files.copy()
+
 
 def save_detection_image(frame: np.ndarray, mission_dir: str, 
                          spot_id: int, frame_count: int,
@@ -945,22 +1034,37 @@ def main():
     import time
     import signal
     
-    print("=" * 60)
-    print("SPOT TRACKER - Starting")
-    print("=" * 60)
+    msg = "=" * 60
+    print(msg)
+    logger.info(msg)
+    msg = "SPOT TRACKER - Starting"
+    print(msg)
+    logger.info(msg)
+    msg = "=" * 60
+    print(msg)
+    logger.info(msg)
     
     # Setup directories
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    LOG_DIR = os.path.join(current_dir, "logs")
-    os.makedirs(LOG_DIR, exist_ok=True)
+    # current_dir = os.path.dirname(os.path.abspath(__file__))
+    # LOG_DIR = os.path.join(current_dir, "logs")
+    # os.makedirs(LOG_DIR, exist_ok=True)
     
     # Initialize mission directory
-    mission_dir = get_current_mission_dir()
-    logger.info(f"Mission directory: {mission_dir}")
-    print(f"[SpotTracker] Mission directory: {mission_dir}")
+    # mission_dir = get_current_mission_dir()
+    VIDEO_DIR = os.path.join(mission_dir, "videos")
+    VIDEO_RAW_DIR = os.path.join(VIDEO_DIR, "raw")
+    VIDEO_ANNOTATED_DIR = os.path.join(VIDEO_DIR, "annotated")
+
+    msg = f"Mission directory: {mission_dir}"
+    logger.info(msg)
+    msg = f"[SpotTracker] Mission directory: {mission_dir}"
+    print(msg)
+    logger.info(msg)
 
     # Initialize camera
-    print("[SpotTracker] Initializing camera...")
+    msg = "[SpotTracker] Initializing camera..."
+    print(msg)
+    logger.info(msg)
     try:
         picam2 = Picamera2()
         config = picam2.create_preview_configuration(
@@ -968,25 +1072,54 @@ def main():
         picam2.configure(config)
         picam2.start()
         time.sleep(2)  # Give camera time to start properly
-        print("[SpotTracker] ✓ Camera started")
+        msg = "[SpotTracker] ✓ Camera started"
+        print(msg)
+        logger.info(msg)
     except Exception as e:
-        print(f"[SpotTracker] ERROR: Camera initialization failed: {e}")
-        print("[SpotTracker] Make sure:")
-        print("  1. Camera is connected")
-        print("  2. Camera is enabled in raspi-config")
-        print("  3. You have permissions (try: sudo usermod -a -G video $USER)")
+        msg = f"[SpotTracker] ERROR: Camera initialization failed: {e}"
+        print(msg)
+        logger.error(msg)
+        msg = "[SpotTracker] Make sure:"
+        print(msg)
+        logger.error(msg)
+        msg = "  1. Camera is connected"
+        print(msg)
+        logger.error(msg)
+        msg = "  2. Camera is enabled in raspi-config"
+        print(msg)
+        logger.error(msg)
+        msg = "  3. You have permissions (try: sudo usermod -a -G video $USER)"
+        print(msg)
+        logger.error(msg)
         return
 
-    # Prepare video output (use MKV for resilience)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    raw_video_path = os.path.join(LOG_DIR, f"feed_raw_{timestamp}.mkv")
-    annotated_video_path = os.path.join(LOG_DIR, f"feed_annotated_{timestamp}.mkv")
-    raw_writer = None
-    annotated_writer = None
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    # Initialize chunked video writers instead of single file
+    msg = "[SpotTracker] Initializing chunked video writers..."
+    print(msg)
+    logger.info(msg)
+    
+    raw_writer = VideoChunkWriter(
+        output_dir=VIDEO_RAW_DIR,
+        prefix="feed_raw",
+        chunk_duration_sec=VIDEO_CHUNK_DURATION_SECONDS,  # 5 minutes per chunk
+        fps=30.0
+    )
+    
+    annotated_writer = VideoChunkWriter(
+        output_dir=VIDEO_ANNOTATED_DIR,
+        prefix="feed_annotated",
+        chunk_duration_sec=VIDEO_CHUNK_DURATION_SECONDS,
+        fps=30.0
+    )
+    
+    msg = "[SpotTracker] ✓ Chunked video writers ready (5 min chunks)"
+    print(msg)
+    logger.info(msg)
 
     # Initialize detector and tracker
-    print("[SpotTracker] Initializing detector and tracker...")
+    msg = "[SpotTracker] Initializing detector and tracker..."
+    print(msg)
+    logger.info(msg)
     detector = ColorDetector()
     tracker = SpotTracker(
         max_distance=80,
@@ -995,10 +1128,14 @@ def main():
         clustering_distance=60.0,
         min_cluster_samples=1
     )
-    print("[SpotTracker] ✓ Detector and tracker ready")
+    msg = "[SpotTracker] ✓ Detector and tracker ready"
+    print(msg)
+    logger.info(msg)
 
     # Connect to drone_manager socket
-    print("[SpotTracker] Connecting to drone_manager...")
+    msg = "[SpotTracker] Connecting to drone_manager..."
+    print(msg)
+    logger.info(msg)
     drone_socket = DroneManagerSocket(host="127.0.0.1", port=5005)
     
     # Wait for connection with retry
@@ -1006,37 +1143,67 @@ def main():
     connected = False
     for i in range(max_retries):
         if drone_socket.connected:
-            print(f"[SpotTracker] ✓ Connected to drone_manager")
+            msg = f"[SpotTracker] ✓ Connected to drone_manager"
+            print(msg)
+            logger.info(msg)
             connected = True
             break
-        print(f"[SpotTracker] Waiting for drone_manager... ({i+1}/{max_retries})")
+        msg = f"[SpotTracker] Waiting for drone_manager... ({i+1}/{max_retries})"
+        print(msg)
+        logger.info(msg)
         time.sleep(2)
         drone_socket._reconnect()
     
     if not connected:
-        print("[SpotTracker] ERROR: Failed to connect to drone_manager")
-        print("[SpotTracker] Make sure drone_manager.py is running!")
-        print("[SpotTracker] You can still run for testing, but no telemetry will be available")
+        msg = "[SpotTracker] ERROR: Failed to connect to drone_manager"
+        print(msg)
+        logger.error(msg)
+        msg = "[SpotTracker] Make sure drone_manager.py is running!"
+        print(msg)
+        logger.error(msg)
+        msg = "[SpotTracker] You can still run for testing, but no telemetry will be available"
+        print(msg)
+        logger.warning(msg)
         # Don't exit - continue for testing without telemetry
 
     # Register with drone_manager
     if drone_socket.connected:
         try:
             drone_socket.send_spots({"type": "register", "name": "spot_tracker"})
-            print("[SpotTracker] ✓ Registered with drone_manager")
+            msg = "[SpotTracker] ✓ Registered with drone_manager"
+            print(msg)
+            logger.info(msg)
         except Exception as e:
-            print(f"[SpotTracker] Registration failed: {e}")
+            msg = f"[SpotTracker] Registration failed: {e}"
+            print(msg)
+            logger.error(msg)
 
-    spot_log_file = os.path.join(LOG_DIR, "spot_data.log")
+    # spot_log_file = os.path.join(LOG_DIR, "spot_data.log")
     
-    print("=" * 60)
-    print("SPOT TRACKER - Ready")
-    print("=" * 60)
-    print(f"  Mission images: {mission_dir}")
-    print(f"  Spot log: {spot_log_file}")
-    print(f"  Videos: {LOG_DIR}")
-    print(f"  Socket: {'Connected' if drone_socket.connected else 'NOT CONNECTED'}")
-    print("=" * 60)
+    msg = "=" * 60
+    print(msg)
+    logger.info(msg)
+    msg = "SPOT TRACKER - Ready"
+    print(msg)
+    logger.info(msg)
+    msg = "=" * 60
+    print(msg)
+    logger.info(msg)
+    msg = f"  Mission images: {mission_dir}"
+    print(msg)
+    logger.info(msg)
+    msg = f"  Spot log: {LOG_FILE}"
+    print(msg)
+    logger.info(msg)
+    msg = f"  Videos: {VIDEO_RAW_DIR}"
+    print(msg)
+    logger.info(msg)
+    msg = f"  Socket: {'Connected' if drone_socket.connected else 'NOT CONNECTED'}"
+    print(msg)
+    logger.info(msg)
+    msg = "=" * 60
+    print(msg)
+    logger.info(msg)
     
     frame_count = 0
     detected_spots_this_mission = set()
@@ -1050,12 +1217,12 @@ def main():
         if shutting_down["flag"]:
             return
         shutting_down["flag"] = True
-        print("\n[SpotTracker] Received signal, shutting down cleanly...")
+        msg = "\n[SpotTracker] Received signal, shutting down cleanly..."
+        print(msg)
+        logger.info(msg)
         try:
-            if raw_writer is not None:
-                raw_writer.release()
-            if annotated_writer is not None:
-                annotated_writer.release()
+            raw_writer.release()
+            annotated_writer.release()
         except:
             pass
         try:
@@ -1070,17 +1237,24 @@ def main():
             drone_socket.close()
         except:
             pass
-        print(f"[SpotTracker] Videos saved: {raw_video_path}, {annotated_video_path}")
-        print(f"[SpotTracker] Spot log: {spot_log_file}")
-        print(f"[SpotTracker] Mission images: {mission_dir}")
-        print(f"[SpotTracker] Total spots detected: {len(detected_spots_this_mission)}")
+        msg = f"[SpotTracker] Spot log: {LOG_FILE}"
+        print(msg)
+        logger.info(msg)
+        msg = f"[SpotTracker] Mission images: {mission_dir}"
+        print(msg)
+        logger.info(msg)
+        msg = f"[SpotTracker] Total spots detected: {len(detected_spots_this_mission)}"
+        print(msg)
+        logger.info(msg)
         sys.exit(0)
 
     signal.signal(signal.SIGINT, _graceful_exit)
     signal.signal(signal.SIGTERM, _graceful_exit)
 
     logger.info("Camera started. Capturing frames...")
-    print("[SpotTracker] Starting frame capture loop...\n")
+    msg = "[SpotTracker] Starting frame capture loop...\n"
+    print(msg)
+    logger.info(msg)
 
     try:
         while True:
@@ -1091,19 +1265,11 @@ def main():
                 time.sleep(0.1)
                 continue
 
+            # Convert RGB (from PiCamera2) to BGR (for OpenCV)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
             frame_count += 1
             height, width = frame.shape[:2]
-
-            # Initialize video writers only once
-            if raw_writer is None:
-                raw_writer = cv2.VideoWriter(raw_video_path, fourcc, 30.0, (width, height))
-                annotated_writer = cv2.VideoWriter(annotated_video_path, fourcc, 30.0, (width, height))
-                
-                if not raw_writer.isOpened() or not annotated_writer.isOpened():
-                    print("[SpotTracker] ERROR: Failed to open video writers")
-                    break
-                
-                print(f"[SpotTracker] ✓ Video writers initialized: {width}x{height}")
 
             # Detect yellow spots
             centers, contours, mask = detector.detect_yellow_spots(frame)
@@ -1118,16 +1284,22 @@ def main():
             now = time.time()
             if now - last_telemetry_check > 10:
                 if telemetry:
-                    print(f"[SpotTracker] Telemetry: Lat={telemetry['lat']:.6f}, "
+                    msg = (f"[SpotTracker] Telemetry: Lat={telemetry['lat']:.6f}, "
                           f"Lon={telemetry['lon']:.6f}, Alt={telemetry['alt']:.1f}m, "
                           f"Yaw={telemetry['yaw']:.1f}°")
-                    telemetry_warnings_shown = 0  # Reset warnings
+                    print(msg)
+                    logger.info(msg)
+                    telemetry_warnings_shown = 0 # Reset warnings
                 else:
                     if telemetry_warnings_shown < 3:  # Limit warning spam
-                        print("[SpotTracker] WARNING: No telemetry data from drone_manager")
+                        msg = "[SpotTracker] WARNING: No telemetry data from drone_manager"
+                        print(msg)
+                        logger.warning(msg)
                         telemetry_warnings_shown += 1
                         if telemetry_warnings_shown >= 3:
-                            print("[SpotTracker] (Further telemetry warnings suppressed)")
+                            msg = "[SpotTracker] (Further telemetry warnings suppressed)"
+                            print(msg)
+                            logger.warning(msg)
                 last_telemetry_check = now
 
             # Save images for newly detected spots
@@ -1150,7 +1322,9 @@ def main():
                         annotated_path = os.path.join(mission_dir, annotated_filename)
                         cv2.imwrite(annotated_path, overlay)
                         
-                        print(f"[SpotTracker] ✓ NEW SPOT #{spot.id} detected and saved")
+                        msg = f"[SpotTracker] ✓ NEW SPOT #{spot.id} detected and saved"
+                        print(msg)
+                        logger.info(msg)
 
             # Log spot data continuously if we have telemetry
             if telemetry and tracked_spots:
@@ -1207,18 +1381,26 @@ def main():
             conn_color = (0, 255, 0) if drone_socket.connected else (0, 0, 255)
             cv2.putText(overlay, conn_str, (width - 150, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, conn_color, 2)
+            
+            # Add chunk info to overlay
+            chunk_info = f"Chunk: {raw_writer.current_chunk_index} | Frames: {raw_writer.frames_in_current_chunk}"
+            cv2.putText(overlay, chunk_info, (10, height - 45),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 1)
 
-            # Write frames to video
+            # Write frames to chunked video writers
             raw_writer.write(frame)
             annotated_writer.write(overlay)
 
             # Print status periodically (every 5 seconds)
             if now - last_status_print > 5:
-                print(f"[SpotTracker] Frame {frame_count} | "
+                msg = (f"[SpotTracker] Frame {frame_count} | "
                       f"Spots: {len(tracked_spots)} | "
                       f"Total detected: {len(detected_spots_this_mission)} | "
+                      f"Chunk: {raw_writer.current_chunk_index} | "
                       f"Telemetry: {'OK' if telemetry else 'NO'} | "
                       f"Socket: {'OK' if drone_socket.connected else 'DOWN'}")
+                print(msg)
+                logger.info(msg)
                 last_status_print = now
 
             # Sleep briefly
@@ -1228,21 +1410,27 @@ def main():
                 break
 
     except KeyboardInterrupt:
-        print("\n[SpotTracker] Stopped by user")
+        msg = "\n[SpotTracker] Stopped by user"
+        print(msg)
+        logger.info(msg)
 
     except Exception as e:
-        print(f"\n[SpotTracker] ERROR in main loop: {e}")
+        msg = f"\n[SpotTracker] ERROR in main loop: {e}"
+        print(msg)
+        logger.error(msg)
         import traceback
         traceback.print_exc()
+        logger.exception("Exception traceback:")
 
     finally:
         # Release resources
-        print("\n[SpotTracker] Cleaning up resources...")
+        msg = "\n[SpotTracker] Cleaning up resources..."
+        print(msg)
+        logger.info(msg)
         
-        if raw_writer is not None:
-            raw_writer.release()
-        if annotated_writer is not None:
-            annotated_writer.release()
+        # Release chunked writers (this prints summary)
+        raw_writer.release()
+        annotated_writer.release()
         
         try:
             picam2.stop()
@@ -1252,15 +1440,30 @@ def main():
         cv2.destroyAllWindows()
         drone_socket.close()
 
-        print("=" * 60)
-        print("SPOT TRACKER - Shutdown Complete")
-        print("=" * 60)
-        print(f"  Videos: {raw_video_path}")
-        print(f"           {annotated_video_path}")
-        print(f"  Spot log: {spot_log_file}")
-        print(f"  Mission images: {mission_dir}")
-        print(f"  Total spots detected: {len(detected_spots_this_mission)}")
-        print("=" * 60)
+        msg = "=" * 60
+        print(msg)
+        logger.info(msg)
+        msg = "SPOT TRACKER - Shutdown Complete"
+        print(msg)
+        logger.info(msg)
+        msg = "=" * 60
+        print(msg)
+        logger.info(msg)
+        msg = f"  Video chunks: {VIDEO_DIR}"
+        print(msg)
+        logger.info(msg)
+        msg = f"  Spot log: {LOG_FILE}"
+        print(msg)
+        logger.info(msg)
+        msg = f"  Mission images: {mission_dir}"
+        print(msg)
+        logger.info(msg)
+        msg = f"  Total spots detected: {len(detected_spots_this_mission)}"
+        print(msg)
+        logger.info(msg)
+        msg = "=" * 60
+        print(msg)
+        logger.info(msg)
 
 
 if __name__ == "__main__":
