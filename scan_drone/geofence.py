@@ -29,10 +29,20 @@ class GeoFence:
         
         # Check altitude first (common to both modes)
         if alt < self.min_altitude:
-            return False, f"Altitude too low: {alt:.2f}m < {self.min_altitude}m"
+            # Allow low altitude if close to home (taking off / landing)
+            dist_home = haversine_dist(self.home_lat, self.home_lon, lat, lon)
+            if dist_home > 20.0:  # Only enforce min altitude if > 20m from home
+                return False, f"Altitude too low: {alt:.2f}m < {self.min_altitude}m"
+                
         if alt > self.max_altitude:
             return False, f"Altitude too high: {alt:.2f}m > {self.max_altitude}m"
         
+        # Exception: Always allow being close to Home (takeoff/landing/return)
+        # 50m radius safe zone around home
+        dist_home = haversine_dist(self.home_lat, self.home_lon, lat, lon)
+        if dist_home < 50.0:
+            return True, f"Within Home safe zone ({dist_home:.1f}m)"
+
         # Mode-specific horizontal checks
         if self.mode == "polygon":
             return self._check_polygon_bounds(lat, lon)
