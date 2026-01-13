@@ -660,7 +660,9 @@ class DroneManagerSocket:
                                         "lat": float(telem['lat']),
                                         "lon": float(telem['lon']),
                                         "alt": float(telem['alt']),
-                                        "yaw": float(telem['yaw'])
+                                        "yaw": float(telem['yaw']),
+                                        "roll": float(telem.get('roll', 0.0)),
+                                        "pitch": float(telem.get('pitch', 0.0))
                                     }
                         except json.JSONDecodeError:
                             pass
@@ -726,7 +728,8 @@ class DroneManagerSocket:
             logger.info(msg)
 
 
-def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, drone_yaw: float,
+def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, 
+                          drone_yaw: float, drone_roll: float, drone_pitch: float,
                           spot_center: Tuple[int, int], image_size: Tuple[int, int],
                           fov_h: float = 62.2) -> Tuple[float, float]:
     """
@@ -737,6 +740,8 @@ def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, 
         drone_lon: Drone longitude
         drone_alt: Drone altitude in meters
         drone_yaw: Drone yaw in degrees
+        drone_roll: Drone roll in degrees
+        drone_pitch: Drone pitch in degrees
         spot_center: Spot center (x, y) in pixels
         image_size: Image size (width, height) in pixels
         fov_h: Horizontal Field of View in degrees
@@ -759,12 +764,24 @@ def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, 
     angle_x = (dx_px / img_w) * fov_h
     angle_y = (dy_px / img_h) * fov_v
 
-    # Calculate ground distances relative to drone
-    # x is right, y is forward (relative to camera frame)
-    # We assume camera is looking straight down (nadir)
+    # Convert to radians
+    roll_rad = math.radians(drone_roll)
+    pitch_rad = math.radians(drone_pitch)
+    angle_x_rad = math.radians(angle_x)
+    angle_y_rad = math.radians(angle_y)
 
-    dist_x = drone_alt * math.tan(math.radians(angle_x))
-    dist_y = drone_alt * math.tan(math.radians(angle_y))
+    # Calculate ground distances relative to drone (Body Frame)
+    # Compensate for attitude:
+    # - Pitch affects forward distance (Body X)
+    # - Roll affects right distance (Body Y)
+    
+    # Forward distance (Body X)
+    # Positive pitch (nose up) + positive angle_y (top of image) -> look further forward
+    dist_forward = drone_alt * math.tan(pitch_rad + angle_y_rad)
+    
+    # Right distance (Body Y)
+    # Positive roll (right wing down) + positive angle_x (right of image) -> look further right
+    dist_right = drone_alt * math.tan(roll_rad + angle_x_rad)
 
     # Rotate distances by drone yaw to get North/East offsets
     # Yaw is usually 0 = North, 90 = East
@@ -775,8 +792,8 @@ def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, 
 
     # NED frame offsets
     # x_b = forward (camera y), y_b = right (camera x)
-    x_b = dist_y
-    y_b = dist_x
+    x_b = dist_forward
+    y_b = dist_right
 
     north_offset = x_b * math.cos(yaw_rad) - y_b * math.sin(yaw_rad)
     east_offset = x_b * math.sin(yaw_rad) + y_b * math.cos(yaw_rad)
@@ -1286,7 +1303,8 @@ def main():
                 if telemetry:
                     msg = (f"[SpotTracker] Telemetry: Lat={telemetry['lat']:.6f}, "
                           f"Lon={telemetry['lon']:.6f}, Alt={telemetry['alt']:.1f}m, "
-                          f"Yaw={telemetry['yaw']:.1f}°")
+                          f"Yaw={telemetry['yaw']:.1f}°, Roll={telemetry.get('roll', 0):.1f}°, "
+                          f"Pitch={telemetry.get('pitch', 0):.1f}°")
                     print(msg)
                     logger.info(msg)
                     telemetry_warnings_shown = 0 # Reset warnings
@@ -1339,6 +1357,7 @@ def main():
                     spot_lat, spot_lon = calculate_real_coords(
                         telemetry["lat"], telemetry["lon"], 
                         telemetry["alt"], telemetry["yaw"],
+                        telemetry.get("roll", 0.0), telemetry.get("pitch", 0.0),
                         spot.center, (width, height)
                     )
                     

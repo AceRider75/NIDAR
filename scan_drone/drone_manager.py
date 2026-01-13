@@ -144,7 +144,9 @@ class SpotTrackerSocketServer:
                     "lat": telemetry.get("lat", 0.0),
                     "lon": telemetry.get("lon", 0.0),
                     "alt": telemetry.get("alt", 0.0),
-                    "yaw": telemetry.get("yaw", 0.0)
+                    "yaw": telemetry.get("yaw", 0.0),
+                    "roll": telemetry.get("roll", 0.0),
+                    "pitch": telemetry.get("pitch", 0.0)
                 }
             }
             data = json.dumps(msg).encode('utf-8') + b'\n'
