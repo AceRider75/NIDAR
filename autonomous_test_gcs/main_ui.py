@@ -10,7 +10,7 @@ from ui.dashboard import Dashboard          #Handles the main dashboard UI layou
 class GCSUI(ctk.CTk):
     UPDATE_INTERVAL_MS = 500
     GRAPH_UPDATE_INTERVAL_MS = 100
-    WAYPOINT_UPDATE_INTERVAL_MS = 2000  # Check for new waypoints every 2 seconds
+    WAYPOINT_UPDATE_INTERVAL_MS = 1000  # Check for new yellow spots every 1 second
 
     def __init__(self):
         super().__init__()
@@ -29,11 +29,12 @@ class GCSUI(ctk.CTk):
 
         self.after(self.UPDATE_INTERVAL_MS, self._periodic_update)   
         self.after(self.GRAPH_UPDATE_INTERVAL_MS, self._update_graphs)
-        self.after(self.WAYPOINT_UPDATE_INTERVAL_MS, self._update_waypoints)
+        self.after(self.WAYPOINT_UPDATE_INTERVAL_MS, self._update_waypoints_from_spots)
 
         self.last_sprayer_log_str = ""
         self.last_scanner_log_str = ""
-        self._last_waypoint_count = 0
+        self._last_spot_count = 0
+        self._last_coord_count = 0
 
 
     def _periodic_update(self) -> None:
@@ -148,18 +149,29 @@ class GCSUI(ctk.CTk):
         
         self.after(self.GRAPH_UPDATE_INTERVAL_MS, self._update_graphs)  
 
-    def _update_waypoints(self) -> None:
-        """Periodically check for new waypoints and update display."""
+    def _update_waypoints_from_spots(self) -> None:
+        """Periodically check for new yellow spots and update waypoint display."""
         try:
             if hasattr(self.dashboard, 'waypoint_manager'):
-                current_waypoints = self.controller.get_waypoints()
-                if len(current_waypoints) != self._last_waypoint_count:
-                    self.dashboard.waypoint_manager.set_waypoints(current_waypoints)
-                    self._last_waypoint_count = len(current_waypoints)
+                # Get yellow spots from scanner
+                spots_data = self.controller.get_yellow_spots(DroneName.Scanner)
+                
+                if spots_data:
+                    current_spot_count = len(spots_data)
+                    current_coord_count = sum(len(coords) for coords in spots_data.values())
+                    
+                    # Only update if spots changed
+                    if (current_spot_count != self._last_spot_count or 
+                        current_coord_count != self._last_coord_count):
+                        
+                        self.dashboard.waypoint_manager.update_from_spots(spots_data)
+                        self._last_spot_count = current_spot_count
+                        self._last_coord_count = current_coord_count
+                        
         except Exception as e:
             print(f"[UI] Waypoint update error: {e}")
         
-        self.after(self.WAYPOINT_UPDATE_INTERVAL_MS, self._update_waypoints)
+        self.after(self.WAYPOINT_UPDATE_INTERVAL_MS, self._update_waypoints_from_spots)
 
     def show_message(self, title: str, message: str, msg_type: str = "info"):
         """Show a message dialog."""

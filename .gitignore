@@ -14,3 +14,4 @@ telemetry
 *.csv
 
 map_cache/
+test_images/

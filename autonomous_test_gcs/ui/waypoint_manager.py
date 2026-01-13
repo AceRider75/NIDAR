@@ -3,10 +3,11 @@ from tkinter import filedialog, messagebox
 import csv
 import os
 from typing import List, Dict, Optional
+from core.drone_state import DroneName
 
 
 class WaypointManager(ctk.CTkFrame):
-    """Widget for displaying and managing waypoints with import/export functionality."""
+    """Widget for displaying and managing waypoints from detected yellow spots."""
     
     def __init__(self, parent, controller, **kwargs):
         super().__init__(parent, **kwargs)
@@ -17,97 +18,173 @@ class WaypointManager(ctk.CTkFrame):
     
     def _setup_ui(self):
         """Setup the waypoint manager UI."""
-        # Title
+        # Configure grid
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(2, weight=1)
+        
+        # Title and count frame
+        header_frame = ctk.CTkFrame(self, fg_color="transparent")
+        header_frame.grid(row=0, column=0, sticky="ew", padx=5, pady=(5, 0))
+        header_frame.grid_columnconfigure(1, weight=1)
+        
         title_label = ctk.CTkLabel(
-            self, 
+            header_frame, 
             text="Waypoint Manager", 
-            font=ctk.CTkFont(size=16, weight="bold")
+            font=ctk.CTkFont(size=14, weight="bold")
         )
-        title_label.pack(pady=(10, 5))
+        title_label.grid(row=0, column=0, sticky="w")
+        
+        # Waypoint count label
+        self.count_label = ctk.CTkLabel(
+            header_frame,
+            text="Spots: 0 | Waypoints: 0",
+            font=ctk.CTkFont(size=11),
+            text_color="#888888"
+        )
+        self.count_label.grid(row=0, column=1, sticky="e", padx=10)
         
         # Button frame
         button_frame = ctk.CTkFrame(self, fg_color="transparent")
-        button_frame.pack(fill="x", padx=10, pady=5)
+        button_frame.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
         
         # Import button
         self.import_btn = ctk.CTkButton(
             button_frame,
-            text="📂 Import CSV",
+            text="📂 Import",
             command=self._import_waypoints,
-            width=120,
-            height=32
+            width=80,
+            height=28,
+            font=ctk.CTkFont(size=11)
         )
-        self.import_btn.pack(side="left", padx=5)
+        self.import_btn.pack(side="left", padx=2)
         
         # Export button
         self.export_btn = ctk.CTkButton(
             button_frame,
-            text="💾 Export CSV",
+            text="💾 Export",
             command=self._export_waypoints,
-            width=120,
-            height=32
+            width=80,
+            height=28,
+            font=ctk.CTkFont(size=11)
         )
-        self.export_btn.pack(side="left", padx=5)
+        self.export_btn.pack(side="left", padx=2)
         
         # Clear button
         self.clear_btn = ctk.CTkButton(
             button_frame,
             text="🗑️ Clear",
             command=self._clear_waypoints,
-            width=80,
-            height=32,
+            width=70,
+            height=28,
+            font=ctk.CTkFont(size=11),
             fg_color="#dc3545",
             hover_color="#c82333"
         )
-        self.clear_btn.pack(side="left", padx=5)
+        self.clear_btn.pack(side="left", padx=2)
         
         # Refresh button
         self.refresh_btn = ctk.CTkButton(
             button_frame,
             text="🔄 Refresh",
-            command=self._refresh_waypoints,
-            width=100,
-            height=32,
+            command=self._refresh_from_spots,
+            width=80,
+            height=28,
+            font=ctk.CTkFont(size=11),
             fg_color="#28a745",
             hover_color="#218838"
         )
-        self.refresh_btn.pack(side="left", padx=5)
+        self.refresh_btn.pack(side="left", padx=2)
         
-        # Waypoint count label
-        self.count_label = ctk.CTkLabel(
-            self,
-            text="Waypoints: 0",
-            font=ctk.CTkFont(size=12)
+        # Transfer to Sprayer button
+        self.transfer_btn = ctk.CTkButton(
+            button_frame,
+            text="📡 Transfer",
+            command=self._transfer_to_sprayer,
+            width=85,
+            height=28,
+            font=ctk.CTkFont(size=11),
+            fg_color="#fd7e14",
+            hover_color="#e76b00"
         )
-        self.count_label.pack(pady=5)
+        self.transfer_btn.pack(side="left", padx=2)
         
         # Waypoint display frame with scrollbar
         self.waypoint_frame = ctk.CTkScrollableFrame(
             self,
-            height=200,
-            label_text="Waypoints"
+            label_text="Detected Yellow Spots",
+            label_font=ctk.CTkFont(size=11)
         )
-        self.waypoint_frame.pack(fill="both", expand=True, padx=10, pady=5)
+        self.waypoint_frame.grid(row=2, column=0, sticky="nsew", padx=5, pady=(0, 5))
+        self.waypoint_frame.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1)
         
         # Header row
         self._create_header()
     
     def _create_header(self):
         """Create the header row for waypoint display."""
-        header_frame = ctk.CTkFrame(self.waypoint_frame, fg_color="#2b2b2b")
-        header_frame.pack(fill="x", pady=(0, 5))
+        header_frame = ctk.CTkFrame(self.waypoint_frame, fg_color="#2b2b2b", height=25)
+        header_frame.pack(fill="x", pady=(0, 3))
+        header_frame.pack_propagate(False)
         
-        headers = ["#", "Latitude", "Longitude", "Altitude", "Type"]
-        widths = [40, 120, 120, 80, 80]
+        headers = ["#", "Spot ID", "Latitude", "Longitude", "Area", "Detections"]
+        widths = [30, 60, 100, 100, 60, 70]
         
         for header, width in zip(headers, widths):
             label = ctk.CTkLabel(
                 header_frame,
                 text=header,
-                font=ctk.CTkFont(size=11, weight="bold"),
+                font=ctk.CTkFont(size=10, weight="bold"),
                 width=width
             )
-            label.pack(side="left", padx=2)
+            label.pack(side="left", padx=1)
+    
+    def _refresh_from_spots(self):
+        """Refresh waypoints from detected yellow spots."""
+        try:
+            # Get yellow spots from scanner drone
+            spots_data = self.controller.get_yellow_spots(DroneName.Scanner)
+            
+            if not spots_data:
+                self.waypoints = []
+                self._update_display()
+                return
+            
+            # Convert spots to waypoints
+            waypoints = []
+            for spot_id, coords in spots_data.items():
+                if not coords:
+                    continue
+                
+                # Calculate average position for this spot
+                avg_lat = sum(c["lat"] for c in coords) / len(coords)
+                avg_lon = sum(c["lon"] for c in coords) / len(coords)
+                avg_area = sum(c["area"] for c in coords) / len(coords)
+                latest_rank = coords[-1].get("rank", 0)
+                
+                waypoint = {
+                    'spot_id': spot_id,
+                    'lat': avg_lat,
+                    'lon': avg_lon,
+                    'alt': 3.0,  # Default altitude
+                    'area': avg_area,
+                    'detection_count': len(coords),
+                    'rank': latest_rank,
+                    'type': 'yellow_spot'
+                }
+                waypoints.append(waypoint)
+            
+            # Sort by spot_id
+            waypoints.sort(key=lambda x: int(x['spot_id']) if x['spot_id'].isdigit() else 0)
+            
+            self.waypoints = waypoints
+            self._update_display()
+            
+            # Also update controller's waypoint list
+            self.controller.set_waypoints(waypoints)
+            
+        except Exception as e:
+            print(f"Error refreshing from spots: {e}")
+            messagebox.showerror("Error", f"Failed to refresh waypoints:\n{e}")
     
     def _import_waypoints(self):
         """Import waypoints from a CSV file."""
@@ -124,21 +201,24 @@ class WaypointManager(ctk.CTkFrame):
             imported_waypoints = []
             with open(filepath, 'r', newline='') as csvfile:
                 reader = csv.DictReader(csvfile)
-                for row in reader:
+                for i, row in enumerate(reader):
                     waypoint = {
+                        'spot_id': row.get('spot_id', str(i + 1)),
                         'lat': float(row.get('latitude', row.get('lat', 0))),
                         'lon': float(row.get('longitude', row.get('lon', 0))),
                         'alt': float(row.get('altitude', row.get('alt', 3.0))),
-                        'type': row.get('type', 'waypoint')
+                        'area': float(row.get('area', 0)),
+                        'detection_count': int(row.get('detection_count', row.get('detections', 1))),
+                        'rank': int(row.get('rank', 0)),
+                        'type': row.get('type', 'imported')
                     }
                     imported_waypoints.append(waypoint)
             
             self.waypoints = imported_waypoints
             self._update_display()
             
-            # Send waypoints to controller if available
-            if hasattr(self.controller, 'set_waypoints'):
-                self.controller.set_waypoints(imported_waypoints)
+            # Update controller's waypoint list
+            self.controller.set_waypoints(imported_waypoints)
             
             messagebox.showinfo(
                 "Import Successful",
@@ -150,9 +230,9 @@ class WaypointManager(ctk.CTkFrame):
     
     def _export_waypoints(self):
         """Export waypoints to a CSV file."""
+        # Refresh from spots first if no waypoints
         if not self.waypoints:
-            # Try to get waypoints from controller
-            self._refresh_waypoints()
+            self._refresh_from_spots()
         
         if not self.waypoints:
             messagebox.showwarning("No Waypoints", "No waypoints to export.")
@@ -163,7 +243,7 @@ class WaypointManager(ctk.CTkFrame):
             defaultextension=".csv",
             filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
             initialdir=os.path.expanduser("~"),
-            initialfile="waypoints.csv"
+            initialfile="yellow_spots_waypoints.csv"
         )
         
         if not filepath:
@@ -171,16 +251,21 @@ class WaypointManager(ctk.CTkFrame):
         
         try:
             with open(filepath, 'w', newline='') as csvfile:
-                fieldnames = ['index', 'latitude', 'longitude', 'altitude', 'type']
+                fieldnames = ['index', 'spot_id', 'latitude', 'longitude', 'altitude', 
+                             'area', 'detection_count', 'rank', 'type']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
                 
                 for i, wp in enumerate(self.waypoints):
                     writer.writerow({
                         'index': i + 1,
-                        'latitude': wp.get('lat', 0),
-                        'longitude': wp.get('lon', 0),
+                        'spot_id': wp.get('spot_id', ''),
+                        'latitude': f"{wp.get('lat', 0):.7f}",
+                        'longitude': f"{wp.get('lon', 0):.7f}",
                         'altitude': wp.get('alt', 3.0),
+                        'area': f"{wp.get('area', 0):.2f}",
+                        'detection_count': wp.get('detection_count', 1),
+                        'rank': wp.get('rank', 0),
                         'type': wp.get('type', 'waypoint')
                     })
             
@@ -197,34 +282,71 @@ class WaypointManager(ctk.CTkFrame):
         if self.waypoints:
             confirm = messagebox.askyesno(
                 "Confirm Clear",
-                "Are you sure you want to clear all waypoints?"
+                "Clear waypoints from display?\n\n(This does not clear detected spots from scanner)"
             )
             if confirm:
                 self.waypoints = []
                 self._update_display()
-                
-                if hasattr(self.controller, 'clear_waypoints'):
-                    self.controller.clear_waypoints()
+                self.controller.clear_waypoints()
     
-    def _refresh_waypoints(self):
-        """Refresh waypoints from the controller."""
+    def _transfer_to_sprayer(self):
+        """Transfer waypoints to the sprayer drone."""
+        if not self.waypoints:
+            self._refresh_from_spots()
+        
+        if not self.waypoints:
+            messagebox.showwarning("No Waypoints", "No waypoints to transfer.")
+            return
+        
         try:
-            # Try different methods to get waypoints from controller
-            if hasattr(self.controller, 'get_waypoints'):
-                self.waypoints = self.controller.get_waypoints() or []
-            elif hasattr(self.controller, 'waypoints'):
-                self.waypoints = self.controller.waypoints or []
-            elif hasattr(self.controller, 'sprayer_waypoints'):
-                self.waypoints = self.controller.sprayer_waypoints or []
+            success = self.controller.transfer_waypoints_to_sprayer()
             
-            self._update_display()
-            
+            if success:
+                messagebox.showinfo(
+                    "Transfer Successful",
+                    f"Transferred {len(self.waypoints)} waypoints to Sprayer drone."
+                )
+            else:
+                messagebox.showerror(
+                    "Transfer Failed",
+                    "Failed to transfer waypoints to Sprayer drone."
+                )
         except Exception as e:
-            print(f"Error refreshing waypoints: {e}")
+            messagebox.showerror("Transfer Error", f"Failed to transfer waypoints:\n{e}")
     
     def set_waypoints(self, waypoints: List[Dict]):
         """Set waypoints externally and update display."""
         self.waypoints = waypoints or []
+        self._update_display()
+    
+    def update_from_spots(self, spots_data: Dict[str, List[Dict]]):
+        """Update waypoints from yellow spots data."""
+        if not spots_data:
+            return
+        
+        waypoints = []
+        for spot_id, coords in spots_data.items():
+            if not coords:
+                continue
+            
+            avg_lat = sum(c["lat"] for c in coords) / len(coords)
+            avg_lon = sum(c["lon"] for c in coords) / len(coords)
+            avg_area = sum(c["area"] for c in coords) / len(coords)
+            
+            waypoint = {
+                'spot_id': spot_id,
+                'lat': avg_lat,
+                'lon': avg_lon,
+                'alt': 3.0,
+                'area': avg_area,
+                'detection_count': len(coords),
+                'rank': coords[-1].get("rank", 0),
+                'type': 'yellow_spot'
+            }
+            waypoints.append(waypoint)
+        
+        waypoints.sort(key=lambda x: int(x['spot_id']) if x['spot_id'].isdigit() else 0)
+        self.waypoints = waypoints
         self._update_display()
     
     def _update_display(self):
@@ -233,8 +355,17 @@ class WaypointManager(ctk.CTkFrame):
         for widget in self.waypoint_frame.winfo_children()[1:]:
             widget.destroy()
         
+        # Get spot count from controller
+        try:
+            spots_data = self.controller.get_yellow_spots(DroneName.Scanner)
+            spot_count = len(spots_data) if spots_data else 0
+        except:
+            spot_count = len(self.waypoints)
+        
         # Update count
-        self.count_label.configure(text=f"Waypoints: {len(self.waypoints)}")
+        self.count_label.configure(
+            text=f"Spots: {spot_count} | Waypoints: {len(self.waypoints)}"
+        )
         
         # Add waypoint rows
         for i, wp in enumerate(self.waypoints):
@@ -242,8 +373,8 @@ class WaypointManager(ctk.CTkFrame):
     
     def _add_waypoint_row(self, index: int, waypoint: Dict):
         """Add a single waypoint row to the display."""
-        row_color = "#1e1e1e" if index % 2 == 0 else "#2d2d2d"
-        row_frame = ctk.CTkFrame(self.waypoint_frame, fg_color=row_color, height=28)
+        row_color = "#1e1e1e" if index % 2 == 0 else "#252525"
+        row_frame = ctk.CTkFrame(self.waypoint_frame, fg_color=row_color, height=24)
         row_frame.pack(fill="x", pady=1)
         row_frame.pack_propagate(False)
         
@@ -251,45 +382,53 @@ class WaypointManager(ctk.CTkFrame):
         ctk.CTkLabel(
             row_frame,
             text=str(index),
-            width=40,
+            width=30,
             font=ctk.CTkFont(size=10)
-        ).pack(side="left", padx=2)
+        ).pack(side="left", padx=1)
+        
+        # Spot ID
+        ctk.CTkLabel(
+            row_frame,
+            text=str(waypoint.get('spot_id', '-')),
+            width=60,
+            font=ctk.CTkFont(size=10),
+            text_color="#ffc107"
+        ).pack(side="left", padx=1)
         
         # Latitude
         ctk.CTkLabel(
             row_frame,
-            text=f"{waypoint.get('lat', 0):.7f}",
-            width=120,
+            text=f"{waypoint.get('lat', 0):.6f}",
+            width=100,
             font=ctk.CTkFont(size=10)
-        ).pack(side="left", padx=2)
+        ).pack(side="left", padx=1)
         
         # Longitude
         ctk.CTkLabel(
             row_frame,
-            text=f"{waypoint.get('lon', 0):.7f}",
-            width=120,
+            text=f"{waypoint.get('lon', 0):.6f}",
+            width=100,
             font=ctk.CTkFont(size=10)
-        ).pack(side="left", padx=2)
+        ).pack(side="left", padx=1)
         
-        # Altitude
+        # Area
         ctk.CTkLabel(
             row_frame,
-            text=f"{waypoint.get('alt', 0):.1f}m",
-            width=80,
+            text=f"{waypoint.get('area', 0):.0f}",
+            width=60,
             font=ctk.CTkFont(size=10)
-        ).pack(side="left", padx=2)
+        ).pack(side="left", padx=1)
         
-        # Type
-        wp_type = waypoint.get('type', 'waypoint')
-        type_color = "#28a745" if wp_type == "spray" else "#17a2b8"
-        type_label = ctk.CTkLabel(
+        # Detection count
+        det_count = waypoint.get('detection_count', 1)
+        det_color = "#28a745" if det_count >= 5 else "#17a2b8" if det_count >= 2 else "#6c757d"
+        ctk.CTkLabel(
             row_frame,
-            text=wp_type,
-            width=80,
+            text=str(det_count),
+            width=70,
             font=ctk.CTkFont(size=10),
-            text_color=type_color
-        )
-        type_label.pack(side="left", padx=2)
+            text_color=det_color
+        ).pack(side="left", padx=1)
     
     def get_waypoints(self) -> List[Dict]:
         """Get current waypoints."""

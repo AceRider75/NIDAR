@@ -78,7 +78,7 @@ def log_spot_data_logfile(spot_id: int, drone_coords: tuple, spot_coords: tuple)
     entry = (
         f"{timestamp} | spot_id={spot_id} | "
         f"drone_lat={drone_coords[0]:.7f}, drone_lon={drone_coords[1]:.7f}, drone_alt={drone_coords[2]:.2f} | "
-        f"spot_lat={spot_coords[0]:.7f}, spot_lon={spot_coords[1]:.7f}"
+        f"spot_lat={spot_coords[0]:.7f}, spot_lon={spot_coords[1]:.7f}, d_lat={spot_coords[0] - drone_coords[0]:.7f}, d_lon={spot_coords[1] - drone_coords[1]:.7f}"
     )
 
     logger.info(entry)  # logged + printed
