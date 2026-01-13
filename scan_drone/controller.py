@@ -1327,16 +1327,63 @@ class DroneController:
             return False
     
     def _execute_rtl(self) -> bool:
-        """Execute return to launch"""
+        """Execute return to launch by returning to home coordinates then land"""
         self._change_state(DroneState.RETURNING_HOME)
-        
-        if self._set_mode(FlightMode.RTL):
-            self.logger.info("RTL in progress")
-            return True
-        else:
-            self.logger.error("Failed to enter RTL mode")
+
+        # Read home coordinates and current altitude from telemetry
+        with self.telemetry_lock:
+            home_lat = self.telemetry.home_lat
+            home_lon = self.telemetry.home_lon
+            current_alt = self.telemetry.alt
+
+        # If home not known, fallback to geofence home if available
+        if (not home_lat or not home_lon) and self.geofence.mode == "radius":
+            home_lat = self.geofence.home_lat
+            home_lon = self.geofence.home_lon
+
+        if not home_lat or not home_lon:
+            self.logger.error("Home coordinates unknown - cannot RTL")
             return False
-        
+
+        # Send a position setpoint to home (do not validate geofence here)
+        wp = Waypoint(
+            lat=home_lat,
+            lon=home_lon,
+            alt=current_alt,
+            radius=self.config.waypoint_radius,
+            validated=True
+        )
+        self.logger.info(f"Returning to home ({home_lat:.6f}, {home_lon:.6f}) before landing")
+        self._add_log("Returning to home (guided) before landing")
+        self._send_waypoint(wp, val_geofence=False)
+
+        # Wait until near home, then command LAND. Timeout to avoid endless wait.
+        start_wait = time.time()
+        timeout_seconds = 240  # 4 minutes
+        while True:
+            if time.time() - start_wait > timeout_seconds:
+                self.logger.warning("Timeout waiting for home - issuing LAND anyway")
+                self._add_log("Timeout waiting for home - Landing")
+                break
+
+            with self.telemetry_lock:
+                cur_lat = self.telemetry.lat
+                cur_lon = self.telemetry.lon
+                cur_alt = self.telemetry.alt
+
+            dist_h = haversine_dist(cur_lat, cur_lon, home_lat, home_lon)
+            dist_v = abs(cur_alt - current_alt)
+
+            if dist_h <= self.config.home_tolerance and dist_v <= self.config.altitude_tolerance:
+                self.logger.info("Reached home position - initiating LAND")
+                self._add_log("Reached home - Landing")
+                break
+
+            time.sleep(1.0)
+
+        # Execute land command (mode LAND)
+        return self._execute_land()
+    
     def _wait_for_ack(self, command: int, timeout: float = None) -> Optional[Any]:
         """
         Wait for command acknowledgement
