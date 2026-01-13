@@ -22,7 +22,7 @@ class ColorDetector:
     def __init__(self, lower_yellow: Tuple[int, int, int] = (20, 100, 100),
                  upper_yellow: Tuple[int, int, int] = (30, 255, 255),
                  min_area: int = 500,
-                 max_area: int = 50000):
+                 max_area: int = 50000000):
         """
         Initialize color detector.
         
