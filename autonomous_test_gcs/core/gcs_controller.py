@@ -429,6 +429,84 @@ class GCSController:
             log_message("GCSController", f"Failed to transfer waypoints: {e}")
             return False
 
+    def get_waypoints(self) -> list:
+        """Get current waypoints for sprayer drone."""
+        if hasattr(self, 'sprayer_waypoints'):
+            return self.sprayer_waypoints
+        if hasattr(self, 'waypoints'):
+            return self.waypoints
+        return []
+
+    def set_waypoints(self, waypoints: list) -> bool:
+        """Set waypoints for the sprayer drone."""
+        try:
+            self.sprayer_waypoints = waypoints
+            print(f"[GCS] Set {len(waypoints)} waypoints")
+            return True
+        except Exception as e:
+            print(f"[GCS] Error setting waypoints: {e}")
+            return False
+
+    def clear_waypoints(self) -> bool:
+        """Clear all waypoints."""
+        try:
+            self.sprayer_waypoints = []
+            if hasattr(self, 'waypoints'):
+                self.waypoints = []
+            print("[GCS] Waypoints cleared")
+            return True
+        except Exception as e:
+            print(f"[GCS] Error clearing waypoints: {e}")
+            return False
+
+    def export_waypoints_to_csv(self, filepath: str) -> bool:
+        """Export waypoints to CSV file."""
+        import csv
+        try:
+            waypoints = self.get_waypoints()
+            if not waypoints:
+                return False
+            
+            with open(filepath, 'w', newline='') as csvfile:
+                fieldnames = ['index', 'latitude', 'longitude', 'altitude', 'type']
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                
+                for i, wp in enumerate(waypoints):
+                    writer.writerow({
+                        'index': i + 1,
+                        'latitude': wp.get('lat', 0),
+                        'longitude': wp.get('lon', 0),
+                        'altitude': wp.get('alt', 3.0),
+                        'type': wp.get('type', 'waypoint')
+                    })
+            return True
+        except Exception as e:
+            print(f"[GCS] Export error: {e}")
+            return False
+
+    def import_waypoints_from_csv(self, filepath: str) -> bool:
+        """Import waypoints from CSV file."""
+        import csv
+        try:
+            waypoints = []
+            with open(filepath, 'r', newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    waypoint = {
+                        'lat': float(row.get('latitude', row.get('lat', 0))),
+                        'lon': float(row.get('longitude', row.get('lon', 0))),
+                        'alt': float(row.get('altitude', row.get('alt', 3.0))),
+                        'type': row.get('type', 'waypoint')
+                    }
+                    waypoints.append(waypoint)
+        
+            self.sprayer_waypoints = waypoints
+            return True
+        except Exception as e:
+            print(f"[GCS] Import error: {e}")
+            return False
+
     # ---------------------------------------------------------
     # STOP
     # ---------------------------------------------------------
