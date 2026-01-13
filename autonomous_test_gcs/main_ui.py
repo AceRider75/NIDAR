@@ -31,7 +31,8 @@ class GCSUI(ctk.CTk):
         self.after(self.GRAPH_UPDATE_INTERVAL_MS, self._update_graphs)
         self.after(self.WAYPOINT_UPDATE_INTERVAL_MS, self._update_waypoints)
 
-        self.last_sprayer_log = None
+        self.last_sprayer_log_str = ""
+        self.last_scanner_log_str = ""
         self._last_waypoint_count = 0
 
 
@@ -65,23 +66,50 @@ class GCSUI(ctk.CTk):
             # Update drone panels
             self.dashboard.scanner_panel.update_status(scanner["status"], scanner["battery"])   #Update Battery and Status 
             self.dashboard.scanner_panel.update_telemetry(scanner["ui_telemetry"])              #Update Telemetry
-            #self.dashboard.scanner_logs.append_text(scanner["raw_latest"])                      #Update Logs --> To be changed
+            
+            scanner_log_raw = scanner.get("log", "")
+            new_scanner_logs = self._process_new_logs(scanner_log_raw, self.last_scanner_log_str)
+            if new_scanner_logs:
+                self.dashboard.scanner_logs.append_text(new_scanner_logs)
+                self.last_scanner_log_str = scanner_log_raw
 
             self.dashboard.sprayer_panel.update_status(sprayer["status"], sprayer["battery"])   #Update Battery and Status 
             self.dashboard.sprayer_panel.update_telemetry(sprayer["ui_telemetry"])              #Update Telemetry
-            #self.dashboard.sprayer_logs.append_text(sprayer["raw_latest"])  
-
-            #current_event = sprayer["log"]
-
-            # if current_event and current_event != self.last_sprayer_log:
-            #     self.dashboard.sprayer_logs.append_text(current_event)
-            #     self.last_sprayer_log = current_event
-
+            
+            sprayer_log_raw = sprayer.get("log", "")
+            new_sprayer_logs = self._process_new_logs(sprayer_log_raw, self.last_sprayer_log_str)
+            if new_sprayer_logs:
+                self.dashboard.sprayer_logs.append_text(new_sprayer_logs)
+                self.last_sprayer_log_str = sprayer_log_raw
 
         except Exception as e:
             print("UI update error:", e)
 
         self.after(self.UPDATE_INTERVAL_MS, self._periodic_update)    
+
+    def _process_new_logs(self, new_log_str: str, last_log_str: str) -> str:
+        """
+        Compare new log string (which may contain overlap) with last received log string.
+        Return only the new lines.
+        """
+        if not new_log_str:
+            return ""
+        if not last_log_str:
+            return new_log_str
+            
+        new_lines = new_log_str.split('\n')
+        last_lines = last_log_str.split('\n')
+        
+        n_new = len(new_lines)
+        n_last = len(last_lines)
+        
+        # Find longest suffix of last_lines that matches prefix of new_lines
+        for k in range(min(n_new, n_last), 0, -1):
+            if last_lines[-k:] == new_lines[:k]:
+                return "\n".join(new_lines[k:])
+        
+        # If no overlap found, assume all new (or gap in data)
+        return new_log_str
 
     def _update_graphs(self) -> None:
         try:
