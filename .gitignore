@@ -12,3 +12,5 @@ telemetry
 
 *.log
 *.csv
+
+map_cache/

@@ -7,6 +7,7 @@ from ui.telemetry_view import TelemetryView
 from ui.graph_widgets import GraphPanel  # For the graphs (Needs to be fixed)
 # For the drone panels (Telem, Battery, Status)
 from ui.drone_panel import DronePanel
+from ui.waypoint_manager import WaypointManager
 
 
 class Dashboard(ctk.CTkFrame):
@@ -18,7 +19,7 @@ class Dashboard(ctk.CTkFrame):
         self.configure(fg_color="#1a1a1a")
 
         # Configure grid with better weight distribution
-        self.grid_rowconfigure(0, weight=2)  # Map + Position Graphs
+        self.grid_rowconfigure(0, weight=2)  # Map + Waypoint Manager
         self.grid_rowconfigure(1, weight=2)  # Map + Orientation Graphs
         self.grid_rowconfigure(2, weight=2)  # Logs + Drone Panels
         self.grid_columnconfigure((0, 1, 2), weight=1, uniform="col")
@@ -28,20 +29,20 @@ class Dashboard(ctk.CTkFrame):
         self.map_view.grid(row=0, column=0, rowspan=2,
                            sticky="nsew", padx=5, pady=5)
 
-        # Graph panels
-        self.scanner_xyz_graph = GraphPanel(
-            self, "Scanner Position vs Time", "x", "y", "z")
-        self.sprayer_xyz_graph = GraphPanel(
-            self, "Sprayer Position vs Time", "x", "y", "z")
+        # Waypoint Manager (replaces position graphs)
+        self.waypoint_manager = WaypointManager(
+            self,
+            controller=controller
+        )
+        self.waypoint_manager.grid(
+            row=0, column=1, columnspan=2, sticky="nsew", padx=5, pady=5)
+
+        # Orientation Graph panels (row 1)
         self.scanner_rpy_graph = GraphPanel(
             self, "Scanner Orientation vs Time", "roll", "pitch", "yaw")
         self.sprayer_rpy_graph = GraphPanel(
             self, "Sprayer Orientation vs Time", "roll", "pitch", "yaw")
 
-        self.scanner_xyz_graph.grid(
-            row=0, column=1, sticky="nsew", padx=5, pady=5)
-        self.sprayer_xyz_graph.grid(
-            row=0, column=2, sticky="nsew", padx=5, pady=5)
         self.scanner_rpy_graph.grid(
             row=1, column=1, sticky="nsew", padx=5, pady=5)
         self.sprayer_rpy_graph.grid(
