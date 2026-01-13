@@ -3340,3 +3340,1533 @@
 2026-01-11 20:39:32 - DroneController - [INFO] - Mode changed to LAND
 2026-01-11 20:39:32 - DroneController - [INFO] - Landing in progress
 2026-01-11 20:39:32 - DroneController - [INFO] - Landing command sent
+2026-01-12 00:58:51 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/JUxs.kml
+2026-01-12 00:58:51 - DroneController - [INFO] - DroneController initialized
+2026-01-12 00:58:51 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-12 00:58:51 - DroneController - [INFO] - Connecting to /dev/ttyACM0
+2026-01-12 00:58:51 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-12 00:58:51 - DroneController - [ERROR] - Connection attempt 1 failed: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2026-01-12 00:58:53 - DroneController - [INFO] - Connection attempt 2/3...
+2026-01-12 00:58:53 - DroneController - [ERROR] - Connection attempt 2 failed: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2026-01-12 00:58:55 - DroneController - [INFO] - Connection attempt 3/3...
+2026-01-12 00:58:55 - DroneController - [ERROR] - Connection attempt 3 failed: [Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such file or directory: '/dev/ttyACM0'
+2026-01-12 00:58:57 - DroneController - [ERROR] - Failed to connect after 3 attempts
+2026-01-12 00:58:57 - DroneController - [INFO] - Stopping controller...
+2026-01-12 00:58:57 - DroneController - [INFO] - Controller stopped
+2026-01-12 00:59:10 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/JUxs.kml
+2026-01-12 00:59:10 - DroneController - [INFO] - DroneController initialized
+2026-01-12 00:59:10 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-12 00:59:10 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-12 00:59:10 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-12 00:59:10 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-12 00:59:11 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-12 00:59:11 - DroneController - [INFO] - Requesting data streams...
+2026-01-12 00:59:11 - DroneController - [INFO] - Verifying data stream...
+2026-01-12 00:59:11 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-12 00:59:12 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-12 00:59:12 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-12 00:59:15 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-12 00:59:15 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260112_005915.csv
+2026-01-12 00:59:15 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-12 00:59:15 - DroneController - [INFO] - Telemetry loop started
+2026-01-12 00:59:15 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-12 00:59:15 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-12 00:59:15 - DroneController - [INFO] - Command processor started
+2026-01-12 00:59:15 - DroneController - [INFO] - Mission controller started
+2026-01-12 00:59:15 - DroneController - [INFO] - All threads started
+2026-01-12 00:59:15 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-12 00:59:17 - DroneController - [INFO] - Loading mission with 0 points
+2026-01-12 00:59:17 - DroneController - [INFO] - Starting and home position: lat=22.497750, lon=88.372470
+2026-01-12 00:59:17 - DroneController - [INFO] - Mission validated: 49 waypoints
+2026-01-12 00:59:17 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-12 00:59:17 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-12 00:59:17 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-12 00:59:19 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-12 00:59:19 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-12 00:59:19 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-12 00:59:19 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-12 00:59:19 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-12 00:59:19 - DroneController - [INFO] - Armed successfully
+2026-01-12 00:59:19 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-12 00:59:21 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-12 00:59:21 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-12 00:59:21 - DroneController - [INFO] - Takeoff command accepted
+2026-01-12 00:59:25 - DroneController - [INFO] - Target altitude reached: 2.56m
+2026-01-12 00:59:25 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-12 00:59:25 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-12 00:59:25 - DroneController - [INFO] - Starting mission with 49 waypoints
+2026-01-12 00:59:25 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-12 00:59:25 - DroneController - [INFO] - Sending waypoint: (22.497833, 88.372311, 3.00)
+2026-01-12 00:59:26 - DroneController - [INFO] - Telemetry: 5576 msgs | GPS: (22.497751, 88.372468, 2.90m) | Battery: 99% | Mode: GUIDED
+2026-01-12 00:59:29 - DroneController - [INFO] - Waypoint 1/49 reached
+2026-01-12 00:59:29 - DroneController - [INFO] - Sending waypoint: (22.497813, 88.372321, 3.00)
+2026-01-12 00:59:29 - DroneController - [INFO] - Waypoint 2/49 reached
+2026-01-12 00:59:29 - DroneController - [INFO] - Sending waypoint: (22.497801, 88.372336, 3.00)
+2026-01-12 00:59:30 - DroneController - [INFO] - Waypoint 3/49 reached
+2026-01-12 00:59:30 - DroneController - [INFO] - Sending waypoint: (22.497798, 88.372356, 3.00)
+2026-01-12 00:59:32 - DroneController - [INFO] - Waypoint 4/49 reached
+2026-01-12 00:59:32 - DroneController - [INFO] - Sending waypoint: (22.497803, 88.372379, 3.00)
+2026-01-12 00:59:33 - DroneController - [INFO] - Waypoint 5/49 reached
+2026-01-12 00:59:33 - DroneController - [INFO] - Sending waypoint: (22.497850, 88.372513, 3.00)
+2026-01-12 00:59:36 - DroneController - [INFO] - Telemetry: 6769 msgs | GPS: (22.497816, 88.372418, 3.02m) | Battery: 96% | Mode: GUIDED
+2026-01-12 00:59:37 - DroneController - [INFO] - Waypoint 6/49 reached
+2026-01-12 00:59:37 - DroneController - [INFO] - Sending waypoint: (22.497860, 88.372531, 3.00)
+2026-01-12 00:59:38 - DroneController - [INFO] - Waypoint 7/49 reached
+2026-01-12 00:59:38 - DroneController - [INFO] - Sending waypoint: (22.497872, 88.372541, 3.00)
+2026-01-12 00:59:39 - DroneController - [INFO] - Waypoint 8/49 reached
+2026-01-12 00:59:39 - DroneController - [INFO] - Sending waypoint: (22.497887, 88.372544, 3.00)
+2026-01-12 00:59:39 - DroneController - [INFO] - Waypoint 9/49 reached
+2026-01-12 00:59:39 - DroneController - [INFO] - Sending waypoint: (22.497905, 88.372540, 3.00)
+2026-01-12 00:59:40 - DroneController - [INFO] - Waypoint 10/49 reached
+2026-01-12 00:59:40 - DroneController - [INFO] - Sending waypoint: (22.497985, 88.372507, 3.00)
+2026-01-12 00:59:43 - DroneController - [INFO] - Waypoint 11/49 reached
+2026-01-12 00:59:43 - DroneController - [INFO] - Sending waypoint: (22.498002, 88.372497, 3.00)
+2026-01-12 00:59:44 - DroneController - [INFO] - Waypoint 12/49 reached
+2026-01-12 00:59:44 - DroneController - [INFO] - Sending waypoint: (22.498012, 88.372484, 3.00)
+2026-01-12 00:59:44 - DroneController - [INFO] - Waypoint 13/49 reached
+2026-01-12 00:59:44 - DroneController - [INFO] - Sending waypoint: (22.498017, 88.372467, 3.00)
+2026-01-12 00:59:45 - DroneController - [INFO] - Waypoint 14/49 reached
+2026-01-12 00:59:45 - DroneController - [INFO] - Sending waypoint: (22.498016, 88.372446, 3.00)
+2026-01-12 00:59:46 - DroneController - [INFO] - Telemetry: 7970 msgs | GPS: (22.498013, 88.372481, 3.00m) | Battery: 94% | Mode: GUIDED
+2026-01-12 00:59:46 - DroneController - [INFO] - Waypoint 15/49 reached
+2026-01-12 00:59:46 - DroneController - [INFO] - Sending waypoint: (22.497990, 88.372315, 3.00)
+2026-01-12 00:59:50 - DroneController - [INFO] - Waypoint 16/49 reached
+2026-01-12 00:59:50 - DroneController - [INFO] - Sending waypoint: (22.497983, 88.372292, 3.00)
+2026-01-12 00:59:50 - DroneController - [INFO] - Waypoint 17/49 reached
+2026-01-12 00:59:50 - DroneController - [INFO] - Sending waypoint: (22.497970, 88.372278, 3.00)
+2026-01-12 00:59:51 - DroneController - [INFO] - Waypoint 18/49 reached
+2026-01-12 00:59:51 - DroneController - [INFO] - Sending waypoint: (22.497953, 88.372273, 3.00)
+2026-01-12 00:59:52 - DroneController - [INFO] - Waypoint 19/49 reached
+2026-01-12 00:59:52 - DroneController - [INFO] - Sending waypoint: (22.497931, 88.372277, 3.00)
+2026-01-12 00:59:53 - DroneController - [INFO] - Waypoint 20/49 reached
+2026-01-12 00:59:53 - DroneController - [INFO] - Sending waypoint: (22.497857, 88.372340, 3.00)
+2026-01-12 00:59:56 - DroneController - [INFO] - Telemetry: 9183 msgs | GPS: (22.497890, 88.372310, 3.01m) | Battery: 91% | Mode: GUIDED
+2026-01-12 00:59:56 - DroneController - [INFO] - Waypoint 21/49 reached
+2026-01-12 00:59:56 - DroneController - [INFO] - Sending waypoint: (22.497840, 88.372351, 3.00)
+2026-01-12 00:59:57 - DroneController - [INFO] - Waypoint 22/49 reached
+2026-01-12 00:59:57 - DroneController - [INFO] - Sending waypoint: (22.497833, 88.372367, 3.00)
+2026-01-12 00:59:58 - DroneController - [INFO] - Waypoint 23/49 reached
+2026-01-12 00:59:58 - DroneController - [INFO] - Sending waypoint: (22.497836, 88.372388, 3.00)
+2026-01-12 00:59:58 - DroneController - [INFO] - Waypoint 24/49 reached
+2026-01-12 00:59:58 - DroneController - [INFO] - Sending waypoint: (22.497870, 88.372481, 3.00)
+2026-01-12 01:00:01 - DroneController - [INFO] - Waypoint 25/49 reached
+2026-01-12 01:00:01 - DroneController - [INFO] - Sending waypoint: (22.497879, 88.372496, 3.00)
+2026-01-12 01:00:02 - DroneController - [INFO] - Waypoint 26/49 reached
+2026-01-12 01:00:02 - DroneController - [INFO] - Sending waypoint: (22.497891, 88.372501, 3.00)
+2026-01-12 01:00:03 - DroneController - [INFO] - Waypoint 27/49 reached
+2026-01-12 01:00:03 - DroneController - [INFO] - Sending waypoint: (22.497907, 88.372498, 3.00)
+2026-01-12 01:00:03 - DroneController - [INFO] - Waypoint 28/49 reached
+2026-01-12 01:00:03 - DroneController - [INFO] - Sending waypoint: (22.497961, 88.372475, 3.00)
+2026-01-12 01:00:06 - DroneController - [INFO] - Telemetry: 10418 msgs | GPS: (22.497935, 88.372488, 3.00m) | Battery: 89% | Mode: GUIDED
+2026-01-12 01:00:06 - DroneController - [INFO] - Waypoint 29/49 reached
+2026-01-12 01:00:06 - DroneController - [INFO] - Sending waypoint: (22.497975, 88.372465, 3.00)
+2026-01-12 01:00:06 - DroneController - [INFO] - Waypoint 30/49 reached
+2026-01-12 01:00:06 - DroneController - [INFO] - Sending waypoint: (22.497982, 88.372451, 3.00)
+2026-01-12 01:00:07 - DroneController - [INFO] - Waypoint 31/49 reached
+2026-01-12 01:00:07 - DroneController - [INFO] - Sending waypoint: (22.497982, 88.372433, 3.00)
+2026-01-12 01:00:08 - DroneController - [INFO] - Waypoint 32/49 reached
+2026-01-12 01:00:08 - DroneController - [INFO] - Sending waypoint: (22.497967, 88.372343, 3.00)
+2026-01-12 01:00:11 - DroneController - [INFO] - Waypoint 33/49 reached
+2026-01-12 01:00:11 - DroneController - [INFO] - Sending waypoint: (22.497959, 88.372323, 3.00)
+2026-01-12 01:00:11 - DroneController - [INFO] - Waypoint 34/49 reached
+2026-01-12 01:00:11 - DroneController - [INFO] - Sending waypoint: (22.497946, 88.372314, 3.00)
+2026-01-12 01:00:12 - DroneController - [INFO] - Waypoint 35/49 reached
+2026-01-12 01:00:12 - DroneController - [INFO] - Sending waypoint: (22.497926, 88.372316, 3.00)
+2026-01-12 01:00:13 - DroneController - [INFO] - Waypoint 36/49 reached
+2026-01-12 01:00:13 - DroneController - [INFO] - Sending waypoint: (22.497882, 88.372369, 3.00)
+2026-01-12 01:00:15 - DroneController - [INFO] - Waypoint 37/49 reached
+2026-01-12 01:00:15 - DroneController - [INFO] - Sending waypoint: (22.497869, 88.372380, 3.00)
+2026-01-12 01:00:16 - DroneController - [INFO] - Telemetry: 11654 msgs | GPS: (22.497899, 88.372347, 3.00m) | Battery: 87% | Mode: GUIDED
+2026-01-12 01:00:16 - DroneController - [INFO] - Waypoint 38/49 reached
+2026-01-12 01:00:16 - DroneController - [INFO] - Sending waypoint: (22.497870, 88.372397, 3.00)
+2026-01-12 01:00:17 - DroneController - [INFO] - Waypoint 39/49 reached
+2026-01-12 01:00:17 - DroneController - [INFO] - Sending waypoint: (22.497890, 88.372449, 3.00)
+2026-01-12 01:00:19 - DroneController - [INFO] - Waypoint 40/49 reached
+2026-01-12 01:00:19 - DroneController - [INFO] - Sending waypoint: (22.497898, 88.372458, 3.00)
+2026-01-12 01:00:19 - DroneController - [INFO] - Waypoint 41/49 reached
+2026-01-12 01:00:19 - DroneController - [INFO] - Sending waypoint: (22.497909, 88.372457, 3.00)
+2026-01-12 01:00:20 - DroneController - [INFO] - Waypoint 42/49 reached
+2026-01-12 01:00:20 - DroneController - [INFO] - Sending waypoint: (22.497937, 88.372443, 3.00)
+2026-01-12 01:00:21 - DroneController - [INFO] - Waypoint 43/49 reached
+2026-01-12 01:00:21 - DroneController - [INFO] - Sending waypoint: (22.497946, 88.372434, 3.00)
+2026-01-12 01:00:22 - DroneController - [INFO] - Waypoint 44/49 reached
+2026-01-12 01:00:22 - DroneController - [INFO] - Sending waypoint: (22.497949, 88.372420, 3.00)
+2026-01-12 01:00:22 - DroneController - [INFO] - Waypoint 45/49 reached
+2026-01-12 01:00:22 - DroneController - [INFO] - Sending waypoint: (22.497943, 88.372370, 3.00)
+2026-01-12 01:00:24 - DroneController - [INFO] - Waypoint 46/49 reached
+2026-01-12 01:00:24 - DroneController - [INFO] - Sending waypoint: (22.497936, 88.372355, 3.00)
+2026-01-12 01:00:25 - DroneController - [INFO] - Waypoint 47/49 reached
+2026-01-12 01:00:25 - DroneController - [INFO] - Sending waypoint: (22.497921, 88.372355, 3.00)
+2026-01-12 01:00:25 - DroneController - [INFO] - Waypoint 48/49 reached
+2026-01-12 01:00:25 - DroneController - [INFO] - Sending waypoint: (22.497914, 88.372409, 3.00)
+2026-01-12 01:00:26 - DroneController - [INFO] - Telemetry: 12887 msgs | GPS: (22.497940, 88.372366, 3.00m) | Battery: 84% | Mode: GUIDED
+2026-01-12 01:00:28 - DroneController - [INFO] - Waypoint 49/49 reached
+2026-01-12 01:00:28 - DroneController - [INFO] - All waypoints reached, returning to home and landing
+2026-01-12 01:00:28 - DroneController - [INFO] - Returning to home and landing
+2026-01-12 01:00:28 - DroneController - [INFO] - Sending waypoint: (22.497750, 88.372470, 3.00)
+2026-01-12 01:00:31 - DroneController - [CRITICAL] - EMERGENCY STOP
+2026-01-12 01:00:34 - DroneController - [INFO] - Reached home position, initiating landing
+2026-01-12 01:00:36 - DroneController - [INFO] - Telemetry: 14120 msgs | GPS: (22.497746, 88.372472, 3.00m) | Battery: 82% | Mode: GUIDED
+2026-01-12 01:00:36 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-12 01:00:36 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-12 01:00:37 - DroneController - [INFO] - Mode changed to LAND
+2026-01-12 01:00:37 - DroneController - [INFO] - Landing in progress
+2026-01-12 01:00:37 - DroneController - [INFO] - Landing command sent
+2026-01-12 01:00:41 - DroneController - [INFO] - Stopping controller...
+2026-01-12 01:00:41 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-12 01:00:41 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 14751
+2026-01-12 01:00:41 - DroneController - [INFO] - Message type distribution: {'AHRS': 499, 'AHRS2': 498, 'ATTITUDE': 498, 'BATTERY_STATUS': 498, 'COMMAND_ACK': 4, 'EKF_STATUS_REPORT': 498, 'ESC_TELEMETRY_1_TO_4': 498, 'ESC_TELEMETRY_5_TO_8': 498, 'EXTENDED_SYS_STATE': 89, 'FENCE_STATUS': 204, 'GLOBAL_POSITION_INT': 498, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 498, 'HEARTBEAT': 90, 'HOME_POSITION': 90, 'LOCAL_POSITION_NED': 498, 'MEMINFO': 498, 'MISSION_CURRENT': 498, 'NAV_CONTROLLER_OUTPUT': 498, 'PARAM_VALUE': 13, 'POSITION_TARGET_GLOBAL_INT': 284, 'POWER_STATUS': 498, 'RAW_IMU': 498, 'RC_CHANNELS': 498, 'SCALED_IMU2': 498, 'SCALED_IMU3': 498, 'SCALED_PRESSURE': 498, 'SCALED_PRESSURE2': 498, 'SERVO_OUTPUT_RAW': 498, 'SIMSTATE': 498, 'STATUSTEXT': 3, 'SYSTEM_TIME': 498, 'SYS_STATUS': 498, 'TERRAIN_REPORT': 498, 'TERRAIN_REQUEST': 1, 'TIMESYNC': 9, 'UNKNOWN_437': 18, 'VFR_HUD': 498, 'VIBRATION': 498, 'WIND': 498}
+2026-01-12 01:00:41 - DroneController - [INFO] - Command processor stopped
+2026-01-12 01:00:42 - DroneController - [INFO] - Mission controller stopped
+2026-01-12 01:00:42 - DroneController - [INFO] - Controller stopped
+2026-01-13 22:06:32 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/JUxs.kml
+2026-01-13 22:06:32 - DroneController - [INFO] - DroneController initialized
+2026-01-13 22:06:32 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-13 22:06:32 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-13 22:06:32 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-13 22:06:32 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-13 22:06:32 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-13 22:06:32 - DroneController - [INFO] - Requesting data streams...
+2026-01-13 22:06:32 - DroneController - [INFO] - Verifying data stream...
+2026-01-13 22:06:32 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-13 22:06:33 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-13 22:06:33 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-13 22:06:34 - DroneController - [CRITICAL] - EMERGENCY STOP
+2026-01-13 22:06:35 - DroneController - [INFO] - Stopping controller...
+2026-01-13 22:06:35 - DroneController - [INFO] - Controller stopped
+2026-01-13 22:06:45 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/GBU_4corners.kml
+2026-01-13 22:06:45 - DroneController - [INFO] - DroneController initialized
+2026-01-13 22:06:45 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-13 22:06:45 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-13 22:06:45 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-13 22:06:45 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-13 22:06:46 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-13 22:06:46 - DroneController - [INFO] - Requesting data streams...
+2026-01-13 22:06:46 - DroneController - [INFO] - Verifying data stream...
+2026-01-13 22:06:46 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-13 22:06:47 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-13 22:06:47 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-13 22:06:50 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-13 22:06:50 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260113_220650.csv
+2026-01-13 22:06:50 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-13 22:06:50 - DroneController - [INFO] - Telemetry loop started
+2026-01-13 22:06:50 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-13 22:06:50 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-13 22:06:50 - DroneController - [INFO] - Command processor started
+2026-01-13 22:06:50 - DroneController - [INFO] - Mission controller started
+2026-01-13 22:06:50 - DroneController - [INFO] - All threads started
+2026-01-13 22:06:50 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-13 22:06:55 - DroneController - [INFO] - Loading mission with 268 points
+2026-01-13 22:06:55 - DroneController - [INFO] - Starting and home position: lat=28.424320, lon=77.527280
+2026-01-13 22:06:55 - DroneController - [INFO] - Mission validated: 268 waypoints
+2026-01-13 22:06:55 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-13 22:06:55 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-13 22:06:55 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-13 22:06:56 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-13 22:06:56 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-13 22:06:56 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-13 22:06:56 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-13 22:06:56 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-13 22:06:56 - DroneController - [INFO] - Armed successfully
+2026-01-13 22:06:56 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-13 22:06:58 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-13 22:06:58 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-13 22:06:58 - DroneController - [INFO] - Takeoff command accepted
+2026-01-13 22:07:00 - DroneController - [INFO] - Telemetry: 2403 msgs | GPS: (28.424320, 77.527280, 0.06m) | Battery: 99% | Mode: GUIDED
+2026-01-13 22:07:02 - DroneController - [INFO] - Target altitude reached: 2.83m
+2026-01-13 22:07:02 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-13 22:07:02 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-13 22:07:02 - DroneController - [INFO] - Starting mission with 268 waypoints
+2026-01-13 22:07:02 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-13 22:07:02 - DroneController - [INFO] - Sending waypoint: (28.424299, 77.527050, 3.00)
+2026-01-13 22:07:08 - DroneController - [INFO] - Waypoint 1/268 reached
+2026-01-13 22:07:08 - DroneController - [INFO] - Sending waypoint: (28.424281, 77.527044, 3.00)
+2026-01-13 22:07:08 - DroneController - [INFO] - Waypoint 2/268 reached
+2026-01-13 22:07:08 - DroneController - [INFO] - Sending waypoint: (28.424264, 77.527039, 3.00)
+2026-01-13 22:07:09 - DroneController - [INFO] - Waypoint 3/268 reached
+2026-01-13 22:07:09 - DroneController - [INFO] - Sending waypoint: (28.424246, 77.527036, 3.00)
+2026-01-13 22:07:10 - DroneController - [INFO] - Telemetry: 3587 msgs | GPS: (28.424282, 77.527039, 3.01m) | Battery: 97% | Mode: GUIDED
+2026-01-13 22:07:10 - DroneController - [INFO] - Waypoint 4/268 reached
+2026-01-13 22:07:10 - DroneController - [INFO] - Sending waypoint: (28.424228, 77.527033, 3.00)
+2026-01-13 22:07:11 - DroneController - [INFO] - Waypoint 5/268 reached
+2026-01-13 22:07:11 - DroneController - [INFO] - Sending waypoint: (28.424210, 77.527032, 3.00)
+2026-01-13 22:07:12 - DroneController - [INFO] - Waypoint 6/268 reached
+2026-01-13 22:07:12 - DroneController - [INFO] - Sending waypoint: (28.424193, 77.527032, 3.00)
+2026-01-13 22:07:13 - DroneController - [INFO] - Waypoint 7/268 reached
+2026-01-13 22:07:13 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527033, 3.00)
+2026-01-13 22:07:13 - DroneController - [INFO] - Waypoint 8/268 reached
+2026-01-13 22:07:13 - DroneController - [INFO] - Sending waypoint: (28.424157, 77.527035, 3.00)
+2026-01-13 22:07:14 - DroneController - [INFO] - Waypoint 9/268 reached
+2026-01-13 22:07:14 - DroneController - [INFO] - Sending waypoint: (28.424140, 77.527039, 3.00)
+2026-01-13 22:07:15 - DroneController - [INFO] - Waypoint 10/268 reached
+2026-01-13 22:07:15 - DroneController - [INFO] - Sending waypoint: (28.424123, 77.527043, 3.00)
+2026-01-13 22:07:16 - DroneController - [INFO] - Waypoint 11/268 reached
+2026-01-13 22:07:16 - DroneController - [INFO] - Sending waypoint: (28.424105, 77.527049, 3.00)
+2026-01-13 22:07:16 - DroneController - [INFO] - Waypoint 12/268 reached
+2026-01-13 22:07:16 - DroneController - [INFO] - Sending waypoint: (28.424088, 77.527056, 3.00)
+2026-01-13 22:07:17 - DroneController - [INFO] - Waypoint 13/268 reached
+2026-01-13 22:07:17 - DroneController - [INFO] - Sending waypoint: (28.424071, 77.527064, 3.00)
+2026-01-13 22:07:18 - DroneController - [INFO] - Waypoint 14/268 reached
+2026-01-13 22:07:18 - DroneController - [INFO] - Sending waypoint: (28.423832, 77.527185, 3.00)
+2026-01-13 22:07:20 - DroneController - [INFO] - Telemetry: 4780 msgs | GPS: (28.424053, 77.527072, 3.00m) | Battery: 94% | Mode: GUIDED
+2026-01-13 22:07:24 - DroneController - [INFO] - Waypoint 15/268 reached
+2026-01-13 22:07:24 - DroneController - [INFO] - Sending waypoint: (28.423800, 77.527204, 3.00)
+2026-01-13 22:07:25 - DroneController - [INFO] - Waypoint 16/268 reached
+2026-01-13 22:07:25 - DroneController - [INFO] - Sending waypoint: (28.423780, 77.527224, 3.00)
+2026-01-13 22:07:26 - DroneController - [INFO] - Waypoint 17/268 reached
+2026-01-13 22:07:26 - DroneController - [INFO] - Sending waypoint: (28.423774, 77.527244, 3.00)
+2026-01-13 22:07:27 - DroneController - [INFO] - Waypoint 18/268 reached
+2026-01-13 22:07:27 - DroneController - [INFO] - Sending waypoint: (28.423780, 77.527265, 3.00)
+2026-01-13 22:07:28 - DroneController - [INFO] - Waypoint 19/268 reached
+2026-01-13 22:07:28 - DroneController - [INFO] - Sending waypoint: (28.423799, 77.527285, 3.00)
+2026-01-13 22:07:29 - DroneController - [INFO] - Waypoint 20/268 reached
+2026-01-13 22:07:29 - DroneController - [INFO] - Sending waypoint: (28.423831, 77.527306, 3.00)
+2026-01-13 22:07:30 - DroneController - [INFO] - Telemetry: 5977 msgs | GPS: (28.423788, 77.527276, 3.00m) | Battery: 92% | Mode: GUIDED
+2026-01-13 22:07:31 - DroneController - [INFO] - Waypoint 21/268 reached
+2026-01-13 22:07:31 - DroneController - [INFO] - Sending waypoint: (28.424633, 77.527738, 3.00)
+2026-01-13 22:07:40 - DroneController - [INFO] - Telemetry: 7170 msgs | GPS: (28.424396, 77.527611, 3.03m) | Battery: 90% | Mode: GUIDED
+2026-01-13 22:07:44 - DroneController - [INFO] - Waypoint 22/268 reached
+2026-01-13 22:07:44 - DroneController - [INFO] - Sending waypoint: (28.424662, 77.527752, 3.00)
+2026-01-13 22:07:45 - DroneController - [INFO] - Waypoint 23/268 reached
+2026-01-13 22:07:45 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527758, 3.00)
+2026-01-13 22:07:46 - DroneController - [INFO] - Waypoint 24/268 reached
+2026-01-13 22:07:46 - DroneController - [INFO] - Sending waypoint: (28.424707, 77.527758, 3.00)
+2026-01-13 22:07:47 - DroneController - [INFO] - Waypoint 25/268 reached
+2026-01-13 22:07:47 - DroneController - [INFO] - Sending waypoint: (28.424722, 77.527750, 3.00)
+2026-01-13 22:07:47 - DroneController - [INFO] - Waypoint 26/268 reached
+2026-01-13 22:07:47 - DroneController - [INFO] - Sending waypoint: (28.424732, 77.527736, 3.00)
+2026-01-13 22:07:48 - DroneController - [INFO] - Waypoint 27/268 reached
+2026-01-13 22:07:48 - DroneController - [INFO] - Sending waypoint: (28.424737, 77.527714, 3.00)
+2026-01-13 22:07:49 - DroneController - [INFO] - Waypoint 28/268 reached
+2026-01-13 22:07:49 - DroneController - [INFO] - Sending waypoint: (28.424737, 77.527685, 3.00)
+2026-01-13 22:07:50 - DroneController - [INFO] - Telemetry: 8363 msgs | GPS: (28.424735, 77.527728, 3.00m) | Battery: 87% | Mode: GUIDED
+2026-01-13 22:07:50 - DroneController - [INFO] - Waypoint 29/268 reached
+2026-01-13 22:07:50 - DroneController - [INFO] - Sending waypoint: (28.424733, 77.527649, 3.00)
+2026-01-13 22:07:52 - DroneController - [INFO] - Waypoint 30/268 reached
+2026-01-13 22:07:52 - DroneController - [INFO] - Sending waypoint: (28.424674, 77.527313, 3.00)
+2026-01-13 22:07:58 - DroneController - [INFO] - Waypoint 31/268 reached
+2026-01-13 22:07:58 - DroneController - [INFO] - Sending waypoint: (28.424669, 77.527291, 3.00)
+2026-01-13 22:07:59 - DroneController - [INFO] - Waypoint 32/268 reached
+2026-01-13 22:07:59 - DroneController - [INFO] - Sending waypoint: (28.424663, 77.527270, 3.00)
+2026-01-13 22:07:59 - DroneController - [INFO] - Waypoint 33/268 reached
+2026-01-13 22:07:59 - DroneController - [INFO] - Sending waypoint: (28.424656, 77.527251, 3.00)
+2026-01-13 22:08:00 - DroneController - [INFO] - Telemetry: 9559 msgs | GPS: (28.424669, 77.527291, 3.00m) | Battery: 85% | Mode: GUIDED
+2026-01-13 22:08:00 - DroneController - [INFO] - Waypoint 34/268 reached
+2026-01-13 22:08:00 - DroneController - [INFO] - Sending waypoint: (28.424647, 77.527233, 3.00)
+2026-01-13 22:08:01 - DroneController - [INFO] - Waypoint 35/268 reached
+2026-01-13 22:08:01 - DroneController - [INFO] - Sending waypoint: (28.424638, 77.527216, 3.00)
+2026-01-13 22:08:02 - DroneController - [INFO] - Waypoint 36/268 reached
+2026-01-13 22:08:02 - DroneController - [INFO] - Sending waypoint: (28.424627, 77.527200, 3.00)
+2026-01-13 22:08:02 - DroneController - [INFO] - Waypoint 37/268 reached
+2026-01-13 22:08:02 - DroneController - [INFO] - Sending waypoint: (28.424614, 77.527186, 3.00)
+2026-01-13 22:08:03 - DroneController - [INFO] - Waypoint 38/268 reached
+2026-01-13 22:08:03 - DroneController - [INFO] - Sending waypoint: (28.424600, 77.527173, 3.00)
+2026-01-13 22:08:04 - DroneController - [INFO] - Waypoint 39/268 reached
+2026-01-13 22:08:04 - DroneController - [INFO] - Sending waypoint: (28.424586, 77.527161, 3.00)
+2026-01-13 22:08:05 - DroneController - [INFO] - Waypoint 40/268 reached
+2026-01-13 22:08:05 - DroneController - [INFO] - Sending waypoint: (28.424569, 77.527151, 3.00)
+2026-01-13 22:08:06 - DroneController - [INFO] - Waypoint 41/268 reached
+2026-01-13 22:08:06 - DroneController - [INFO] - Sending waypoint: (28.424552, 77.527142, 3.00)
+2026-01-13 22:08:06 - DroneController - [INFO] - Waypoint 42/268 reached
+2026-01-13 22:08:06 - DroneController - [INFO] - Sending waypoint: (28.424533, 77.527134, 3.00)
+2026-01-13 22:08:08 - DroneController - [INFO] - Waypoint 43/268 reached
+2026-01-13 22:08:08 - DroneController - [INFO] - Sending waypoint: (28.424305, 77.527088, 3.00)
+2026-01-13 22:08:10 - DroneController - [INFO] - Telemetry: 10753 msgs | GPS: (28.424480, 77.527122, 3.00m) | Battery: 82% | Mode: GUIDED
+2026-01-13 22:08:13 - DroneController - [INFO] - Waypoint 44/268 reached
+2026-01-13 22:08:13 - DroneController - [INFO] - Sending waypoint: (28.424288, 77.527082, 3.00)
+2026-01-13 22:08:14 - DroneController - [INFO] - Waypoint 45/268 reached
+2026-01-13 22:08:14 - DroneController - [INFO] - Sending waypoint: (28.424271, 77.527078, 3.00)
+2026-01-13 22:08:14 - DroneController - [INFO] - Waypoint 46/268 reached
+2026-01-13 22:08:14 - DroneController - [INFO] - Sending waypoint: (28.424255, 77.527075, 3.00)
+2026-01-13 22:08:15 - DroneController - [INFO] - Waypoint 47/268 reached
+2026-01-13 22:08:15 - DroneController - [INFO] - Sending waypoint: (28.424238, 77.527073, 3.00)
+2026-01-13 22:08:16 - DroneController - [INFO] - Waypoint 48/268 reached
+2026-01-13 22:08:16 - DroneController - [INFO] - Sending waypoint: (28.424221, 77.527072, 3.00)
+2026-01-13 22:08:17 - DroneController - [INFO] - Waypoint 49/268 reached
+2026-01-13 22:08:17 - DroneController - [INFO] - Sending waypoint: (28.424205, 77.527072, 3.00)
+2026-01-13 22:08:17 - DroneController - [INFO] - Waypoint 50/268 reached
+2026-01-13 22:08:17 - DroneController - [INFO] - Sending waypoint: (28.424188, 77.527073, 3.00)
+2026-01-13 22:08:18 - DroneController - [INFO] - Waypoint 51/268 reached
+2026-01-13 22:08:18 - DroneController - [INFO] - Sending waypoint: (28.424172, 77.527076, 3.00)
+2026-01-13 22:08:19 - DroneController - [INFO] - Waypoint 52/268 reached
+2026-01-13 22:08:19 - DroneController - [INFO] - Sending waypoint: (28.424155, 77.527079, 3.00)
+2026-01-13 22:08:20 - DroneController - [INFO] - Waypoint 53/268 reached
+2026-01-13 22:08:20 - DroneController - [INFO] - Sending waypoint: (28.424139, 77.527084, 3.00)
+2026-01-13 22:08:20 - DroneController - [INFO] - Telemetry: 11946 msgs | GPS: (28.424173, 77.527075, 3.00m) | Battery: 80% | Mode: GUIDED
+2026-01-13 22:08:20 - DroneController - [INFO] - Waypoint 54/268 reached
+2026-01-13 22:08:20 - DroneController - [INFO] - Sending waypoint: (28.424122, 77.527089, 3.00)
+2026-01-13 22:08:21 - DroneController - [INFO] - Waypoint 55/268 reached
+2026-01-13 22:08:21 - DroneController - [INFO] - Sending waypoint: (28.424106, 77.527096, 3.00)
+2026-01-13 22:08:22 - DroneController - [INFO] - Waypoint 56/268 reached
+2026-01-13 22:08:22 - DroneController - [INFO] - Sending waypoint: (28.423871, 77.527199, 3.00)
+2026-01-13 22:08:27 - DroneController - [INFO] - Waypoint 57/268 reached
+2026-01-13 22:08:27 - DroneController - [INFO] - Sending waypoint: (28.423840, 77.527216, 3.00)
+2026-01-13 22:08:28 - DroneController - [INFO] - Waypoint 58/268 reached
+2026-01-13 22:08:28 - DroneController - [INFO] - Sending waypoint: (28.423822, 77.527233, 3.00)
+2026-01-13 22:08:30 - DroneController - [INFO] - Waypoint 59/268 reached
+2026-01-13 22:08:30 - DroneController - [INFO] - Sending waypoint: (28.423815, 77.527251, 3.00)
+2026-01-13 22:08:30 - DroneController - [INFO] - Telemetry: 13142 msgs | GPS: (28.423836, 77.527220, 3.00m) | Battery: 78% | Mode: GUIDED
+2026-01-13 22:08:30 - DroneController - [INFO] - Waypoint 60/268 reached
+2026-01-13 22:08:30 - DroneController - [INFO] - Sending waypoint: (28.423820, 77.527269, 3.00)
+2026-01-13 22:08:31 - DroneController - [INFO] - Waypoint 61/268 reached
+2026-01-13 22:08:31 - DroneController - [INFO] - Sending waypoint: (28.423838, 77.527287, 3.00)
+2026-01-13 22:08:32 - DroneController - [INFO] - Waypoint 62/268 reached
+2026-01-13 22:08:32 - DroneController - [INFO] - Sending waypoint: (28.423868, 77.527306, 3.00)
+2026-01-13 22:08:33 - DroneController - [INFO] - Waypoint 63/268 reached
+2026-01-13 22:08:33 - DroneController - [INFO] - Sending waypoint: (28.424611, 77.527707, 3.00)
+2026-01-13 22:08:40 - DroneController - [INFO] - Telemetry: 14335 msgs | GPS: (28.424213, 77.527493, 3.00m) | Battery: 75% | Mode: GUIDED
+2026-01-13 22:08:46 - DroneController - [INFO] - Waypoint 64/268 reached
+2026-01-13 22:08:46 - DroneController - [INFO] - Sending waypoint: (28.424642, 77.527721, 3.00)
+2026-01-13 22:08:47 - DroneController - [INFO] - Waypoint 65/268 reached
+2026-01-13 22:08:47 - DroneController - [INFO] - Sending waypoint: (28.424666, 77.527726, 3.00)
+2026-01-13 22:08:48 - DroneController - [INFO] - Waypoint 66/268 reached
+2026-01-13 22:08:48 - DroneController - [INFO] - Sending waypoint: (28.424685, 77.527723, 3.00)
+2026-01-13 22:08:49 - DroneController - [INFO] - Waypoint 67/268 reached
+2026-01-13 22:08:49 - DroneController - [INFO] - Sending waypoint: (28.424697, 77.527712, 3.00)
+2026-01-13 22:08:50 - DroneController - [INFO] - Waypoint 68/268 reached
+2026-01-13 22:08:50 - DroneController - [INFO] - Sending waypoint: (28.424704, 77.527692, 3.00)
+2026-01-13 22:08:50 - DroneController - [INFO] - Telemetry: 15528 msgs | GPS: (28.424683, 77.527723, 3.00m) | Battery: 73% | Mode: GUIDED
+2026-01-13 22:08:50 - DroneController - [INFO] - Waypoint 69/268 reached
+2026-01-13 22:08:50 - DroneController - [INFO] - Sending waypoint: (28.424704, 77.527663, 3.00)
+2026-01-13 22:08:51 - DroneController - [INFO] - Waypoint 70/268 reached
+2026-01-13 22:08:51 - DroneController - [INFO] - Sending waypoint: (28.424699, 77.527626, 3.00)
+2026-01-13 22:08:53 - DroneController - [INFO] - Waypoint 71/268 reached
+2026-01-13 22:08:53 - DroneController - [INFO] - Sending waypoint: (28.424632, 77.527310, 3.00)
+2026-01-13 22:08:59 - DroneController - [INFO] - Waypoint 72/268 reached
+2026-01-13 22:08:59 - DroneController - [INFO] - Sending waypoint: (28.424627, 77.527290, 3.00)
+2026-01-13 22:09:00 - DroneController - [INFO] - Waypoint 73/268 reached
+2026-01-13 22:09:00 - DroneController - [INFO] - Sending waypoint: (28.424621, 77.527271, 3.00)
+2026-01-13 22:09:00 - DroneController - [INFO] - Telemetry: 16724 msgs | GPS: (28.424634, 77.527319, 2.99m) | Battery: 70% | Mode: GUIDED
+2026-01-13 22:09:00 - DroneController - [INFO] - Waypoint 74/268 reached
+2026-01-13 22:09:00 - DroneController - [INFO] - Sending waypoint: (28.424613, 77.527253, 3.00)
+2026-01-13 22:09:01 - DroneController - [INFO] - Waypoint 75/268 reached
+2026-01-13 22:09:01 - DroneController - [INFO] - Sending waypoint: (28.424604, 77.527236, 3.00)
+2026-01-13 22:09:02 - DroneController - [INFO] - Waypoint 76/268 reached
+2026-01-13 22:09:02 - DroneController - [INFO] - Sending waypoint: (28.424594, 77.527221, 3.00)
+2026-01-13 22:09:03 - DroneController - [INFO] - Waypoint 77/268 reached
+2026-01-13 22:09:03 - DroneController - [INFO] - Sending waypoint: (28.424582, 77.527207, 3.00)
+2026-01-13 22:09:03 - DroneController - [INFO] - Waypoint 78/268 reached
+2026-01-13 22:09:03 - DroneController - [INFO] - Sending waypoint: (28.424570, 77.527195, 3.00)
+2026-01-13 22:09:04 - DroneController - [INFO] - Waypoint 79/268 reached
+2026-01-13 22:09:04 - DroneController - [INFO] - Sending waypoint: (28.424556, 77.527184, 3.00)
+2026-01-13 22:09:05 - DroneController - [INFO] - Waypoint 80/268 reached
+2026-01-13 22:09:05 - DroneController - [INFO] - Sending waypoint: (28.424541, 77.527174, 3.00)
+2026-01-13 22:09:06 - DroneController - [INFO] - Waypoint 81/268 reached
+2026-01-13 22:09:06 - DroneController - [INFO] - Sending waypoint: (28.424524, 77.527166, 3.00)
+2026-01-13 22:09:06 - DroneController - [INFO] - Waypoint 82/268 reached
+2026-01-13 22:09:06 - DroneController - [INFO] - Sending waypoint: (28.424507, 77.527158, 3.00)
+2026-01-13 22:09:07 - DroneController - [INFO] - Waypoint 83/268 reached
+2026-01-13 22:09:07 - DroneController - [INFO] - Sending waypoint: (28.424311, 77.527126, 3.00)
+2026-01-13 22:09:10 - DroneController - [INFO] - Telemetry: 17918 msgs | GPS: (28.424439, 77.527147, 3.01m) | Battery: 68% | Mode: GUIDED
+2026-01-13 22:09:12 - DroneController - [INFO] - Waypoint 84/268 reached
+2026-01-13 22:09:12 - DroneController - [INFO] - Sending waypoint: (28.424294, 77.527121, 3.00)
+2026-01-13 22:09:13 - DroneController - [INFO] - Waypoint 85/268 reached
+2026-01-13 22:09:13 - DroneController - [INFO] - Sending waypoint: (28.424277, 77.527117, 3.00)
+2026-01-13 22:09:13 - DroneController - [INFO] - Waypoint 86/268 reached
+2026-01-13 22:09:13 - DroneController - [INFO] - Sending waypoint: (28.424260, 77.527114, 3.00)
+2026-01-13 22:09:14 - DroneController - [INFO] - Waypoint 87/268 reached
+2026-01-13 22:09:14 - DroneController - [INFO] - Sending waypoint: (28.424243, 77.527112, 3.00)
+2026-01-13 22:09:15 - DroneController - [INFO] - Waypoint 88/268 reached
+2026-01-13 22:09:15 - DroneController - [INFO] - Sending waypoint: (28.424226, 77.527112, 3.00)
+2026-01-13 22:09:16 - DroneController - [INFO] - Waypoint 89/268 reached
+2026-01-13 22:09:16 - DroneController - [INFO] - Sending waypoint: (28.424209, 77.527113, 3.00)
+2026-01-13 22:09:16 - DroneController - [INFO] - Waypoint 90/268 reached
+2026-01-13 22:09:16 - DroneController - [INFO] - Sending waypoint: (28.424192, 77.527115, 3.00)
+2026-01-13 22:09:17 - DroneController - [INFO] - Waypoint 91/268 reached
+2026-01-13 22:09:17 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527118, 3.00)
+2026-01-13 22:09:18 - DroneController - [INFO] - Waypoint 92/268 reached
+2026-01-13 22:09:18 - DroneController - [INFO] - Sending waypoint: (28.424158, 77.527123, 3.00)
+2026-01-13 22:09:19 - DroneController - [INFO] - Waypoint 93/268 reached
+2026-01-13 22:09:19 - DroneController - [INFO] - Sending waypoint: (28.424142, 77.527128, 3.00)
+2026-01-13 22:09:20 - DroneController - [INFO] - Waypoint 94/268 reached
+2026-01-13 22:09:20 - DroneController - [INFO] - Sending waypoint: (28.423910, 77.527214, 3.00)
+2026-01-13 22:09:20 - DroneController - [INFO] - Telemetry: 19110 msgs | GPS: (28.424160, 77.527122, 3.00m) | Battery: 65% | Mode: GUIDED
+2026-01-13 22:09:25 - DroneController - [INFO] - Waypoint 95/268 reached
+2026-01-13 22:09:25 - DroneController - [INFO] - Sending waypoint: (28.423876, 77.527230, 3.00)
+2026-01-13 22:09:26 - DroneController - [INFO] - Waypoint 96/268 reached
+2026-01-13 22:09:26 - DroneController - [INFO] - Sending waypoint: (28.423859, 77.527248, 3.00)
+2026-01-13 22:09:27 - DroneController - [INFO] - Waypoint 97/268 reached
+2026-01-13 22:09:27 - DroneController - [INFO] - Sending waypoint: (28.423858, 77.527266, 3.00)
+2026-01-13 22:09:28 - DroneController - [INFO] - Waypoint 98/268 reached
+2026-01-13 22:09:28 - DroneController - [INFO] - Sending waypoint: (28.423873, 77.527286, 3.00)
+2026-01-13 22:09:29 - DroneController - [INFO] - Waypoint 99/268 reached
+2026-01-13 22:09:29 - DroneController - [INFO] - Sending waypoint: (28.423905, 77.527307, 3.00)
+2026-01-13 22:09:30 - DroneController - [INFO] - Telemetry: 20306 msgs | GPS: (28.423870, 77.527282, 3.00m) | Battery: 63% | Mode: GUIDED
+2026-01-13 22:09:31 - DroneController - [INFO] - Waypoint 100/268 reached
+2026-01-13 22:09:31 - DroneController - [INFO] - Sending waypoint: (28.424589, 77.527676, 3.00)
+2026-01-13 22:09:40 - DroneController - [INFO] - Telemetry: 21499 msgs | GPS: (28.424458, 77.527605, 3.00m) | Battery: 61% | Mode: GUIDED
+2026-01-13 22:09:42 - DroneController - [INFO] - Waypoint 101/268 reached
+2026-01-13 22:09:42 - DroneController - [INFO] - Sending waypoint: (28.424621, 77.527690, 3.00)
+2026-01-13 22:09:44 - DroneController - [INFO] - Waypoint 102/268 reached
+2026-01-13 22:09:44 - DroneController - [INFO] - Sending waypoint: (28.424646, 77.527694, 3.00)
+2026-01-13 22:09:45 - DroneController - [INFO] - Waypoint 103/268 reached
+2026-01-13 22:09:45 - DroneController - [INFO] - Sending waypoint: (28.424662, 77.527687, 3.00)
+2026-01-13 22:09:45 - DroneController - [INFO] - Waypoint 104/268 reached
+2026-01-13 22:09:45 - DroneController - [INFO] - Sending waypoint: (28.424671, 77.527670, 3.00)
+2026-01-13 22:09:46 - DroneController - [INFO] - Waypoint 105/268 reached
+2026-01-13 22:09:46 - DroneController - [INFO] - Sending waypoint: (28.424671, 77.527642, 3.00)
+2026-01-13 22:09:47 - DroneController - [INFO] - Waypoint 106/268 reached
+2026-01-13 22:09:47 - DroneController - [INFO] - Sending waypoint: (28.424664, 77.527603, 3.00)
+2026-01-13 22:09:49 - DroneController - [INFO] - Waypoint 107/268 reached
+2026-01-13 22:09:49 - DroneController - [INFO] - Sending waypoint: (28.424590, 77.527308, 3.00)
+2026-01-13 22:09:50 - DroneController - [INFO] - Telemetry: 22693 msgs | GPS: (28.424666, 77.527603, 2.99m) | Battery: 58% | Mode: GUIDED
+2026-01-13 22:09:55 - DroneController - [INFO] - Waypoint 108/268 reached
+2026-01-13 22:09:55 - DroneController - [INFO] - Sending waypoint: (28.424583, 77.527287, 3.00)
+2026-01-13 22:09:55 - DroneController - [INFO] - Waypoint 109/268 reached
+2026-01-13 22:09:55 - DroneController - [INFO] - Sending waypoint: (28.424576, 77.527268, 3.00)
+2026-01-13 22:09:56 - DroneController - [INFO] - Waypoint 110/268 reached
+2026-01-13 22:09:56 - DroneController - [INFO] - Sending waypoint: (28.424567, 77.527251, 3.00)
+2026-01-13 22:09:57 - DroneController - [INFO] - Waypoint 111/268 reached
+2026-01-13 22:09:57 - DroneController - [INFO] - Sending waypoint: (28.424556, 77.527235, 3.00)
+2026-01-13 22:09:58 - DroneController - [INFO] - Waypoint 112/268 reached
+2026-01-13 22:09:58 - DroneController - [INFO] - Sending waypoint: (28.424544, 77.527221, 3.00)
+2026-01-13 22:09:58 - DroneController - [INFO] - Waypoint 113/268 reached
+2026-01-13 22:09:58 - DroneController - [INFO] - Sending waypoint: (28.424530, 77.527209, 3.00)
+2026-01-13 22:09:59 - DroneController - [INFO] - Waypoint 114/268 reached
+2026-01-13 22:09:59 - DroneController - [INFO] - Sending waypoint: (28.424515, 77.527199, 3.00)
+2026-01-13 22:10:00 - DroneController - [INFO] - Telemetry: 23888 msgs | GPS: (28.424541, 77.527218, 3.00m) | Battery: 56% | Mode: GUIDED
+2026-01-13 22:10:00 - DroneController - [INFO] - Waypoint 115/268 reached
+2026-01-13 22:10:00 - DroneController - [INFO] - Sending waypoint: (28.424498, 77.527190, 3.00)
+2026-01-13 22:10:01 - DroneController - [INFO] - Waypoint 116/268 reached
+2026-01-13 22:10:01 - DroneController - [INFO] - Sending waypoint: (28.424480, 77.527183, 3.00)
+2026-01-13 22:10:02 - DroneController - [INFO] - Waypoint 117/268 reached
+2026-01-13 22:10:02 - DroneController - [INFO] - Sending waypoint: (28.424316, 77.527164, 3.00)
+2026-01-13 22:10:06 - DroneController - [INFO] - Waypoint 118/268 reached
+2026-01-13 22:10:06 - DroneController - [INFO] - Sending waypoint: (28.424299, 77.527159, 3.00)
+2026-01-13 22:10:07 - DroneController - [INFO] - Waypoint 119/268 reached
+2026-01-13 22:10:07 - DroneController - [INFO] - Sending waypoint: (28.424282, 77.527156, 3.00)
+2026-01-13 22:10:08 - DroneController - [INFO] - Waypoint 120/268 reached
+2026-01-13 22:10:08 - DroneController - [INFO] - Sending waypoint: (28.424264, 77.527153, 3.00)
+2026-01-13 22:10:08 - DroneController - [INFO] - Waypoint 121/268 reached
+2026-01-13 22:10:08 - DroneController - [INFO] - Sending waypoint: (28.424247, 77.527153, 3.00)
+2026-01-13 22:10:09 - DroneController - [INFO] - Waypoint 122/268 reached
+2026-01-13 22:10:09 - DroneController - [INFO] - Sending waypoint: (28.424230, 77.527153, 3.00)
+2026-01-13 22:10:10 - DroneController - [INFO] - Waypoint 123/268 reached
+2026-01-13 22:10:10 - DroneController - [INFO] - Sending waypoint: (28.424213, 77.527155, 3.00)
+2026-01-13 22:10:10 - DroneController - [INFO] - Telemetry: 25081 msgs | GPS: (28.424255, 77.527153, 3.00m) | Battery: 53% | Mode: GUIDED
+2026-01-13 22:10:11 - DroneController - [INFO] - Waypoint 124/268 reached
+2026-01-13 22:10:11 - DroneController - [INFO] - Sending waypoint: (28.424195, 77.527158, 3.00)
+2026-01-13 22:10:11 - DroneController - [INFO] - Waypoint 125/268 reached
+2026-01-13 22:10:11 - DroneController - [INFO] - Sending waypoint: (28.424178, 77.527162, 3.00)
+2026-01-13 22:10:12 - DroneController - [INFO] - Waypoint 126/268 reached
+2026-01-13 22:10:12 - DroneController - [INFO] - Sending waypoint: (28.423949, 77.527229, 3.00)
+2026-01-13 22:10:17 - DroneController - [INFO] - Waypoint 127/268 reached
+2026-01-13 22:10:17 - DroneController - [INFO] - Sending waypoint: (28.423912, 77.527245, 3.00)
+2026-01-13 22:10:19 - DroneController - [INFO] - Waypoint 128/268 reached
+2026-01-13 22:10:19 - DroneController - [INFO] - Sending waypoint: (28.423898, 77.527263, 3.00)
+2026-01-13 22:10:19 - DroneController - [INFO] - Waypoint 129/268 reached
+2026-01-13 22:10:19 - DroneController - [INFO] - Sending waypoint: (28.423908, 77.527284, 3.00)
+2026-01-13 22:10:20 - DroneController - [INFO] - Telemetry: 26274 msgs | GPS: (28.423912, 77.527247, 3.00m) | Battery: 51% | Mode: GUIDED
+2026-01-13 22:10:20 - DroneController - [INFO] - Waypoint 130/268 reached
+2026-01-13 22:10:20 - DroneController - [INFO] - Sending waypoint: (28.423943, 77.527308, 3.00)
+2026-01-13 22:10:22 - DroneController - [INFO] - Waypoint 131/268 reached
+2026-01-13 22:10:22 - DroneController - [INFO] - Sending waypoint: (28.424567, 77.527645, 3.00)
+2026-01-13 22:10:30 - DroneController - [INFO] - Telemetry: 27470 msgs | GPS: (28.424371, 77.527539, 3.01m) | Battery: 48% | Mode: GUIDED
+2026-01-13 22:10:33 - DroneController - [INFO] - Waypoint 132/268 reached
+2026-01-13 22:10:33 - DroneController - [INFO] - Sending waypoint: (28.424601, 77.527659, 3.00)
+2026-01-13 22:10:35 - DroneController - [INFO] - Waypoint 133/268 reached
+2026-01-13 22:10:35 - DroneController - [INFO] - Sending waypoint: (28.424624, 77.527660, 3.00)
+2026-01-13 22:10:35 - DroneController - [INFO] - Waypoint 134/268 reached
+2026-01-13 22:10:35 - DroneController - [INFO] - Sending waypoint: (28.424637, 77.527647, 3.00)
+2026-01-13 22:10:36 - DroneController - [INFO] - Waypoint 135/268 reached
+2026-01-13 22:10:36 - DroneController - [INFO] - Sending waypoint: (28.424639, 77.527621, 3.00)
+2026-01-13 22:10:37 - DroneController - [INFO] - Waypoint 136/268 reached
+2026-01-13 22:10:37 - DroneController - [INFO] - Sending waypoint: (28.424630, 77.527580, 3.00)
+2026-01-13 22:10:39 - DroneController - [INFO] - Waypoint 137/268 reached
+2026-01-13 22:10:39 - DroneController - [INFO] - Sending waypoint: (28.424546, 77.527305, 3.00)
+2026-01-13 22:10:40 - DroneController - [INFO] - Telemetry: 28663 msgs | GPS: (28.424632, 77.527582, 2.99m) | Battery: 46% | Mode: GUIDED
+2026-01-13 22:10:45 - DroneController - [INFO] - Waypoint 138/268 reached
+2026-01-13 22:10:45 - DroneController - [INFO] - Sending waypoint: (28.424540, 77.527287, 3.00)
+2026-01-13 22:10:45 - DroneController - [INFO] - Waypoint 139/268 reached
+2026-01-13 22:10:45 - DroneController - [INFO] - Sending waypoint: (28.424532, 77.527270, 3.00)
+2026-01-13 22:10:46 - DroneController - [INFO] - Waypoint 140/268 reached
+2026-01-13 22:10:46 - DroneController - [INFO] - Sending waypoint: (28.424522, 77.527255, 3.00)
+2026-01-13 22:10:47 - DroneController - [INFO] - Waypoint 141/268 reached
+2026-01-13 22:10:47 - DroneController - [INFO] - Sending waypoint: (28.424511, 77.527242, 3.00)
+2026-01-13 22:10:47 - DroneController - [INFO] - Waypoint 142/268 reached
+2026-01-13 22:10:47 - DroneController - [INFO] - Sending waypoint: (28.424499, 77.527231, 3.00)
+2026-01-13 22:10:48 - DroneController - [INFO] - Waypoint 143/268 reached
+2026-01-13 22:10:48 - DroneController - [INFO] - Sending waypoint: (28.424485, 77.527221, 3.00)
+2026-01-13 22:10:49 - DroneController - [INFO] - Waypoint 144/268 reached
+2026-01-13 22:10:49 - DroneController - [INFO] - Sending waypoint: (28.424470, 77.527213, 3.00)
+2026-01-13 22:10:50 - DroneController - [INFO] - Waypoint 145/268 reached
+2026-01-13 22:10:50 - DroneController - [INFO] - Sending waypoint: (28.424454, 77.527207, 3.00)
+2026-01-13 22:10:50 - DroneController - [INFO] - Telemetry: 29858 msgs | GPS: (28.424487, 77.527221, 3.00m) | Battery: 44% | Mode: GUIDED
+2026-01-13 22:10:50 - DroneController - [INFO] - Waypoint 146/268 reached
+2026-01-13 22:10:50 - DroneController - [INFO] - Sending waypoint: (28.424322, 77.527202, 3.00)
+2026-01-13 22:10:54 - DroneController - [INFO] - Waypoint 147/268 reached
+2026-01-13 22:10:54 - DroneController - [INFO] - Sending waypoint: (28.424304, 77.527198, 3.00)
+2026-01-13 22:10:55 - DroneController - [INFO] - Waypoint 148/268 reached
+2026-01-13 22:10:55 - DroneController - [INFO] - Sending waypoint: (28.424286, 77.527195, 3.00)
+2026-01-13 22:10:56 - DroneController - [INFO] - Waypoint 149/268 reached
+2026-01-13 22:10:56 - DroneController - [INFO] - Sending waypoint: (28.424269, 77.527193, 3.00)
+2026-01-13 22:10:56 - DroneController - [INFO] - Waypoint 150/268 reached
+2026-01-13 22:10:56 - DroneController - [INFO] - Sending waypoint: (28.424251, 77.527193, 3.00)
+2026-01-13 22:10:57 - DroneController - [INFO] - Waypoint 151/268 reached
+2026-01-13 22:10:57 - DroneController - [INFO] - Sending waypoint: (28.424233, 77.527195, 3.00)
+2026-01-13 22:10:58 - DroneController - [INFO] - Waypoint 152/268 reached
+2026-01-13 22:10:58 - DroneController - [INFO] - Sending waypoint: (28.424215, 77.527198, 3.00)
+2026-01-13 22:10:59 - DroneController - [INFO] - Waypoint 153/268 reached
+2026-01-13 22:10:59 - DroneController - [INFO] - Sending waypoint: (28.423988, 77.527244, 3.00)
+2026-01-13 22:11:00 - DroneController - [INFO] - Telemetry: 31052 msgs | GPS: (28.424206, 77.527199, 3.00m) | Battery: 41% | Mode: GUIDED
+2026-01-13 22:11:04 - DroneController - [INFO] - Waypoint 154/268 reached
+2026-01-13 22:11:04 - DroneController - [INFO] - Sending waypoint: (28.423953, 77.527255, 3.00)
+2026-01-13 22:11:05 - DroneController - [INFO] - Waypoint 155/268 reached
+2026-01-13 22:11:05 - DroneController - [INFO] - Sending waypoint: (28.423940, 77.527269, 3.00)
+2026-01-13 22:11:06 - DroneController - [INFO] - Waypoint 156/268 reached
+2026-01-13 22:11:06 - DroneController - [INFO] - Sending waypoint: (28.423949, 77.527287, 3.00)
+2026-01-13 22:11:06 - DroneController - [INFO] - Waypoint 157/268 reached
+2026-01-13 22:11:06 - DroneController - [INFO] - Sending waypoint: (28.423981, 77.527309, 3.00)
+2026-01-13 22:11:08 - DroneController - [INFO] - Waypoint 158/268 reached
+2026-01-13 22:11:08 - DroneController - [INFO] - Sending waypoint: (28.424545, 77.527613, 3.00)
+2026-01-13 22:11:10 - DroneController - [INFO] - Telemetry: 32245 msgs | GPS: (28.423994, 77.527318, 3.00m) | Battery: 39% | Mode: GUIDED
+2026-01-13 22:11:19 - DroneController - [INFO] - Waypoint 159/268 reached
+2026-01-13 22:11:19 - DroneController - [INFO] - Sending waypoint: (28.424581, 77.527628, 3.00)
+2026-01-13 22:11:20 - DroneController - [INFO] - Waypoint 160/268 reached
+2026-01-13 22:11:20 - DroneController - [INFO] - Sending waypoint: (28.424602, 77.527623, 3.00)
+2026-01-13 22:11:20 - DroneController - [INFO] - Telemetry: 33438 msgs | GPS: (28.424556, 77.527618, 2.99m) | Battery: 36% | Mode: GUIDED
+2026-01-13 22:11:21 - DroneController - [INFO] - Waypoint 161/268 reached
+2026-01-13 22:11:21 - DroneController - [INFO] - Sending waypoint: (28.424607, 77.527600, 3.00)
+2026-01-13 22:11:21 - DroneController - [INFO] - Waypoint 162/268 reached
+2026-01-13 22:11:21 - DroneController - [INFO] - Sending waypoint: (28.424596, 77.527558, 3.00)
+2026-01-13 22:11:23 - DroneController - [INFO] - Waypoint 163/268 reached
+2026-01-13 22:11:23 - DroneController - [INFO] - Sending waypoint: (28.424502, 77.527303, 3.00)
+2026-01-13 22:11:29 - DroneController - [INFO] - Waypoint 164/268 reached
+2026-01-13 22:11:29 - DroneController - [INFO] - Sending waypoint: (28.424494, 77.527285, 3.00)
+2026-01-13 22:11:30 - DroneController - [INFO] - Waypoint 165/268 reached
+2026-01-13 22:11:30 - DroneController - [INFO] - Sending waypoint: (28.424484, 77.527270, 3.00)
+2026-01-13 22:11:30 - DroneController - [INFO] - Telemetry: 34634 msgs | GPS: (28.424500, 77.527300, 2.99m) | Battery: 34% | Mode: GUIDED
+2026-01-13 22:11:30 - DroneController - [INFO] - Waypoint 166/268 reached
+2026-01-13 22:11:30 - DroneController - [INFO] - Sending waypoint: (28.424473, 77.527256, 3.00)
+2026-01-13 22:11:31 - DroneController - [INFO] - Waypoint 167/268 reached
+2026-01-13 22:11:31 - DroneController - [INFO] - Sending waypoint: (28.424459, 77.527246, 3.00)
+2026-01-13 22:11:32 - DroneController - [INFO] - Waypoint 168/268 reached
+2026-01-13 22:11:32 - DroneController - [INFO] - Sending waypoint: (28.424444, 77.527237, 3.00)
+2026-01-13 22:11:32 - DroneController - [INFO] - Waypoint 169/268 reached
+2026-01-13 22:11:32 - DroneController - [INFO] - Sending waypoint: (28.424428, 77.527231, 3.00)
+2026-01-13 22:11:33 - DroneController - [INFO] - Waypoint 170/268 reached
+2026-01-13 22:11:33 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527240, 3.00)
+2026-01-13 22:11:36 - DroneController - [INFO] - Waypoint 171/268 reached
+2026-01-13 22:11:36 - DroneController - [INFO] - Sending waypoint: (28.424312, 77.527237, 3.00)
+2026-01-13 22:11:37 - DroneController - [INFO] - Waypoint 172/268 reached
+2026-01-13 22:11:37 - DroneController - [INFO] - Sending waypoint: (28.424298, 77.527235, 3.00)
+2026-01-13 22:11:38 - DroneController - [INFO] - Waypoint 173/268 reached
+2026-01-13 22:11:38 - DroneController - [INFO] - Sending waypoint: (28.424283, 77.527235, 3.00)
+2026-01-13 22:11:38 - DroneController - [INFO] - Waypoint 174/268 reached
+2026-01-13 22:11:38 - DroneController - [INFO] - Sending waypoint: (28.424268, 77.527235, 3.00)
+2026-01-13 22:11:39 - DroneController - [INFO] - Waypoint 175/268 reached
+2026-01-13 22:11:39 - DroneController - [INFO] - Sending waypoint: (28.424253, 77.527236, 3.00)
+2026-01-13 22:11:40 - DroneController - [INFO] - Waypoint 176/268 reached
+2026-01-13 22:11:40 - DroneController - [INFO] - Sending waypoint: (28.424027, 77.527258, 3.00)
+2026-01-13 22:11:40 - DroneController - [INFO] - Telemetry: 35827 msgs | GPS: (28.424270, 77.527235, 3.00m) | Battery: 32% | Mode: GUIDED
+2026-01-13 22:11:45 - DroneController - [INFO] - Waypoint 177/268 reached
+2026-01-13 22:11:45 - DroneController - [INFO] - Sending waypoint: (28.423987, 77.527268, 3.00)
+2026-01-13 22:11:46 - DroneController - [INFO] - Waypoint 178/268 reached
+2026-01-13 22:11:46 - DroneController - [INFO] - Sending waypoint: (28.423985, 77.527285, 3.00)
+2026-01-13 22:11:47 - DroneController - [INFO] - Waypoint 179/268 reached
+2026-01-13 22:11:47 - DroneController - [INFO] - Sending waypoint: (28.424019, 77.527310, 3.00)
+2026-01-13 22:11:49 - DroneController - [INFO] - Waypoint 180/268 reached
+2026-01-13 22:11:49 - DroneController - [INFO] - Sending waypoint: (28.424522, 77.527581, 3.00)
+2026-01-13 22:11:50 - DroneController - [INFO] - Telemetry: 37020 msgs | GPS: (28.424018, 77.527309, 2.99m) | Battery: 29% | Mode: GUIDED
+2026-01-13 22:11:58 - DroneController - [INFO] - Waypoint 181/268 reached
+2026-01-13 22:11:58 - DroneController - [INFO] - Sending waypoint: (28.424554, 77.527595, 3.00)
+2026-01-13 22:12:00 - DroneController - [INFO] - Waypoint 182/268 reached
+2026-01-13 22:12:00 - DroneController - [INFO] - Sending waypoint: (28.424572, 77.527592, 3.00)
+2026-01-13 22:12:00 - DroneController - [INFO] - Telemetry: 38213 msgs | GPS: (28.424539, 77.527589, 2.99m) | Battery: 27% | Mode: GUIDED
+2026-01-13 22:12:00 - DroneController - [INFO] - Waypoint 183/268 reached
+2026-01-13 22:12:00 - DroneController - [INFO] - Sending waypoint: (28.424574, 77.527571, 3.00)
+2026-01-13 22:12:01 - DroneController - [INFO] - Waypoint 184/268 reached
+2026-01-13 22:12:01 - DroneController - [INFO] - Sending waypoint: (28.424561, 77.527535, 3.00)
+2026-01-13 22:12:03 - DroneController - [INFO] - Waypoint 185/268 reached
+2026-01-13 22:12:03 - DroneController - [INFO] - Sending waypoint: (28.424455, 77.527301, 3.00)
+2026-01-13 22:12:08 - DroneController - [INFO] - Waypoint 186/268 reached
+2026-01-13 22:12:08 - DroneController - [INFO] - Sending waypoint: (28.424446, 77.527284, 3.00)
+2026-01-13 22:12:09 - DroneController - [INFO] - Waypoint 187/268 reached
+2026-01-13 22:12:09 - DroneController - [INFO] - Sending waypoint: (28.424433, 77.527271, 3.00)
+2026-01-13 22:12:10 - DroneController - [INFO] - Waypoint 188/268 reached
+2026-01-13 22:12:10 - DroneController - [INFO] - Sending waypoint: (28.424418, 77.527261, 3.00)
+2026-01-13 22:12:10 - DroneController - [INFO] - Telemetry: 39412 msgs | GPS: (28.424442, 77.527281, 2.99m) | Battery: 24% | Mode: GUIDED
+2026-01-13 22:12:10 - DroneController - [INFO] - Waypoint 189/268 reached
+2026-01-13 22:12:10 - DroneController - [INFO] - Sending waypoint: (28.424401, 77.527255, 3.00)
+2026-01-13 22:12:11 - DroneController - [INFO] - Waypoint 190/268 reached
+2026-01-13 22:12:11 - DroneController - [INFO] - Sending waypoint: (28.424333, 77.527278, 3.00)
+2026-01-13 22:12:14 - DroneController - [INFO] - Waypoint 191/268 reached
+2026-01-13 22:12:14 - DroneController - [INFO] - Sending waypoint: (28.424319, 77.527277, 3.00)
+2026-01-13 22:12:14 - DroneController - [INFO] - Waypoint 192/268 reached
+2026-01-13 22:12:14 - DroneController - [INFO] - Sending waypoint: (28.424305, 77.527277, 3.00)
+2026-01-13 22:12:15 - DroneController - [INFO] - Waypoint 193/268 reached
+2026-01-13 22:12:15 - DroneController - [INFO] - Sending waypoint: (28.424291, 77.527276, 3.00)
+2026-01-13 22:12:15 - DroneController - [INFO] - Waypoint 194/268 reached
+2026-01-13 22:12:15 - DroneController - [INFO] - Sending waypoint: (28.424066, 77.527273, 3.00)
+2026-01-13 22:12:20 - DroneController - [INFO] - Telemetry: 40602 msgs | GPS: (28.424116, 77.527274, 2.99m) | Battery: 22% | Mode: GUIDED
+2026-01-13 22:12:21 - DroneController - [INFO] - Waypoint 195/268 reached
+2026-01-13 22:12:21 - DroneController - [INFO] - Sending waypoint: (28.424023, 77.527282, 3.00)
+2026-01-13 22:12:22 - DroneController - [INFO] - Waypoint 196/268 reached
+2026-01-13 22:12:22 - DroneController - [INFO] - Sending waypoint: (28.424058, 77.527312, 3.00)
+2026-01-13 22:12:24 - DroneController - [INFO] - Waypoint 197/268 reached
+2026-01-13 22:12:24 - DroneController - [INFO] - Sending waypoint: (28.424498, 77.527549, 3.00)
+2026-01-13 22:12:30 - DroneController - [INFO] - Telemetry: 41800 msgs | GPS: (28.424344, 77.527467, 3.01m) | Battery: 19% | Mode: GUIDED
+2026-01-13 22:12:33 - DroneController - [INFO] - Waypoint 198/268 reached
+2026-01-13 22:12:33 - DroneController - [INFO] - Sending waypoint: (28.424534, 77.527563, 3.00)
+2026-01-13 22:12:34 - DroneController - [INFO] - Waypoint 199/268 reached
+2026-01-13 22:12:34 - DroneController - [INFO] - Sending waypoint: (28.424543, 77.527550, 3.00)
+2026-01-13 22:12:35 - DroneController - [INFO] - Waypoint 200/268 reached
+2026-01-13 22:12:35 - DroneController - [INFO] - Sending waypoint: (28.424527, 77.527512, 3.00)
+2026-01-13 22:12:37 - DroneController - [INFO] - Waypoint 201/268 reached
+2026-01-13 22:12:37 - DroneController - [INFO] - Sending waypoint: (28.424407, 77.527301, 3.00)
+2026-01-13 22:12:40 - DroneController - [INFO] - Telemetry: 42991 msgs | GPS: (28.424475, 77.527417, 3.01m) | Battery: 17% | Mode: GUIDED
+2026-01-13 22:12:42 - DroneController - [INFO] - Waypoint 202/268 reached
+2026-01-13 22:12:42 - DroneController - [INFO] - Sending waypoint: (28.424399, 77.527289, 3.00)
+2026-01-13 22:12:43 - DroneController - [INFO] - Waypoint 203/268 reached
+2026-01-13 22:12:43 - DroneController - [INFO] - Sending waypoint: (28.424388, 77.527282, 3.00)
+2026-01-13 22:12:43 - DroneController - [INFO] - Waypoint 204/268 reached
+2026-01-13 22:12:43 - DroneController - [INFO] - Sending waypoint: (28.424375, 77.527280, 3.00)
+2026-01-13 22:12:44 - DroneController - [INFO] - Waypoint 205/268 reached
+2026-01-13 22:12:44 - DroneController - [INFO] - Sending waypoint: (28.424334, 77.527306, 3.00)
+2026-01-13 22:12:46 - DroneController - [INFO] - Waypoint 206/268 reached
+2026-01-13 22:12:46 - DroneController - [INFO] - Sending waypoint: (28.424320, 77.527308, 3.00)
+2026-01-13 22:12:46 - DroneController - [INFO] - Waypoint 207/268 reached
+2026-01-13 22:12:46 - DroneController - [INFO] - Sending waypoint: (28.424104, 77.527285, 3.00)
+2026-01-13 22:12:50 - DroneController - [INFO] - Telemetry: 44184 msgs | GPS: (28.424184, 77.527293, 3.00m) | Battery: 15% | Mode: GUIDED
+2026-01-13 22:12:51 - DroneController - [INFO] - Waypoint 208/268 reached
+2026-01-13 22:12:51 - DroneController - [INFO] - Sending waypoint: (28.424065, 77.527288, 3.00)
+2026-01-13 22:12:53 - DroneController - [INFO] - Waypoint 209/268 reached
+2026-01-13 22:12:53 - DroneController - [INFO] - Sending waypoint: (28.424097, 77.527313, 3.00)
+2026-01-13 22:12:53 - DroneController - [INFO] - Waypoint 210/268 reached
+2026-01-13 22:12:53 - DroneController - [INFO] - Sending waypoint: (28.424474, 77.527517, 3.00)
+2026-01-13 22:13:00 - DroneController - [INFO] - Telemetry: 45377 msgs | GPS: (28.424337, 77.527442, 3.00m) | Battery: 12% | Mode: GUIDED
+2026-01-13 22:13:02 - DroneController - [INFO] - Waypoint 211/268 reached
+2026-01-13 22:13:02 - DroneController - [INFO] - Sending waypoint: (28.424511, 77.527528, 3.00)
+2026-01-13 22:13:04 - DroneController - [INFO] - Waypoint 212/268 reached
+2026-01-13 22:13:04 - DroneController - [INFO] - Sending waypoint: (28.424493, 77.527489, 3.00)
+2026-01-13 22:13:06 - DroneController - [INFO] - Waypoint 213/268 reached
+2026-01-13 22:13:06 - DroneController - [INFO] - Sending waypoint: (28.424358, 77.527304, 3.00)
+2026-01-13 22:13:10 - DroneController - [INFO] - Telemetry: 46573 msgs | GPS: (28.424402, 77.527363, 2.99m) | Battery: 10% | Mode: GUIDED
+2026-01-13 22:13:11 - DroneController - [INFO] - Waypoint 214/268 reached
+2026-01-13 22:13:11 - DroneController - [INFO] - Sending waypoint: (28.424347, 77.527300, 3.00)
+2026-01-13 22:13:11 - DroneController - [INFO] - Waypoint 215/268 reached
+2026-01-13 22:13:11 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:12 - DroneController - [INFO] - Waypoint 216/268 reached
+2026-01-13 22:13:12 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:12 - DroneController - [INFO] - Waypoint 217/268 reached
+2026-01-13 22:13:12 - DroneController - [INFO] - Sending waypoint: (28.424137, 77.527288, 3.00)
+2026-01-13 22:13:17 - DroneController - [INFO] - Waypoint 218/268 reached
+2026-01-13 22:13:17 - DroneController - [INFO] - Sending waypoint: (28.424104, 77.527291, 3.00)
+2026-01-13 22:13:18 - DroneController - [INFO] - Waypoint 219/268 reached
+2026-01-13 22:13:18 - DroneController - [INFO] - Sending waypoint: (28.424131, 77.527313, 3.00)
+2026-01-13 22:13:18 - DroneController - [INFO] - Waypoint 220/268 reached
+2026-01-13 22:13:18 - DroneController - [INFO] - Sending waypoint: (28.424450, 77.527485, 3.00)
+2026-01-13 22:13:20 - DroneController - [INFO] - Telemetry: 47766 msgs | GPS: (28.424109, 77.527293, 2.99m) | Battery: 7% | Mode: GUIDED
+2026-01-13 22:13:27 - DroneController - [INFO] - Waypoint 221/268 reached
+2026-01-13 22:13:27 - DroneController - [INFO] - Sending waypoint: (28.424482, 77.527495, 3.00)
+2026-01-13 22:13:28 - DroneController - [INFO] - Waypoint 222/268 reached
+2026-01-13 22:13:28 - DroneController - [INFO] - Sending waypoint: (28.424462, 77.527464, 3.00)
+2026-01-13 22:13:28 - DroneController - [INFO] - Waypoint 223/268 reached
+2026-01-13 22:13:28 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:30 - DroneController - [INFO] - Telemetry: 48959 msgs | GPS: (28.424478, 77.527492, 2.99m) | Battery: 5% | Mode: GUIDED
+2026-01-13 22:13:35 - DroneController - [INFO] - Waypoint 224/268 reached
+2026-01-13 22:13:35 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:35 - DroneController - [INFO] - Waypoint 225/268 reached
+2026-01-13 22:13:35 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:35 - DroneController - [INFO] - Waypoint 226/268 reached
+2026-01-13 22:13:35 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:35 - DroneController - [INFO] - Waypoint 227/268 reached
+2026-01-13 22:13:35 - DroneController - [INFO] - Sending waypoint: (28.424171, 77.527292, 3.00)
+2026-01-13 22:13:40 - DroneController - [INFO] - Waypoint 228/268 reached
+2026-01-13 22:13:40 - DroneController - [INFO] - Sending waypoint: (28.424143, 77.527294, 3.00)
+2026-01-13 22:13:40 - DroneController - [INFO] - Telemetry: 50155 msgs | GPS: (28.424185, 77.527292, 2.99m) | Battery: 2% | Mode: GUIDED
+2026-01-13 22:13:41 - DroneController - [INFO] - Waypoint 229/268 reached
+2026-01-13 22:13:41 - DroneController - [INFO] - Sending waypoint: (28.424166, 77.527312, 3.00)
+2026-01-13 22:13:41 - DroneController - [INFO] - Waypoint 230/268 reached
+2026-01-13 22:13:41 - DroneController - [INFO] - Sending waypoint: (28.424428, 77.527454, 3.00)
+2026-01-13 22:13:48 - DroneController - [INFO] - Waypoint 231/268 reached
+2026-01-13 22:13:48 - DroneController - [INFO] - Sending waypoint: (28.424455, 77.527463, 3.00)
+2026-01-13 22:13:49 - DroneController - [INFO] - Waypoint 232/268 reached
+2026-01-13 22:13:49 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527437, 3.00)
+2026-01-13 22:13:49 - DroneController - [INFO] - Waypoint 233/268 reached
+2026-01-13 22:13:49 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:50 - DroneController - [INFO] - Telemetry: 51348 msgs | GPS: (28.424441, 77.527458, 2.99m) | Battery: 0% | Mode: GUIDED
+2026-01-13 22:13:55 - DroneController - [INFO] - Waypoint 234/268 reached
+2026-01-13 22:13:55 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:55 - DroneController - [INFO] - Waypoint 235/268 reached
+2026-01-13 22:13:55 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:56 - DroneController - [INFO] - Waypoint 236/268 reached
+2026-01-13 22:13:56 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:13:56 - DroneController - [INFO] - Waypoint 237/268 reached
+2026-01-13 22:13:56 - DroneController - [INFO] - Sending waypoint: (28.424204, 77.527296, 3.00)
+2026-01-13 22:14:00 - DroneController - [INFO] - Waypoint 238/268 reached
+2026-01-13 22:14:00 - DroneController - [INFO] - Sending waypoint: (28.424200, 77.527311, 3.00)
+2026-01-13 22:14:00 - DroneController - [INFO] - Waypoint 239/268 reached
+2026-01-13 22:14:00 - DroneController - [INFO] - Sending waypoint: (28.424407, 77.527423, 3.00)
+2026-01-13 22:14:00 - DroneController - [INFO] - Telemetry: 52541 msgs | GPS: (28.424218, 77.527295, 2.99m) | Battery: 0% | Mode: GUIDED
+2026-01-13 22:14:06 - DroneController - [INFO] - Waypoint 240/268 reached
+2026-01-13 22:14:06 - DroneController - [INFO] - Sending waypoint: (28.424415, 77.527410, 3.00)
+2026-01-13 22:14:07 - DroneController - [INFO] - Waypoint 241/268 reached
+2026-01-13 22:14:07 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:10 - DroneController - [INFO] - Telemetry: 53737 msgs | GPS: (28.424378, 77.527376, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-13 22:14:11 - DroneController - [INFO] - Waypoint 242/268 reached
+2026-01-13 22:14:11 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:11 - DroneController - [INFO] - Waypoint 243/268 reached
+2026-01-13 22:14:11 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:12 - DroneController - [INFO] - Waypoint 244/268 reached
+2026-01-13 22:14:12 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:12 - DroneController - [INFO] - Waypoint 245/268 reached
+2026-01-13 22:14:12 - DroneController - [INFO] - Sending waypoint: (28.424238, 77.527299, 3.00)
+2026-01-13 22:14:15 - DroneController - [INFO] - Waypoint 246/268 reached
+2026-01-13 22:14:15 - DroneController - [INFO] - Sending waypoint: (28.424235, 77.527311, 3.00)
+2026-01-13 22:14:15 - DroneController - [INFO] - Waypoint 247/268 reached
+2026-01-13 22:14:15 - DroneController - [INFO] - Sending waypoint: (28.424385, 77.527392, 3.00)
+2026-01-13 22:14:20 - DroneController - [INFO] - Telemetry: 54930 msgs | GPS: (28.424348, 77.527371, 2.99m) | Battery: 0% | Mode: GUIDED
+2026-01-13 22:14:20 - DroneController - [INFO] - Waypoint 248/268 reached
+2026-01-13 22:14:20 - DroneController - [INFO] - Sending waypoint: (28.424391, 77.527382, 3.00)
+2026-01-13 22:14:21 - DroneController - [INFO] - Waypoint 249/268 reached
+2026-01-13 22:14:21 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:25 - DroneController - [INFO] - Waypoint 250/268 reached
+2026-01-13 22:14:25 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:25 - DroneController - [INFO] - Waypoint 251/268 reached
+2026-01-13 22:14:25 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:25 - DroneController - [INFO] - Waypoint 252/268 reached
+2026-01-13 22:14:25 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:25 - DroneController - [INFO] - Waypoint 253/268 reached
+2026-01-13 22:14:25 - DroneController - [INFO] - Sending waypoint: (28.424271, 77.527303, 3.00)
+2026-01-13 22:14:27 - DroneController - [INFO] - Waypoint 254/268 reached
+2026-01-13 22:14:27 - DroneController - [INFO] - Sending waypoint: (28.424270, 77.527310, 3.00)
+2026-01-13 22:14:27 - DroneController - [INFO] - Waypoint 255/268 reached
+2026-01-13 22:14:27 - DroneController - [INFO] - Sending waypoint: (28.424364, 77.527361, 3.00)
+2026-01-13 22:14:30 - DroneController - [INFO] - Telemetry: 56123 msgs | GPS: (28.424296, 77.527320, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-13 22:14:32 - DroneController - [INFO] - Waypoint 256/268 reached
+2026-01-13 22:14:32 - DroneController - [INFO] - Sending waypoint: (28.424368, 77.527355, 3.00)
+2026-01-13 22:14:32 - DroneController - [INFO] - Waypoint 257/268 reached
+2026-01-13 22:14:32 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:35 - DroneController - [INFO] - Waypoint 258/268 reached
+2026-01-13 22:14:35 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:35 - DroneController - [INFO] - Waypoint 259/268 reached
+2026-01-13 22:14:35 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:35 - DroneController - [INFO] - Waypoint 260/268 reached
+2026-01-13 22:14:35 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:35 - DroneController - [INFO] - Waypoint 261/268 reached
+2026-01-13 22:14:35 - DroneController - [INFO] - Sending waypoint: (28.424305, 77.527306, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 262/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424304, 77.527309, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 263/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424342, 77.527330, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 264/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424344, 77.527328, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 265/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 266/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 267/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424327, 77.527309, 3.00)
+2026-01-13 22:14:36 - DroneController - [INFO] - Waypoint 268/268 reached
+2026-01-13 22:14:36 - DroneController - [INFO] - All waypoints reached, returning to home and landing
+2026-01-13 22:14:36 - DroneController - [INFO] - Returning to home and landing
+2026-01-13 22:14:36 - DroneController - [INFO] - Sending waypoint: (28.424320, 77.527280, 2.99)
+2026-01-13 22:14:39 - DroneController - [INFO] - Reached home position, initiating landing
+2026-01-13 22:14:40 - DroneController - [INFO] - Telemetry: 57319 msgs | GPS: (28.424320, 77.527279, 2.98m) | Battery: 0% | Mode: GUIDED
+2026-01-13 22:14:41 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-13 22:14:41 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-13 22:14:42 - DroneController - [INFO] - Mode changed to LAND
+2026-01-13 22:14:42 - DroneController - [INFO] - Landing in progress
+2026-01-13 22:14:42 - DroneController - [INFO] - Landing command sent
+2026-01-13 22:14:50 - DroneController - [INFO] - Telemetry: 58484 msgs | GPS: (28.424320, 77.527280, -0.02m) | Battery: 0% | Mode: LAND
+2026-01-13 22:15:00 - DroneController - [INFO] - Telemetry: 59637 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:15:10 - DroneController - [INFO] - Telemetry: 60790 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:15:20 - DroneController - [INFO] - Telemetry: 61944 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:15:30 - DroneController - [INFO] - Telemetry: 63097 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:15:40 - DroneController - [INFO] - Telemetry: 64250 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:15:50 - DroneController - [INFO] - Telemetry: 65404 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:16:00 - DroneController - [INFO] - Telemetry: 66557 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:16:10 - DroneController - [INFO] - Telemetry: 67713 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:16:20 - DroneController - [INFO] - Telemetry: 68863 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:32:15 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 22:32:15 - DroneController - [INFO] - Telemetry: 69785 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:40:20 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 22:40:20 - DroneController - [INFO] - Telemetry: 70354 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:40:20 - DroneController - [WARNING] - No heartbeat for 480.5s
+2026-01-13 22:40:21 - DroneController - [INFO] - Heartbeat restored
+2026-01-13 22:40:30 - DroneController - [INFO] - Telemetry: 71464 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:40:40 - DroneController - [INFO] - Telemetry: 72617 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:40:50 - DroneController - [INFO] - Telemetry: 73818 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 22:41:00 - DroneController - [INFO] - Telemetry: 74973 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 23:17:33 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:17:33 - DroneController - [INFO] - Telemetry: 75780 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 23:17:43 - DroneController - [INFO] - Telemetry: 76631 msgs | GPS: (28.424320, 77.527280, -0.00m) | Battery: 0% | Mode: LAND
+2026-01-13 23:17:51 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:17:51 - DroneController - [INFO] - Mission controller stopped
+2026-01-13 23:17:51 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 77581
+2026-01-13 23:17:51 - DroneController - [INFO] - Message type distribution: {'AHRS': 2580, 'AHRS2': 2899, 'ATTITUDE': 2899, 'BATTERY_STATUS': 2580, 'COMMAND_ACK': 28, 'EKF_STATUS_REPORT': 2580, 'ESC_TELEMETRY_1_TO_4': 2899, 'ESC_TELEMETRY_5_TO_8': 2899, 'EXTENDED_SYS_STATE': 649, 'GLOBAL_POSITION_INT': 2577, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 2534, 'HEARTBEAT': 651, 'HOME_POSITION': 650, 'LOCAL_POSITION_NED': 2577, 'MEMINFO': 2534, 'MISSION_CURRENT': 2534, 'NAV_CONTROLLER_OUTPUT': 2534, 'PARAM_VALUE': 56, 'POSITION_TARGET_GLOBAL_INT': 1834, 'POWER_STATUS': 2534, 'RAW_IMU': 2527, 'RC_CHANNELS': 2530, 'SCALED_IMU2': 2527, 'SCALED_IMU3': 2527, 'SCALED_PRESSURE': 2527, 'SCALED_PRESSURE2': 2527, 'SERVO_OUTPUT_RAW': 2530, 'SIMSTATE': 2899, 'STATUSTEXT': 6, 'SYSTEM_TIME': 2580, 'SYS_STATUS': 2534, 'TERRAIN_REPORT': 2580, 'TIMESYNC': 65, 'UNKNOWN_437': 130, 'VFR_HUD': 2904, 'VIBRATION': 2579, 'WIND': 2580}
+2026-01-13 23:17:51 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-13 23:17:51 - DroneController - [INFO] - Command processor stopped
+2026-01-13 23:17:51 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:17:51 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:17:51 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:19:54 - DroneController - [ERROR] - Failed to load KML file: Placemark 'Field' not found. Available placemarks: ['Center', 'MultiGeometry', 'Untitled placemark']
+2026-01-13 23:19:54 - DroneController - [INFO] - DroneController initialized
+2026-01-13 23:19:54 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-13 23:19:54 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-13 23:19:54 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-13 23:19:54 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-13 23:19:54 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-13 23:19:54 - DroneController - [INFO] - Requesting data streams...
+2026-01-13 23:19:54 - DroneController - [INFO] - Verifying data stream...
+2026-01-13 23:19:54 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-13 23:19:55 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-13 23:19:55 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-13 23:19:58 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-13 23:19:58 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260113_231958.csv
+2026-01-13 23:19:58 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-13 23:19:58 - DroneController - [INFO] - Telemetry loop started
+2026-01-13 23:19:58 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-13 23:19:58 - DroneController - [INFO] - Command processor started
+2026-01-13 23:19:58 - DroneController - [INFO] - Mission controller started
+2026-01-13 23:19:58 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-13 23:19:58 - DroneController - [INFO] - All threads started
+2026-01-13 23:19:58 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-13 23:20:03 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-13 23:20:03 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-13 23:20:03 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-13 23:20:04 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-13 23:20:04 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-13 23:20:04 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-13 23:20:04 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-13 23:20:04 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-13 23:20:04 - DroneController - [INFO] - Armed successfully
+2026-01-13 23:20:04 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-13 23:20:06 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-13 23:20:06 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-13 23:20:06 - DroneController - [INFO] - Takeoff command accepted
+2026-01-13 23:20:08 - DroneController - [INFO] - Telemetry: 2088 msgs | GPS: (28.424320, 77.527280, 0.08m) | Battery: 99% | Mode: GUIDED
+2026-01-13 23:20:11 - DroneController - [INFO] - Target altitude reached: 2.83m
+2026-01-13 23:20:11 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-13 23:20:11 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-13 23:20:18 - DroneController - [INFO] - Telemetry: 3443 msgs | GPS: (28.424320, 77.527280, 3.00m) | Battery: 97% | Mode: GUIDED
+2026-01-13 23:20:28 - DroneController - [INFO] - Telemetry: 4603 msgs | GPS: (28.424320, 77.527280, 3.00m) | Battery: 95% | Mode: GUIDED
+2026-01-13 23:20:38 - DroneController - [INFO] - Telemetry: 5788 msgs | GPS: (28.424320, 77.527280, 2.96m) | Battery: 92% | Mode: LAND
+2026-01-13 23:20:47 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:20:47 - DroneController - [INFO] - Mission controller stopped
+2026-01-13 23:20:47 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 6775
+2026-01-13 23:20:47 - DroneController - [INFO] - Message type distribution: {'AHRS': 192, 'AHRS2': 326, 'ATTITUDE': 326, 'BATTERY_STATUS': 191, 'COMMAND_ACK': 8, 'EKF_STATUS_REPORT': 191, 'ESC_TELEMETRY_1_TO_4': 326, 'ESC_TELEMETRY_5_TO_8': 326, 'EXTENDED_SYS_STATE': 52, 'GLOBAL_POSITION_INT': 223, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 218, 'HEARTBEAT': 54, 'HOME_POSITION': 53, 'LOCAL_POSITION_NED': 223, 'MEMINFO': 218, 'MISSION_CURRENT': 218, 'NAV_CONTROLLER_OUTPUT': 218, 'PARAM_VALUE': 9, 'POSITION_TARGET_GLOBAL_INT': 21, 'POWER_STATUS': 218, 'RAW_IMU': 208, 'RC_CHANNELS': 227, 'SCALED_IMU2': 208, 'SCALED_IMU3': 208, 'SCALED_PRESSURE': 208, 'SCALED_PRESSURE2': 208, 'SERVO_OUTPUT_RAW': 227, 'SIMSTATE': 326, 'STATUSTEXT': 6, 'SYSTEM_TIME': 191, 'SYS_STATUS': 218, 'TERRAIN_REPORT': 191, 'TERRAIN_REQUEST': 17, 'TIMESYNC': 5, 'UNKNOWN_437': 11, 'VFR_HUD': 322, 'VIBRATION': 191, 'WIND': 191}
+2026-01-13 23:20:47 - DroneController - [INFO] - Command processor stopped
+2026-01-13 23:20:47 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-13 23:20:47 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:20:47 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:20:47 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:27:30 - DroneController - [ERROR] - Failed to load KML file: Placemark 'Field' not found. Available placemarks: ['Center', 'MultiGeometry', 'Untitled placemark']
+2026-01-13 23:27:30 - DroneController - [INFO] - DroneController initialized
+2026-01-13 23:27:30 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-13 23:27:30 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-13 23:27:30 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-13 23:27:30 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-13 23:27:30 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-13 23:27:30 - DroneController - [INFO] - Requesting data streams...
+2026-01-13 23:27:30 - DroneController - [INFO] - Verifying data stream...
+2026-01-13 23:27:30 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-13 23:27:31 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-13 23:27:31 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-13 23:27:34 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-13 23:27:34 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260113_232734.csv
+2026-01-13 23:27:34 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-13 23:27:34 - DroneController - [INFO] - Telemetry loop started
+2026-01-13 23:27:34 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-13 23:27:34 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-13 23:27:34 - DroneController - [INFO] - Command processor started
+2026-01-13 23:27:34 - DroneController - [INFO] - Mission controller started
+2026-01-13 23:27:34 - DroneController - [INFO] - All threads started
+2026-01-13 23:27:34 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-13 23:27:39 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-13 23:27:39 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-13 23:27:39 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-13 23:27:40 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-13 23:27:40 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-13 23:27:40 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-13 23:27:40 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-13 23:27:40 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-13 23:27:40 - DroneController - [INFO] - Armed successfully
+2026-01-13 23:27:40 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-13 23:27:42 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-13 23:27:42 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-13 23:27:42 - DroneController - [INFO] - Takeoff command accepted
+2026-01-13 23:27:44 - DroneController - [INFO] - Telemetry: 1506 msgs | GPS: (28.424320, 77.527280, 0.07m) | Battery: 91% | Mode: GUIDED
+2026-01-13 23:27:46 - DroneController - [INFO] - Target altitude reached: 2.52m
+2026-01-13 23:27:46 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-13 23:27:46 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-13 23:27:54 - DroneController - [INFO] - Telemetry: 2661 msgs | GPS: (28.424320, 77.527280, 3.00m) | Battery: 88% | Mode: GUIDED
+2026-01-13 23:28:04 - DroneController - [INFO] - Telemetry: 3819 msgs | GPS: (28.424320, 77.527280, 3.00m) | Battery: 86% | Mode: GUIDED
+2026-01-13 23:28:10 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:28:10 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 4453
+2026-01-13 23:28:10 - DroneController - [INFO] - Message type distribution: {'AHRS': 155, 'AHRS2': 154, 'ATTITUDE': 154, 'BATTERY_STATUS': 154, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 154, 'ESC_TELEMETRY_1_TO_4': 154, 'ESC_TELEMETRY_5_TO_8': 154, 'EXTENDED_SYS_STATE': 39, 'GLOBAL_POSITION_INT': 154, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 154, 'HEARTBEAT': 39, 'HOME_POSITION': 40, 'LOCAL_POSITION_NED': 154, 'MEMINFO': 154, 'MISSION_CURRENT': 154, 'NAV_CONTROLLER_OUTPUT': 154, 'PARAM_VALUE': 4, 'POWER_STATUS': 154, 'RAW_IMU': 154, 'RC_CHANNELS': 154, 'SCALED_IMU2': 154, 'SCALED_IMU3': 154, 'SCALED_PRESSURE': 154, 'SCALED_PRESSURE2': 154, 'SERVO_OUTPUT_RAW': 154, 'SIMSTATE': 154, 'STATUSTEXT': 4, 'SYSTEM_TIME': 154, 'SYS_STATUS': 154, 'TERRAIN_REPORT': 154, 'TIMESYNC': 4, 'UNKNOWN_437': 7, 'VFR_HUD': 154, 'VIBRATION': 154, 'WIND': 154}
+2026-01-13 23:28:10 - DroneController - [INFO] - Mission controller stopped
+2026-01-13 23:28:10 - DroneController - [INFO] - Command processor stopped
+2026-01-13 23:28:10 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-13 23:28:10 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:28:10 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:28:10 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:33:04 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/GBUhalf2.kml
+2026-01-13 23:33:04 - DroneController - [INFO] - DroneController initialized
+2026-01-13 23:33:04 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-13 23:33:04 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-13 23:33:04 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-13 23:33:04 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-13 23:33:04 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-13 23:33:04 - DroneController - [INFO] - Requesting data streams...
+2026-01-13 23:33:04 - DroneController - [INFO] - Verifying data stream...
+2026-01-13 23:33:04 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-13 23:33:05 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-13 23:33:05 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-13 23:33:08 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-13 23:33:08 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260113_233308.csv
+2026-01-13 23:33:08 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-13 23:33:08 - DroneController - [INFO] - Telemetry loop started
+2026-01-13 23:33:08 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-13 23:33:08 - DroneController - [INFO] - Command processor started
+2026-01-13 23:33:08 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-13 23:33:08 - DroneController - [INFO] - Mission controller started
+2026-01-13 23:33:08 - DroneController - [INFO] - All threads started
+2026-01-13 23:33:08 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-13 23:33:13 - DroneController - [INFO] - Loading mission with 30 points
+2026-01-13 23:33:13 - DroneController - [INFO] - Starting and home position: lat=28.424320, lon=77.527280
+2026-01-13 23:33:13 - DroneController - [INFO] - Mission validated: 30 waypoints
+2026-01-13 23:33:13 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-13 23:33:13 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-13 23:33:13 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-13 23:33:14 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-13 23:33:14 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-13 23:33:14 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-13 23:33:14 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-13 23:33:14 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-13 23:33:15 - DroneController - [INFO] - Armed successfully
+2026-01-13 23:33:15 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-13 23:33:17 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-13 23:33:17 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-13 23:33:17 - DroneController - [INFO] - Takeoff command accepted
+2026-01-13 23:33:18 - DroneController - [INFO] - Telemetry: 6351 msgs | GPS: (28.424320, 77.527280, 0.08m) | Battery: 82% | Mode: GUIDED
+2026-01-13 23:33:21 - DroneController - [INFO] - Target altitude reached: 2.58m
+2026-01-13 23:33:21 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-13 23:33:21 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-13 23:33:21 - DroneController - [INFO] - Starting mission with 30 waypoints
+2026-01-13 23:33:21 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-13 23:33:21 - DroneController - [INFO] - Sending waypoint: (28.424364, 77.527028, 3.00)
+2026-01-13 23:33:26 - DroneController - [INFO] - Waypoint 1/30 reached
+2026-01-13 23:33:26 - DroneController - [INFO] - Sending waypoint: (28.424132, 77.527028, 3.00)
+2026-01-13 23:33:28 - DroneController - [INFO] - Telemetry: 7537 msgs | GPS: (28.424343, 77.527021, 3.01m) | Battery: 79% | Mode: GUIDED
+2026-01-13 23:33:33 - DroneController - [INFO] - Waypoint 2/30 reached
+2026-01-13 23:33:33 - DroneController - [INFO] - Sending waypoint: (28.423986, 77.527080, 3.00)
+2026-01-13 23:33:37 - DroneController - [INFO] - Waypoint 3/30 reached
+2026-01-13 23:33:37 - DroneController - [INFO] - Sending waypoint: (28.424510, 77.527080, 3.00)
+2026-01-13 23:33:39 - DroneController - [INFO] - Telemetry: 8736 msgs | GPS: (28.423988, 77.527080, 3.01m) | Battery: 77% | Mode: GUIDED
+2026-01-13 23:33:47 - DroneController - [INFO] - Waypoint 4/30 reached
+2026-01-13 23:33:47 - DroneController - [INFO] - Sending waypoint: (28.424594, 77.527131, 3.00)
+2026-01-13 23:33:49 - DroneController - [INFO] - Telemetry: 9929 msgs | GPS: (28.424515, 77.527082, 3.01m) | Battery: 75% | Mode: GUIDED
+2026-01-13 23:33:50 - DroneController - [INFO] - Waypoint 5/30 reached
+2026-01-13 23:33:50 - DroneController - [INFO] - Sending waypoint: (28.423902, 77.527131, 3.00)
+2026-01-13 23:33:59 - DroneController - [INFO] - Telemetry: 11122 msgs | GPS: (28.424190, 77.527132, 3.02m) | Battery: 72% | Mode: GUIDED
+2026-01-13 23:34:03 - DroneController - [INFO] - Waypoint 6/30 reached
+2026-01-13 23:34:03 - DroneController - [INFO] - Sending waypoint: (28.423838, 77.527182, 3.00)
+2026-01-13 23:34:05 - DroneController - [INFO] - Waypoint 7/30 reached
+2026-01-13 23:34:05 - DroneController - [INFO] - Sending waypoint: (28.424658, 77.527182, 3.00)
+2026-01-13 23:34:09 - DroneController - [INFO] - Telemetry: 12318 msgs | GPS: (28.423885, 77.527184, 3.00m) | Battery: 70% | Mode: GUIDED
+2026-01-13 23:34:19 - DroneController - [INFO] - Telemetry: 13514 msgs | GPS: (28.424626, 77.527182, 2.99m) | Battery: 67% | Mode: GUIDED
+2026-01-13 23:34:19 - DroneController - [INFO] - Waypoint 8/30 reached
+2026-01-13 23:34:19 - DroneController - [INFO] - Sending waypoint: (28.424707, 77.527233, 3.00)
+2026-01-13 23:34:21 - DroneController - [INFO] - Waypoint 9/30 reached
+2026-01-13 23:34:21 - DroneController - [INFO] - Sending waypoint: (28.423789, 77.527233, 3.00)
+2026-01-13 23:34:29 - DroneController - [INFO] - Telemetry: 14704 msgs | GPS: (28.424360, 77.527234, 3.01m) | Battery: 65% | Mode: GUIDED
+2026-01-13 23:34:36 - DroneController - [INFO] - Waypoint 10/30 reached
+2026-01-13 23:34:36 - DroneController - [INFO] - Sending waypoint: (28.423748, 77.527284, 3.00)
+2026-01-13 23:34:38 - DroneController - [INFO] - Waypoint 11/30 reached
+2026-01-13 23:34:38 - DroneController - [INFO] - Sending waypoint: (28.424748, 77.527284, 3.00)
+2026-01-13 23:34:39 - DroneController - [INFO] - Telemetry: 15908 msgs | GPS: (28.423752, 77.527271, 2.99m) | Battery: 62% | Mode: GUIDED
+2026-01-13 23:34:49 - DroneController - [INFO] - Telemetry: 17094 msgs | GPS: (28.424367, 77.527285, 3.01m) | Battery: 60% | Mode: GUIDED
+2026-01-13 23:34:54 - DroneController - [INFO] - Waypoint 12/30 reached
+2026-01-13 23:34:54 - DroneController - [INFO] - Sending waypoint: (28.424782, 77.527335, 3.00)
+2026-01-13 23:34:56 - DroneController - [INFO] - Waypoint 13/30 reached
+2026-01-13 23:34:56 - DroneController - [INFO] - Sending waypoint: (28.423714, 77.527335, 3.00)
+2026-01-13 23:34:59 - DroneController - [INFO] - Telemetry: 18286 msgs | GPS: (28.424757, 77.527335, 2.99m) | Battery: 57% | Mode: GUIDED
+2026-01-13 23:35:09 - DroneController - [INFO] - Telemetry: 19482 msgs | GPS: (28.423960, 77.527335, 3.01m) | Battery: 55% | Mode: GUIDED
+2026-01-13 23:35:12 - DroneController - [INFO] - Waypoint 14/30 reached
+2026-01-13 23:35:12 - DroneController - [INFO] - Sending waypoint: (28.423686, 77.527386, 3.00)
+2026-01-13 23:35:14 - DroneController - [INFO] - Waypoint 15/30 reached
+2026-01-13 23:35:14 - DroneController - [INFO] - Sending waypoint: (28.424810, 77.527386, 3.00)
+2026-01-13 23:35:19 - DroneController - [INFO] - Telemetry: 20675 msgs | GPS: (28.423789, 77.527389, 3.00m) | Battery: 52% | Mode: GUIDED
+2026-01-13 23:35:29 - DroneController - [INFO] - Telemetry: 21868 msgs | GPS: (28.424636, 77.527386, 3.00m) | Battery: 50% | Mode: GUIDED
+2026-01-13 23:35:31 - DroneController - [INFO] - Waypoint 16/30 reached
+2026-01-13 23:35:31 - DroneController - [INFO] - Sending waypoint: (28.424834, 77.527437, 3.00)
+2026-01-13 23:35:33 - DroneController - [INFO] - Waypoint 17/30 reached
+2026-01-13 23:35:33 - DroneController - [INFO] - Sending waypoint: (28.423662, 77.527437, 3.00)
+2026-01-13 23:35:39 - DroneController - [INFO] - Telemetry: 23066 msgs | GPS: (28.424655, 77.527440, 3.00m) | Battery: 47% | Mode: GUIDED
+2026-01-13 23:35:49 - DroneController - [INFO] - Telemetry: 24257 msgs | GPS: (28.423802, 77.527437, 3.00m) | Battery: 45% | Mode: GUIDED
+2026-01-13 23:35:51 - DroneController - [INFO] - Waypoint 18/30 reached
+2026-01-13 23:35:51 - DroneController - [INFO] - Sending waypoint: (28.423643, 77.527488, 3.00)
+2026-01-13 23:35:53 - DroneController - [INFO] - Waypoint 19/30 reached
+2026-01-13 23:35:53 - DroneController - [INFO] - Sending waypoint: (28.424853, 77.527488, 3.00)
+2026-01-13 23:35:59 - DroneController - [INFO] - Telemetry: 25450 msgs | GPS: (28.423868, 77.527491, 3.01m) | Battery: 42% | Mode: GUIDED
+2026-01-13 23:36:09 - DroneController - [INFO] - Telemetry: 26646 msgs | GPS: (28.424721, 77.527489, 2.99m) | Battery: 40% | Mode: GUIDED
+2026-01-13 23:36:11 - DroneController - [INFO] - Waypoint 20/30 reached
+2026-01-13 23:36:11 - DroneController - [INFO] - Sending waypoint: (28.424869, 77.527539, 3.00)
+2026-01-13 23:36:13 - DroneController - [INFO] - Waypoint 21/30 reached
+2026-01-13 23:36:13 - DroneController - [INFO] - Sending waypoint: (28.423627, 77.527539, 3.00)
+2026-01-13 23:36:19 - DroneController - [INFO] - Telemetry: 27839 msgs | GPS: (28.424619, 77.527542, 3.00m) | Battery: 37% | Mode: GUIDED
+2026-01-13 23:36:29 - DroneController - [INFO] - Telemetry: 29032 msgs | GPS: (28.423762, 77.527540, 3.00m) | Battery: 35% | Mode: GUIDED
+2026-01-13 23:36:31 - DroneController - [INFO] - Waypoint 22/30 reached
+2026-01-13 23:36:31 - DroneController - [INFO] - Sending waypoint: (28.423615, 77.527590, 3.00)
+2026-01-13 23:36:32 - DroneController - [INFO] - Waypoint 23/30 reached
+2026-01-13 23:36:32 - DroneController - [INFO] - Sending waypoint: (28.424881, 77.527590, 3.00)
+2026-01-13 23:36:39 - DroneController - [INFO] - Telemetry: 30228 msgs | GPS: (28.423875, 77.527592, 3.01m) | Battery: 32% | Mode: GUIDED
+2026-01-13 23:36:49 - DroneController - [INFO] - Telemetry: 31424 msgs | GPS: (28.424752, 77.527590, 2.99m) | Battery: 30% | Mode: GUIDED
+2026-01-13 23:36:51 - DroneController - [INFO] - Waypoint 24/30 reached
+2026-01-13 23:36:51 - DroneController - [INFO] - Sending waypoint: (28.424889, 77.527641, 3.00)
+2026-01-13 23:36:53 - DroneController - [INFO] - Waypoint 25/30 reached
+2026-01-13 23:36:53 - DroneController - [INFO] - Sending waypoint: (28.423607, 77.527641, 3.00)
+2026-01-13 23:36:59 - DroneController - [INFO] - Telemetry: 32614 msgs | GPS: (28.424637, 77.527642, 3.00m) | Battery: 27% | Mode: GUIDED
+2026-01-13 23:37:09 - DroneController - [INFO] - Telemetry: 33810 msgs | GPS: (28.423770, 77.527641, 3.00m) | Battery: 25% | Mode: GUIDED
+2026-01-13 23:37:11 - DroneController - [INFO] - Waypoint 26/30 reached
+2026-01-13 23:37:11 - DroneController - [INFO] - Sending waypoint: (28.423601, 77.527692, 3.00)
+2026-01-13 23:37:13 - DroneController - [INFO] - Waypoint 27/30 reached
+2026-01-13 23:37:13 - DroneController - [INFO] - Sending waypoint: (28.424895, 77.527692, 3.00)
+2026-01-13 23:37:19 - DroneController - [INFO] - Telemetry: 35003 msgs | GPS: (28.423821, 77.527696, 3.00m) | Battery: 22% | Mode: GUIDED
+2026-01-13 23:37:29 - DroneController - [INFO] - Telemetry: 36196 msgs | GPS: (28.424694, 77.527693, 3.01m) | Battery: 20% | Mode: GUIDED
+2026-01-13 23:37:32 - DroneController - [INFO] - Waypoint 28/30 reached
+2026-01-13 23:37:32 - DroneController - [INFO] - Sending waypoint: (28.424746, 77.527744, 3.00)
+2026-01-13 23:37:37 - DroneController - [INFO] - Waypoint 29/30 reached
+2026-01-13 23:37:37 - DroneController - [INFO] - Sending waypoint: (28.423599, 77.527744, 3.00)
+2026-01-13 23:37:39 - DroneController - [INFO] - Telemetry: 37392 msgs | GPS: (28.424736, 77.527743, 2.98m) | Battery: 17% | Mode: GUIDED
+2026-01-13 23:37:49 - DroneController - [INFO] - Telemetry: 38585 msgs | GPS: (28.423923, 77.527744, 3.01m) | Battery: 15% | Mode: GUIDED
+2026-01-13 23:37:53 - DroneController - [INFO] - Waypoint 30/30 reached
+2026-01-13 23:37:53 - DroneController - [INFO] - All waypoints reached, returning to home and landing
+2026-01-13 23:37:53 - DroneController - [INFO] - Returning to home and landing
+2026-01-13 23:37:53 - DroneController - [INFO] - Sending waypoint: (28.424320, 77.527280, 2.98)
+2026-01-13 23:37:59 - DroneController - [INFO] - Telemetry: 39781 msgs | GPS: (28.423756, 77.527640, 2.98m) | Battery: 12% | Mode: GUIDED
+2026-01-13 23:38:08 - DroneController - [INFO] - Reached home position, initiating landing
+2026-01-13 23:38:09 - DroneController - [INFO] - Telemetry: 40977 msgs | GPS: (28.424325, 77.527277, 2.97m) | Battery: 10% | Mode: GUIDED
+2026-01-13 23:38:10 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-13 23:38:10 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-13 23:38:11 - DroneController - [INFO] - Mode changed to LAND
+2026-01-13 23:38:11 - DroneController - [INFO] - Landing in progress
+2026-01-13 23:38:11 - DroneController - [INFO] - Landing command sent
+2026-01-13 23:38:19 - DroneController - [INFO] - Telemetry: 42139 msgs | GPS: (28.424321, 77.527280, 0.00m) | Battery: 8% | Mode: LAND
+2026-01-13 23:38:29 - DroneController - [INFO] - Telemetry: 43294 msgs | GPS: (28.424321, 77.527280, 0.01m) | Battery: 8% | Mode: LAND
+2026-01-13 23:38:39 - DroneController - [INFO] - Telemetry: 44447 msgs | GPS: (28.424321, 77.527280, 0.01m) | Battery: 8% | Mode: LAND
+2026-01-13 23:38:49 - DroneController - [INFO] - Telemetry: 45600 msgs | GPS: (28.424321, 77.527280, 0.01m) | Battery: 8% | Mode: LAND
+2026-01-13 23:38:59 - DroneController - [INFO] - Telemetry: 46754 msgs | GPS: (28.424321, 77.527280, 0.01m) | Battery: 8% | Mode: LAND
+2026-01-13 23:39:09 - DroneController - [INFO] - Telemetry: 47909 msgs | GPS: (28.424321, 77.527280, 0.01m) | Battery: 8% | Mode: LAND
+2026-01-13 23:39:19 - DroneController - [INFO] - Telemetry: 49060 msgs | GPS: (28.424321, 77.527280, 0.01m) | Battery: 8% | Mode: LAND
+2026-01-13 23:39:23 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:27 - DroneController - [WARNING] - No heartbeat for 5.1s
+2026-01-13 23:39:28 - DroneController - [WARNING] - No heartbeat for 6.1s
+2026-01-13 23:39:28 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:29 - DroneController - [WARNING] - No heartbeat for 7.1s
+2026-01-13 23:39:30 - DroneController - [WARNING] - No heartbeat for 8.1s
+2026-01-13 23:39:31 - DroneController - [WARNING] - No heartbeat for 9.1s
+2026-01-13 23:39:32 - DroneController - [WARNING] - No heartbeat for 10.1s
+2026-01-13 23:39:33 - DroneController - [WARNING] - No heartbeat for 11.1s
+2026-01-13 23:39:33 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:34 - DroneController - [WARNING] - No heartbeat for 12.1s
+2026-01-13 23:39:35 - DroneController - [WARNING] - No heartbeat for 13.1s
+2026-01-13 23:39:36 - DroneController - [WARNING] - No heartbeat for 14.1s
+2026-01-13 23:39:37 - DroneController - [WARNING] - No heartbeat for 15.1s
+2026-01-13 23:39:38 - DroneController - [WARNING] - No heartbeat for 16.2s
+2026-01-13 23:39:38 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:39 - DroneController - [WARNING] - No heartbeat for 17.2s
+2026-01-13 23:39:40 - DroneController - [WARNING] - No heartbeat for 18.2s
+2026-01-13 23:39:41 - DroneController - [WARNING] - No heartbeat for 19.2s
+2026-01-13 23:39:42 - DroneController - [WARNING] - No heartbeat for 20.2s
+2026-01-13 23:39:43 - DroneController - [WARNING] - No heartbeat for 21.2s
+2026-01-13 23:39:43 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:44 - DroneController - [WARNING] - No heartbeat for 22.2s
+2026-01-13 23:39:45 - DroneController - [WARNING] - No heartbeat for 23.2s
+2026-01-13 23:39:46 - DroneController - [WARNING] - No heartbeat for 24.2s
+2026-01-13 23:39:47 - DroneController - [WARNING] - No heartbeat for 25.2s
+2026-01-13 23:39:48 - DroneController - [WARNING] - No heartbeat for 26.2s
+2026-01-13 23:39:48 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:49 - DroneController - [WARNING] - No heartbeat for 27.2s
+2026-01-13 23:39:50 - DroneController - [WARNING] - No heartbeat for 28.2s
+2026-01-13 23:39:51 - DroneController - [WARNING] - No heartbeat for 29.2s
+2026-01-13 23:39:52 - DroneController - [WARNING] - No heartbeat for 30.2s
+2026-01-13 23:39:53 - DroneController - [WARNING] - No heartbeat for 31.2s
+2026-01-13 23:39:53 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:54 - DroneController - [WARNING] - No heartbeat for 32.2s
+2026-01-13 23:39:55 - DroneController - [WARNING] - No heartbeat for 33.2s
+2026-01-13 23:39:56 - DroneController - [WARNING] - No heartbeat for 34.2s
+2026-01-13 23:39:57 - DroneController - [WARNING] - No heartbeat for 35.2s
+2026-01-13 23:39:58 - DroneController - [WARNING] - No heartbeat for 36.2s
+2026-01-13 23:39:58 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:39:59 - DroneController - [WARNING] - No heartbeat for 37.2s
+2026-01-13 23:40:00 - DroneController - [WARNING] - No heartbeat for 38.2s
+2026-01-13 23:40:01 - DroneController - [WARNING] - No heartbeat for 39.2s
+2026-01-13 23:40:02 - DroneController - [WARNING] - No heartbeat for 40.2s
+2026-01-13 23:40:03 - DroneController - [WARNING] - No heartbeat for 41.2s
+2026-01-13 23:40:03 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:04 - DroneController - [WARNING] - No heartbeat for 42.3s
+2026-01-13 23:40:05 - DroneController - [WARNING] - No heartbeat for 43.3s
+2026-01-13 23:40:06 - DroneController - [WARNING] - No heartbeat for 44.3s
+2026-01-13 23:40:07 - DroneController - [WARNING] - No heartbeat for 45.3s
+2026-01-13 23:40:08 - DroneController - [WARNING] - No heartbeat for 46.3s
+2026-01-13 23:40:09 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:09 - DroneController - [WARNING] - No heartbeat for 47.3s
+2026-01-13 23:40:10 - DroneController - [WARNING] - No heartbeat for 48.3s
+2026-01-13 23:40:11 - DroneController - [WARNING] - No heartbeat for 49.3s
+2026-01-13 23:40:12 - DroneController - [WARNING] - No heartbeat for 50.3s
+2026-01-13 23:40:13 - DroneController - [WARNING] - No heartbeat for 51.3s
+2026-01-13 23:40:14 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:14 - DroneController - [WARNING] - No heartbeat for 52.3s
+2026-01-13 23:40:15 - DroneController - [WARNING] - No heartbeat for 53.3s
+2026-01-13 23:40:16 - DroneController - [WARNING] - No heartbeat for 54.3s
+2026-01-13 23:40:17 - DroneController - [WARNING] - No heartbeat for 55.3s
+2026-01-13 23:40:18 - DroneController - [WARNING] - No heartbeat for 56.3s
+2026-01-13 23:40:19 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:19 - DroneController - [WARNING] - No heartbeat for 57.3s
+2026-01-13 23:40:20 - DroneController - [WARNING] - No heartbeat for 58.3s
+2026-01-13 23:40:21 - DroneController - [WARNING] - No heartbeat for 59.3s
+2026-01-13 23:40:22 - DroneController - [WARNING] - No heartbeat for 60.3s
+2026-01-13 23:40:23 - DroneController - [WARNING] - No heartbeat for 61.3s
+2026-01-13 23:40:24 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:24 - DroneController - [WARNING] - No heartbeat for 62.3s
+2026-01-13 23:40:25 - DroneController - [WARNING] - No heartbeat for 63.3s
+2026-01-13 23:40:26 - DroneController - [WARNING] - No heartbeat for 64.3s
+2026-01-13 23:40:27 - DroneController - [WARNING] - No heartbeat for 65.3s
+2026-01-13 23:40:28 - DroneController - [WARNING] - No heartbeat for 66.3s
+2026-01-13 23:40:29 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:29 - DroneController - [WARNING] - No heartbeat for 67.3s
+2026-01-13 23:40:30 - DroneController - [WARNING] - No heartbeat for 68.3s
+2026-01-13 23:40:31 - DroneController - [WARNING] - No heartbeat for 69.3s
+2026-01-13 23:40:32 - DroneController - [WARNING] - No heartbeat for 70.3s
+2026-01-13 23:40:33 - DroneController - [WARNING] - No heartbeat for 71.4s
+2026-01-13 23:40:34 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:34 - DroneController - [WARNING] - No heartbeat for 72.4s
+2026-01-13 23:40:35 - DroneController - [WARNING] - No heartbeat for 73.4s
+2026-01-13 23:40:36 - DroneController - [WARNING] - No heartbeat for 74.4s
+2026-01-13 23:40:37 - DroneController - [WARNING] - No heartbeat for 75.4s
+2026-01-13 23:40:38 - DroneController - [WARNING] - No heartbeat for 76.4s
+2026-01-13 23:40:39 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:39 - DroneController - [WARNING] - No heartbeat for 77.4s
+2026-01-13 23:40:40 - DroneController - [WARNING] - No heartbeat for 78.4s
+2026-01-13 23:40:41 - DroneController - [WARNING] - No heartbeat for 79.4s
+2026-01-13 23:40:42 - DroneController - [WARNING] - No heartbeat for 80.4s
+2026-01-13 23:40:43 - DroneController - [WARNING] - No heartbeat for 81.4s
+2026-01-13 23:40:44 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:44 - DroneController - [WARNING] - No heartbeat for 82.4s
+2026-01-13 23:40:45 - DroneController - [WARNING] - No heartbeat for 83.4s
+2026-01-13 23:40:46 - DroneController - [WARNING] - No heartbeat for 84.4s
+2026-01-13 23:40:47 - DroneController - [WARNING] - No heartbeat for 85.4s
+2026-01-13 23:40:48 - DroneController - [WARNING] - No heartbeat for 86.4s
+2026-01-13 23:40:49 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:49 - DroneController - [WARNING] - No heartbeat for 87.5s
+2026-01-13 23:40:50 - DroneController - [WARNING] - No heartbeat for 88.5s
+2026-01-13 23:40:51 - DroneController - [WARNING] - No heartbeat for 89.5s
+2026-01-13 23:40:52 - DroneController - [WARNING] - No heartbeat for 90.5s
+2026-01-13 23:40:53 - DroneController - [WARNING] - No heartbeat for 91.5s
+2026-01-13 23:40:54 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:54 - DroneController - [WARNING] - No heartbeat for 92.5s
+2026-01-13 23:40:55 - DroneController - [WARNING] - No heartbeat for 93.5s
+2026-01-13 23:40:56 - DroneController - [WARNING] - No heartbeat for 94.5s
+2026-01-13 23:40:57 - DroneController - [WARNING] - No heartbeat for 95.5s
+2026-01-13 23:40:58 - DroneController - [WARNING] - No heartbeat for 96.5s
+2026-01-13 23:40:59 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:40:59 - DroneController - [WARNING] - No heartbeat for 97.5s
+2026-01-13 23:41:00 - DroneController - [WARNING] - No heartbeat for 98.6s
+2026-01-13 23:41:01 - DroneController - [WARNING] - No heartbeat for 99.6s
+2026-01-13 23:41:02 - DroneController - [WARNING] - No heartbeat for 100.6s
+2026-01-13 23:41:03 - DroneController - [WARNING] - No heartbeat for 101.6s
+2026-01-13 23:41:04 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:04 - DroneController - [WARNING] - No heartbeat for 102.6s
+2026-01-13 23:41:05 - DroneController - [WARNING] - No heartbeat for 103.6s
+2026-01-13 23:41:06 - DroneController - [WARNING] - No heartbeat for 104.6s
+2026-01-13 23:41:07 - DroneController - [WARNING] - No heartbeat for 105.6s
+2026-01-13 23:41:08 - DroneController - [WARNING] - No heartbeat for 106.6s
+2026-01-13 23:41:09 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:09 - DroneController - [WARNING] - No heartbeat for 107.6s
+2026-01-13 23:41:10 - DroneController - [WARNING] - No heartbeat for 108.6s
+2026-01-13 23:41:11 - DroneController - [WARNING] - No heartbeat for 109.6s
+2026-01-13 23:41:12 - DroneController - [WARNING] - No heartbeat for 110.6s
+2026-01-13 23:41:13 - DroneController - [WARNING] - No heartbeat for 111.6s
+2026-01-13 23:41:14 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:14 - DroneController - [WARNING] - No heartbeat for 112.6s
+2026-01-13 23:41:15 - DroneController - [WARNING] - No heartbeat for 113.6s
+2026-01-13 23:41:16 - DroneController - [WARNING] - No heartbeat for 114.6s
+2026-01-13 23:41:17 - DroneController - [WARNING] - No heartbeat for 115.6s
+2026-01-13 23:41:18 - DroneController - [WARNING] - No heartbeat for 116.6s
+2026-01-13 23:41:19 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:19 - DroneController - [WARNING] - No heartbeat for 117.6s
+2026-01-13 23:41:20 - DroneController - [WARNING] - No heartbeat for 118.6s
+2026-01-13 23:41:21 - DroneController - [WARNING] - No heartbeat for 119.6s
+2026-01-13 23:41:22 - DroneController - [WARNING] - No heartbeat for 120.6s
+2026-01-13 23:41:23 - DroneController - [WARNING] - No heartbeat for 121.6s
+2026-01-13 23:41:24 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:24 - DroneController - [WARNING] - No heartbeat for 122.6s
+2026-01-13 23:41:25 - DroneController - [WARNING] - No heartbeat for 123.6s
+2026-01-13 23:41:26 - DroneController - [WARNING] - No heartbeat for 124.6s
+2026-01-13 23:41:27 - DroneController - [WARNING] - No heartbeat for 125.6s
+2026-01-13 23:41:28 - DroneController - [WARNING] - No heartbeat for 126.6s
+2026-01-13 23:41:29 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:29 - DroneController - [WARNING] - No heartbeat for 127.7s
+2026-01-13 23:41:30 - DroneController - [WARNING] - No heartbeat for 128.7s
+2026-01-13 23:41:31 - DroneController - [WARNING] - No heartbeat for 129.7s
+2026-01-13 23:41:32 - DroneController - [WARNING] - No heartbeat for 130.7s
+2026-01-13 23:41:33 - DroneController - [WARNING] - No heartbeat for 131.7s
+2026-01-13 23:41:34 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:34 - DroneController - [WARNING] - No heartbeat for 132.7s
+2026-01-13 23:41:35 - DroneController - [WARNING] - No heartbeat for 133.7s
+2026-01-13 23:41:36 - DroneController - [WARNING] - No heartbeat for 134.7s
+2026-01-13 23:41:37 - DroneController - [WARNING] - No heartbeat for 135.7s
+2026-01-13 23:41:38 - DroneController - [WARNING] - No heartbeat for 136.7s
+2026-01-13 23:41:39 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:39 - DroneController - [WARNING] - No heartbeat for 137.7s
+2026-01-13 23:41:40 - DroneController - [WARNING] - No heartbeat for 138.7s
+2026-01-13 23:41:41 - DroneController - [WARNING] - No heartbeat for 139.7s
+2026-01-13 23:41:42 - DroneController - [WARNING] - No heartbeat for 140.7s
+2026-01-13 23:41:43 - DroneController - [WARNING] - No heartbeat for 141.7s
+2026-01-13 23:41:44 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:44 - DroneController - [WARNING] - No heartbeat for 142.7s
+2026-01-13 23:41:45 - DroneController - [WARNING] - No heartbeat for 143.7s
+2026-01-13 23:41:46 - DroneController - [WARNING] - No heartbeat for 144.7s
+2026-01-13 23:41:47 - DroneController - [WARNING] - No heartbeat for 145.7s
+2026-01-13 23:41:48 - DroneController - [WARNING] - No heartbeat for 146.7s
+2026-01-13 23:41:49 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:49 - DroneController - [WARNING] - No heartbeat for 147.7s
+2026-01-13 23:41:50 - DroneController - [WARNING] - No heartbeat for 148.7s
+2026-01-13 23:41:51 - DroneController - [WARNING] - No heartbeat for 149.8s
+2026-01-13 23:41:52 - DroneController - [WARNING] - No heartbeat for 150.8s
+2026-01-13 23:41:53 - DroneController - [WARNING] - No heartbeat for 151.8s
+2026-01-13 23:41:54 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:54 - DroneController - [WARNING] - No heartbeat for 152.8s
+2026-01-13 23:41:55 - DroneController - [WARNING] - No heartbeat for 153.8s
+2026-01-13 23:41:56 - DroneController - [WARNING] - No heartbeat for 154.8s
+2026-01-13 23:41:57 - DroneController - [WARNING] - No heartbeat for 155.8s
+2026-01-13 23:41:58 - DroneController - [WARNING] - No heartbeat for 156.8s
+2026-01-13 23:41:59 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:41:59 - DroneController - [WARNING] - No heartbeat for 157.8s
+2026-01-13 23:42:00 - DroneController - [WARNING] - No heartbeat for 158.8s
+2026-01-13 23:42:01 - DroneController - [WARNING] - No heartbeat for 159.8s
+2026-01-13 23:42:02 - DroneController - [WARNING] - No heartbeat for 160.8s
+2026-01-13 23:42:03 - DroneController - [WARNING] - No heartbeat for 161.8s
+2026-01-13 23:42:04 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:04 - DroneController - [WARNING] - No heartbeat for 162.8s
+2026-01-13 23:42:05 - DroneController - [WARNING] - No heartbeat for 163.8s
+2026-01-13 23:42:06 - DroneController - [WARNING] - No heartbeat for 164.8s
+2026-01-13 23:42:07 - DroneController - [WARNING] - No heartbeat for 165.8s
+2026-01-13 23:42:08 - DroneController - [WARNING] - No heartbeat for 166.8s
+2026-01-13 23:42:09 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:09 - DroneController - [WARNING] - No heartbeat for 167.8s
+2026-01-13 23:42:10 - DroneController - [WARNING] - No heartbeat for 168.8s
+2026-01-13 23:42:11 - DroneController - [WARNING] - No heartbeat for 169.8s
+2026-01-13 23:42:12 - DroneController - [WARNING] - No heartbeat for 170.8s
+2026-01-13 23:42:13 - DroneController - [WARNING] - No heartbeat for 171.8s
+2026-01-13 23:42:14 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:14 - DroneController - [WARNING] - No heartbeat for 172.8s
+2026-01-13 23:42:15 - DroneController - [WARNING] - No heartbeat for 173.8s
+2026-01-13 23:42:16 - DroneController - [WARNING] - No heartbeat for 174.8s
+2026-01-13 23:42:17 - DroneController - [WARNING] - No heartbeat for 175.8s
+2026-01-13 23:42:18 - DroneController - [WARNING] - No heartbeat for 176.8s
+2026-01-13 23:42:19 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:19 - DroneController - [WARNING] - No heartbeat for 177.9s
+2026-01-13 23:42:20 - DroneController - [WARNING] - No heartbeat for 178.9s
+2026-01-13 23:42:21 - DroneController - [WARNING] - No heartbeat for 179.9s
+2026-01-13 23:42:22 - DroneController - [WARNING] - No heartbeat for 180.9s
+2026-01-13 23:42:23 - DroneController - [WARNING] - No heartbeat for 181.9s
+2026-01-13 23:42:24 - DroneController - [WARNING] - No heartbeat for 182.9s
+2026-01-13 23:42:24 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:25 - DroneController - [WARNING] - No heartbeat for 183.9s
+2026-01-13 23:42:26 - DroneController - [WARNING] - No heartbeat for 184.9s
+2026-01-13 23:42:27 - DroneController - [WARNING] - No heartbeat for 185.9s
+2026-01-13 23:42:28 - DroneController - [WARNING] - No heartbeat for 186.9s
+2026-01-13 23:42:29 - DroneController - [WARNING] - No heartbeat for 187.9s
+2026-01-13 23:42:30 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:30 - DroneController - [WARNING] - No heartbeat for 188.9s
+2026-01-13 23:42:32 - DroneController - [WARNING] - No heartbeat for 189.9s
+2026-01-13 23:42:33 - DroneController - [WARNING] - No heartbeat for 190.9s
+2026-01-13 23:42:34 - DroneController - [WARNING] - No heartbeat for 191.9s
+2026-01-13 23:42:35 - DroneController - [WARNING] - No heartbeat for 192.9s
+2026-01-13 23:42:35 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:36 - DroneController - [WARNING] - No heartbeat for 193.9s
+2026-01-13 23:42:37 - DroneController - [WARNING] - No heartbeat for 194.9s
+2026-01-13 23:42:38 - DroneController - [WARNING] - No heartbeat for 195.9s
+2026-01-13 23:42:39 - DroneController - [WARNING] - No heartbeat for 196.9s
+2026-01-13 23:42:40 - DroneController - [WARNING] - No heartbeat for 197.9s
+2026-01-13 23:42:40 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:41 - DroneController - [WARNING] - No heartbeat for 198.9s
+2026-01-13 23:42:42 - DroneController - [WARNING] - No heartbeat for 199.9s
+2026-01-13 23:42:43 - DroneController - [WARNING] - No heartbeat for 201.0s
+2026-01-13 23:42:44 - DroneController - [WARNING] - No heartbeat for 202.0s
+2026-01-13 23:42:45 - DroneController - [WARNING] - No heartbeat for 203.0s
+2026-01-13 23:42:45 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:46 - DroneController - [WARNING] - No heartbeat for 204.0s
+2026-01-13 23:42:47 - DroneController - [WARNING] - No heartbeat for 205.0s
+2026-01-13 23:42:48 - DroneController - [WARNING] - No heartbeat for 206.0s
+2026-01-13 23:42:49 - DroneController - [WARNING] - No heartbeat for 207.0s
+2026-01-13 23:42:50 - DroneController - [WARNING] - No heartbeat for 208.0s
+2026-01-13 23:42:50 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:51 - DroneController - [WARNING] - No heartbeat for 209.0s
+2026-01-13 23:42:52 - DroneController - [WARNING] - No heartbeat for 210.0s
+2026-01-13 23:42:53 - DroneController - [WARNING] - No heartbeat for 211.0s
+2026-01-13 23:42:54 - DroneController - [WARNING] - No heartbeat for 212.0s
+2026-01-13 23:42:55 - DroneController - [WARNING] - No heartbeat for 213.0s
+2026-01-13 23:42:55 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:42:56 - DroneController - [WARNING] - No heartbeat for 214.4s
+2026-01-13 23:42:57 - DroneController - [WARNING] - No heartbeat for 215.4s
+2026-01-13 23:42:58 - DroneController - [WARNING] - No heartbeat for 216.5s
+2026-01-13 23:42:59 - DroneController - [WARNING] - No heartbeat for 217.5s
+2026-01-13 23:43:00 - DroneController - [WARNING] - No heartbeat for 218.5s
+2026-01-13 23:43:00 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:01 - DroneController - [WARNING] - No heartbeat for 219.5s
+2026-01-13 23:43:02 - DroneController - [WARNING] - No heartbeat for 220.5s
+2026-01-13 23:43:03 - DroneController - [WARNING] - No heartbeat for 221.5s
+2026-01-13 23:43:04 - DroneController - [WARNING] - No heartbeat for 222.5s
+2026-01-13 23:43:05 - DroneController - [WARNING] - No heartbeat for 223.5s
+2026-01-13 23:43:06 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:06 - DroneController - [WARNING] - No heartbeat for 224.5s
+2026-01-13 23:43:07 - DroneController - [WARNING] - No heartbeat for 225.5s
+2026-01-13 23:43:08 - DroneController - [WARNING] - No heartbeat for 226.5s
+2026-01-13 23:43:09 - DroneController - [WARNING] - No heartbeat for 227.5s
+2026-01-13 23:43:10 - DroneController - [WARNING] - No heartbeat for 228.5s
+2026-01-13 23:43:11 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:11 - DroneController - [WARNING] - No heartbeat for 229.5s
+2026-01-13 23:43:12 - DroneController - [WARNING] - No heartbeat for 230.5s
+2026-01-13 23:43:13 - DroneController - [WARNING] - No heartbeat for 231.5s
+2026-01-13 23:43:14 - DroneController - [WARNING] - No heartbeat for 232.5s
+2026-01-13 23:43:15 - DroneController - [WARNING] - No heartbeat for 233.5s
+2026-01-13 23:43:16 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:16 - DroneController - [WARNING] - No heartbeat for 234.5s
+2026-01-13 23:43:17 - DroneController - [WARNING] - No heartbeat for 235.5s
+2026-01-13 23:43:18 - DroneController - [WARNING] - No heartbeat for 236.5s
+2026-01-13 23:43:19 - DroneController - [WARNING] - No heartbeat for 237.5s
+2026-01-13 23:43:20 - DroneController - [WARNING] - No heartbeat for 238.5s
+2026-01-13 23:43:21 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:21 - DroneController - [WARNING] - No heartbeat for 239.6s
+2026-01-13 23:43:22 - DroneController - [WARNING] - No heartbeat for 240.6s
+2026-01-13 23:43:23 - DroneController - [WARNING] - No heartbeat for 241.6s
+2026-01-13 23:43:24 - DroneController - [WARNING] - No heartbeat for 242.6s
+2026-01-13 23:43:25 - DroneController - [WARNING] - No heartbeat for 243.6s
+2026-01-13 23:43:26 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:26 - DroneController - [WARNING] - No heartbeat for 244.6s
+2026-01-13 23:43:27 - DroneController - [WARNING] - No heartbeat for 245.6s
+2026-01-13 23:43:28 - DroneController - [WARNING] - No heartbeat for 246.6s
+2026-01-13 23:43:29 - DroneController - [WARNING] - No heartbeat for 247.6s
+2026-01-13 23:43:30 - DroneController - [WARNING] - No heartbeat for 248.6s
+2026-01-13 23:43:31 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:31 - DroneController - [WARNING] - No heartbeat for 249.6s
+2026-01-13 23:43:32 - DroneController - [WARNING] - No heartbeat for 250.6s
+2026-01-13 23:43:33 - DroneController - [WARNING] - No heartbeat for 251.6s
+2026-01-13 23:43:34 - DroneController - [WARNING] - No heartbeat for 252.6s
+2026-01-13 23:43:35 - DroneController - [WARNING] - No heartbeat for 253.6s
+2026-01-13 23:43:36 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:36 - DroneController - [WARNING] - No heartbeat for 254.6s
+2026-01-13 23:43:37 - DroneController - [WARNING] - No heartbeat for 255.6s
+2026-01-13 23:43:38 - DroneController - [WARNING] - No heartbeat for 256.6s
+2026-01-13 23:43:39 - DroneController - [WARNING] - No heartbeat for 257.6s
+2026-01-13 23:43:40 - DroneController - [WARNING] - No heartbeat for 258.6s
+2026-01-13 23:43:41 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:41 - DroneController - [WARNING] - No heartbeat for 259.6s
+2026-01-13 23:43:42 - DroneController - [WARNING] - No heartbeat for 260.7s
+2026-01-13 23:43:43 - DroneController - [WARNING] - No heartbeat for 261.7s
+2026-01-13 23:43:44 - DroneController - [WARNING] - No heartbeat for 262.7s
+2026-01-13 23:43:45 - DroneController - [WARNING] - No heartbeat for 263.7s
+2026-01-13 23:43:46 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:46 - DroneController - [WARNING] - No heartbeat for 264.7s
+2026-01-13 23:43:47 - DroneController - [WARNING] - No heartbeat for 265.7s
+2026-01-13 23:43:48 - DroneController - [WARNING] - No heartbeat for 266.7s
+2026-01-13 23:43:49 - DroneController - [WARNING] - No heartbeat for 267.7s
+2026-01-13 23:43:50 - DroneController - [WARNING] - No heartbeat for 268.7s
+2026-01-13 23:43:51 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:51 - DroneController - [WARNING] - No heartbeat for 269.7s
+2026-01-13 23:43:52 - DroneController - [WARNING] - No heartbeat for 270.7s
+2026-01-13 23:43:53 - DroneController - [WARNING] - No heartbeat for 271.7s
+2026-01-13 23:43:54 - DroneController - [WARNING] - No heartbeat for 272.7s
+2026-01-13 23:43:55 - DroneController - [WARNING] - No heartbeat for 273.7s
+2026-01-13 23:43:56 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:43:56 - DroneController - [WARNING] - No heartbeat for 274.7s
+2026-01-13 23:43:57 - DroneController - [WARNING] - No heartbeat for 275.7s
+2026-01-13 23:43:58 - DroneController - [WARNING] - No heartbeat for 276.7s
+2026-01-13 23:43:59 - DroneController - [WARNING] - No heartbeat for 277.7s
+2026-01-13 23:44:00 - DroneController - [WARNING] - No heartbeat for 278.7s
+2026-01-13 23:44:01 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:44:01 - DroneController - [WARNING] - No heartbeat for 279.7s
+2026-01-13 23:44:02 - DroneController - [WARNING] - No heartbeat for 280.7s
+2026-01-13 23:44:03 - DroneController - [WARNING] - No heartbeat for 281.7s
+2026-01-13 23:44:04 - DroneController - [WARNING] - No heartbeat for 282.7s
+2026-01-13 23:44:05 - DroneController - [WARNING] - No heartbeat for 283.7s
+2026-01-13 23:44:06 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:44:06 - DroneController - [WARNING] - No heartbeat for 284.8s
+2026-01-13 23:44:07 - DroneController - [WARNING] - No heartbeat for 285.8s
+2026-01-13 23:44:08 - DroneController - [WARNING] - No heartbeat for 286.8s
+2026-01-13 23:44:09 - DroneController - [WARNING] - No heartbeat for 287.8s
+2026-01-13 23:44:10 - DroneController - [WARNING] - No heartbeat for 288.8s
+2026-01-13 23:44:11 - DroneController - [WARNING] - No messages received in 5 seconds
+2026-01-13 23:44:11 - DroneController - [WARNING] - No heartbeat for 289.8s
+2026-01-13 23:44:12 - DroneController - [WARNING] - No heartbeat for 290.8s
+2026-01-13 23:44:13 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:44:13 - DroneController - [INFO] - Mission controller stopped
+2026-01-13 23:44:13 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:44:13 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 49491
+2026-01-13 23:44:13 - DroneController - [INFO] - Message type distribution: {'AHRS': 1680, 'AHRS2': 1680, 'ATTITUDE': 1680, 'BATTERY_STATUS': 1680, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 1680, 'ESC_TELEMETRY_1_TO_4': 1680, 'ESC_TELEMETRY_5_TO_8': 1680, 'EXTENDED_SYS_STATE': 377, 'GLOBAL_POSITION_INT': 1680, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 1680, 'HEARTBEAT': 378, 'HOME_POSITION': 378, 'LOCAL_POSITION_NED': 1680, 'MEMINFO': 1680, 'MISSION_CURRENT': 1680, 'NAV_CONTROLLER_OUTPUT': 1680, 'PARAM_VALUE': 37, 'POSITION_TARGET_GLOBAL_INT': 1158, 'POWER_STATUS': 1680, 'RAW_IMU': 1680, 'RC_CHANNELS': 1680, 'SCALED_IMU2': 1680, 'SCALED_IMU3': 1680, 'SCALED_PRESSURE': 1680, 'SCALED_PRESSURE2': 1680, 'SERVO_OUTPUT_RAW': 1680, 'SIMSTATE': 1680, 'STATUSTEXT': 6, 'SYSTEM_TIME': 1680, 'SYS_STATUS': 1680, 'TERRAIN_REPORT': 1680, 'TIMESYNC': 38, 'UNKNOWN_437': 76, 'VFR_HUD': 1680, 'VIBRATION': 1680, 'WIND': 1680}
+2026-01-13 23:44:13 - DroneController - [INFO] - Command processor stopped
+2026-01-13 23:44:13 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-13 23:44:13 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:44:13 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:44:13 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:45:13 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/GBULcircle.kml
+2026-01-13 23:45:13 - DroneController - [INFO] - DroneController initialized
+2026-01-13 23:45:13 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-13 23:45:13 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-13 23:45:13 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-13 23:45:13 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-13 23:45:13 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-13 23:45:13 - DroneController - [INFO] - Requesting data streams...
+2026-01-13 23:45:13 - DroneController - [INFO] - Verifying data stream...
+2026-01-13 23:45:13 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-13 23:45:14 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-13 23:45:14 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-13 23:45:17 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-13 23:45:17 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260113_234517.csv
+2026-01-13 23:45:17 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-13 23:45:17 - DroneController - [INFO] - Telemetry loop started
+2026-01-13 23:45:17 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-13 23:45:17 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-13 23:45:17 - DroneController - [INFO] - Command processor started
+2026-01-13 23:45:17 - DroneController - [INFO] - Mission controller started
+2026-01-13 23:45:17 - DroneController - [INFO] - All threads started
+2026-01-13 23:45:17 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-13 23:45:23 - DroneController - [INFO] - Loading mission with 30 points
+2026-01-13 23:45:23 - DroneController - [INFO] - Starting and home position: lat=28.423520, lon=77.527510
+2026-01-13 23:45:23 - DroneController - [INFO] - Mission validated: 30 waypoints
+2026-01-13 23:45:23 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-13 23:45:23 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-13 23:45:23 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-13 23:45:24 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-13 23:45:24 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-13 23:45:24 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-13 23:45:24 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-13 23:45:24 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-13 23:45:24 - DroneController - [INFO] - Armed successfully
+2026-01-13 23:45:24 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-13 23:45:26 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-13 23:45:26 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-13 23:45:26 - DroneController - [INFO] - Takeoff command accepted
+2026-01-13 23:45:28 - DroneController - [INFO] - Telemetry: 2041 msgs | GPS: (28.423520, 77.527510, 0.07m) | Battery: 99% | Mode: GUIDED
+2026-01-13 23:45:30 - DroneController - [INFO] - Target altitude reached: 2.52m
+2026-01-13 23:45:30 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-13 23:45:30 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-13 23:45:30 - DroneController - [INFO] - Starting mission with 30 waypoints
+2026-01-13 23:45:30 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-13 23:45:30 - DroneController - [INFO] - Sending waypoint: (28.423599, 77.527744, 3.00)
+2026-01-13 23:45:30 - DroneController - [ERROR] - Geofence violation: Outside polygon boundary: (28.423520, 77.527510)
+2026-01-13 23:45:30 - DroneController - [CRITICAL] - Emergency RTL triggered
+2026-01-13 23:45:30 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> RETURNING_HOME
+2026-01-13 23:45:30 - DroneController - [INFO] - Setting mode to RTL (attempt 1)
+2026-01-13 23:45:31 - DroneController - [INFO] - Mode changed to RTL
+2026-01-13 23:45:31 - DroneController - [INFO] - RTL in progress
+2026-01-13 23:45:38 - DroneController - [INFO] - Telemetry: 3236 msgs | GPS: (28.423520, 77.527510, 2.64m) | Battery: 97% | Mode: RTL
+2026-01-13 23:45:48 - DroneController - [INFO] - Telemetry: 4407 msgs | GPS: (28.423520, 77.527510, -0.02m) | Battery: 95% | Mode: RTL
+2026-01-13 23:45:58 - DroneController - [INFO] - Telemetry: 5562 msgs | GPS: (28.423520, 77.527509, 0.01m) | Battery: 95% | Mode: RTL
+2026-01-13 23:46:08 - DroneController - [INFO] - Telemetry: 6715 msgs | GPS: (28.423520, 77.527509, 0.01m) | Battery: 95% | Mode: RTL
+2026-01-13 23:46:18 - DroneController - [INFO] - Telemetry: 7869 msgs | GPS: (28.423520, 77.527509, 0.01m) | Battery: 95% | Mode: RTL
+2026-01-13 23:46:21 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:46:21 - DroneController - [INFO] - Mission controller stopped
+2026-01-13 23:46:21 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 8273
+2026-01-13 23:46:21 - DroneController - [INFO] - Message type distribution: {'AHRS': 272, 'AHRS2': 327, 'ATTITUDE': 327, 'BATTERY_STATUS': 271, 'COMMAND_ACK': 6, 'EKF_STATUS_REPORT': 271, 'ESC_TELEMETRY_1_TO_4': 327, 'ESC_TELEMETRY_5_TO_8': 327, 'EXTENDED_SYS_STATE': 67, 'GLOBAL_POSITION_INT': 255, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 279, 'HEARTBEAT': 68, 'HOME_POSITION': 68, 'LOCAL_POSITION_NED': 255, 'MEMINFO': 279, 'MISSION_CURRENT': 279, 'NAV_CONTROLLER_OUTPUT': 279, 'PARAM_VALUE': 7, 'POSITION_TARGET_GLOBAL_INT': 38, 'POWER_STATUS': 279, 'RAW_IMU': 270, 'RC_CHANNELS': 289, 'SCALED_IMU2': 270, 'SCALED_IMU3': 270, 'SCALED_PRESSURE': 270, 'SCALED_PRESSURE2': 270, 'SERVO_OUTPUT_RAW': 289, 'SIMSTATE': 327, 'STATUSTEXT': 5, 'SYSTEM_TIME': 271, 'SYS_STATUS': 279, 'TERRAIN_REPORT': 271, 'TERRAIN_REQUEST': 18, 'TIMESYNC': 6, 'UNKNOWN_437': 13, 'VFR_HUD': 331, 'VIBRATION': 271, 'WIND': 271}
+2026-01-13 23:46:21 - DroneController - [INFO] - Command processor stopped
+2026-01-13 23:46:22 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:46:22 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-13 23:46:22 - DroneController - [INFO] - Controller stopped
+2026-01-13 23:46:22 - DroneController - [INFO] - Stopping controller...
+2026-01-13 23:46:22 - DroneController - [INFO] - Controller stopped

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from lxml import etree
 import os
 
-def get_polygon_corners(kml_path, polygon_name="Field"):
+def get_polygon_corners(kml_path, polygon_name="MultiGeometry"):
     tree = etree.parse(kml_path)
     ns = {"kml": "http://www.opengis.net/kml/2.2"}
     placemarks = tree.xpath(f"//kml:Placemark[kml:name='{polygon_name}']", namespaces=ns)

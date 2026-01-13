@@ -197,7 +197,7 @@ class DroneManager:
 
         # Setup controller configuration
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        KML_PATH = os.path.join(BASE_DIR, "data", "JUxs.kml")
+        KML_PATH = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
         
         print(f"[DroneManager] Loading KML from: {KML_PATH}")
         
@@ -205,7 +205,7 @@ class DroneManager:
             connection_string='127.0.0.1:14551',
             geofence_mode="polygon",
             kml_file=KML_PATH,
-            polygon_name="Field",
+            polygon_name="MultiGeometry",
             max_altitude=30.0,
             geofence_radius=500.0,
             waypoint_radius=3.0,
@@ -354,6 +354,9 @@ class DroneManager:
                 # Convert to waypoints with altitude
                 waypoints = [[lat, lon, altitude] for lat, lon in points_2d]
                 print(f"[DroneManager] Generated {len(waypoints)} waypoints from KML")
+                print("Generated Mission Plan:")
+                for i, wp in enumerate(waypoints):
+                    print(f"  WP {i+1}: Lat={wp[0]:.6f}, Lon={wp[1]:.6f}, Alt={wp[2]:.1f}m")
 
             print(f"[DroneManager] START command received")
             print(f"[DroneManager] Waypoints: {len(waypoints)}, Altitude: {altitude}m")

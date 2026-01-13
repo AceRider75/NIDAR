@@ -12,10 +12,10 @@ def main():
     KML_PATH = os.path.join(BASE_DIR, "data", "JUxs.kml")
     
     config = DroneConfig(
-        connection_string='/dev/ttyACM0',
+        connection_string='127.0.0.1:14551',
         geofence_mode="polygon",
         kml_file=KML_PATH,
-        polygon_name="Field",
+        polygon_name="MultiGeometry",
         max_altitude=30.0,
         waypoint_radius=3.0,
         default_altitude=3.0,
