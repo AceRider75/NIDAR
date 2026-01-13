@@ -1032,12 +1032,13 @@ class DroneController:
         
         # Set home position for geofence
         with self.telemetry_lock:
-            if self.geofence.mode == "radius":
-                self.geofence.home_lat = self.telemetry.lat
-                self.geofence.home_lon = self.telemetry.lon
-                self.logger.info(f"Home set: {self.geofence.home_lat:.6f}, {self.geofence.home_lon:.6f}")
-            else:
-                self.logger.info("Using polygon geofence from KML")
+            # Always update home position in geofence
+            self.geofence.home_lat = self.telemetry.lat
+            self.geofence.home_lon = self.telemetry.lon
+            self.logger.info(f"Home set: {self.geofence.home_lat:.6f}, {self.geofence.home_lon:.6f}")
+            
+            if self.geofence.mode != "radius":
+                self.logger.info("Using polygon geofence from KML (with home exception)")
         
         # Change to GUIDED mode
         if not self._set_mode(FlightMode.GUIDED):

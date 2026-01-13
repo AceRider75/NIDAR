@@ -252,7 +252,7 @@ class MissionPlanner:
             return True
 
         # Check tolerance if outside
-        tolerance = 10.0  # meters
+        tolerance = 5  # meters
         dist = self._get_distance_to_polygon(lat, lon)
         if dist <= tolerance:
             print(f"Point outside polygon but within tolerance: {dist:.2f}m <= {tolerance}m")

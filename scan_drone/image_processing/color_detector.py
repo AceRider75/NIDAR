@@ -19,8 +19,8 @@ else:
 class ColorDetector:
     """Detects yellow spots in images using HSV color space."""
     
-    def __init__(self, lower_yellow: Tuple[int, int, int] = (20, 100, 100),
-                 upper_yellow: Tuple[int, int, int] = (30, 255, 255),
+    def __init__(self, lower_yellow: Tuple[int, int, int] = (18, 15, 185),
+                 upper_yellow: Tuple[int, int, int] = (38, 240, 255),
                  min_area: int = 500,
                  max_area: int = 50000):
         """
