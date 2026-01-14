@@ -5,6 +5,9 @@ import os
 from typing import List, Dict, Optional
 from core.drone_state import DroneName
 
+# Minimum detections required for a spot to be considered valid
+MIN_DETECTION_COUNT = 2
+
 
 class WaypointManager(ctk.CTkFrame):
     """Widget for displaying and managing waypoints from detected yellow spots."""
@@ -12,7 +15,8 @@ class WaypointManager(ctk.CTkFrame):
     def __init__(self, parent, controller, **kwargs):
         super().__init__(parent, **kwargs)
         self.controller = controller
-        self.waypoints: List[Dict] = []
+        self.waypoints: List[Dict] = []  # All waypoints (including filtered out)
+        self.valid_waypoints: List[Dict] = []  # Only waypoints with enough detections
         
         self._setup_ui()
     
@@ -37,7 +41,7 @@ class WaypointManager(ctk.CTkFrame):
         # Waypoint count label
         self.count_label = ctk.CTkLabel(
             header_frame,
-            text="Spots: 0 | Waypoints: 0",
+            text=f"Spots: 0 | Valid (≥{MIN_DETECTION_COUNT} detections): 0",
             font=ctk.CTkFont(size=11),
             text_color="#888888"
         )
@@ -111,7 +115,7 @@ class WaypointManager(ctk.CTkFrame):
         # Waypoint display frame with scrollbar
         self.waypoint_frame = ctk.CTkScrollableFrame(
             self,
-            label_text="Detected Yellow Spots",
+            label_text=f"Confirmed Yellow Spots (≥{MIN_DETECTION_COUNT} detections)",
             label_font=ctk.CTkFont(size=11)
         )
         self.waypoint_frame.grid(row=2, column=0, sticky="nsew", padx=5, pady=(0, 5))
@@ -138,6 +142,10 @@ class WaypointManager(ctk.CTkFrame):
             )
             label.pack(side="left", padx=1)
     
+    def _filter_valid_waypoints(self, waypoints: List[Dict]) -> List[Dict]:
+        """Filter waypoints to only include those with detection_count >= MIN_DETECTION_COUNT."""
+        return [wp for wp in waypoints if wp.get('detection_count', 0) >= MIN_DETECTION_COUNT]
+    
     def _refresh_from_spots(self):
         """Refresh waypoints from detected yellow spots."""
         try:
@@ -146,6 +154,7 @@ class WaypointManager(ctk.CTkFrame):
             
             if not spots_data:
                 self.waypoints = []
+                self.valid_waypoints = []
                 self._update_display()
                 return
             
@@ -177,10 +186,11 @@ class WaypointManager(ctk.CTkFrame):
             waypoints.sort(key=lambda x: int(x['spot_id']) if x['spot_id'].isdigit() else 0)
             
             self.waypoints = waypoints
+            self.valid_waypoints = self._filter_valid_waypoints(waypoints)
             self._update_display()
             
-            # Also update controller's waypoint list
-            self.controller.set_waypoints(waypoints)
+            # Update controller with only valid waypoints
+            self.controller.set_waypoints(self.valid_waypoints)
             
         except Exception as e:
             print(f"Error refreshing from spots: {e}")
@@ -208,38 +218,48 @@ class WaypointManager(ctk.CTkFrame):
                         'lon': float(row.get('longitude', row.get('lon', 0))),
                         'alt': float(row.get('altitude', row.get('alt', 3.0))),
                         'area': float(row.get('area', 0)),
-                        'detection_count': int(row.get('detection_count', row.get('detections', 1))),
+                        'detection_count': int(row.get('detection_count', row.get('detections', MIN_DETECTION_COUNT))),
                         'rank': int(row.get('rank', 0)),
                         'type': row.get('type', 'imported')
                     }
                     imported_waypoints.append(waypoint)
             
             self.waypoints = imported_waypoints
+            self.valid_waypoints = self._filter_valid_waypoints(imported_waypoints)
             self._update_display()
             
-            # Update controller's waypoint list
-            self.controller.set_waypoints(imported_waypoints)
+            # Update controller with only valid waypoints
+            self.controller.set_waypoints(self.valid_waypoints)
             
-            messagebox.showinfo(
-                "Import Successful",
-                f"Imported {len(imported_waypoints)} waypoints from CSV."
-            )
+            total_imported = len(imported_waypoints)
+            valid_count = len(self.valid_waypoints)
+            filtered_count = total_imported - valid_count
+            
+            msg = f"Imported {total_imported} waypoints from CSV.\n"
+            msg += f"Valid waypoints (≥{MIN_DETECTION_COUNT} detections): {valid_count}\n"
+            if filtered_count > 0:
+                msg += f"Filtered out: {filtered_count} (insufficient detections)"
+            
+            messagebox.showinfo("Import Successful", msg)
             
         except Exception as e:
             messagebox.showerror("Import Error", f"Failed to import waypoints:\n{e}")
     
     def _export_waypoints(self):
-        """Export waypoints to a CSV file."""
+        """Export only valid waypoints to a CSV file."""
         # Refresh from spots first if no waypoints
         if not self.waypoints:
             self._refresh_from_spots()
         
-        if not self.waypoints:
-            messagebox.showwarning("No Waypoints", "No waypoints to export.")
+        if not self.valid_waypoints:
+            messagebox.showwarning(
+                "No Valid Waypoints", 
+                f"No waypoints with ≥{MIN_DETECTION_COUNT} detections to export."
+            )
             return
         
         filepath = filedialog.asksaveasfilename(
-            title="Export Waypoints",
+            title="Export Valid Waypoints",
             defaultextension=".csv",
             filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
             initialdir=os.path.expanduser("~"),
@@ -256,7 +276,8 @@ class WaypointManager(ctk.CTkFrame):
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
                 
-                for i, wp in enumerate(self.waypoints):
+                # Export only valid waypoints
+                for i, wp in enumerate(self.valid_waypoints):
                     writer.writerow({
                         'index': i + 1,
                         'spot_id': wp.get('spot_id', ''),
@@ -264,14 +285,14 @@ class WaypointManager(ctk.CTkFrame):
                         'longitude': f"{wp.get('lon', 0):.7f}",
                         'altitude': wp.get('alt', 3.0),
                         'area': f"{wp.get('area', 0):.2f}",
-                        'detection_count': wp.get('detection_count', 1),
+                        'detection_count': wp.get('detection_count', MIN_DETECTION_COUNT),
                         'rank': wp.get('rank', 0),
                         'type': wp.get('type', 'waypoint')
                     })
             
             messagebox.showinfo(
                 "Export Successful",
-                f"Exported {len(self.waypoints)} waypoints to:\n{filepath}"
+                f"Exported {len(self.valid_waypoints)} valid waypoints to:\n{filepath}"
             )
             
         except Exception as e:
@@ -286,25 +307,32 @@ class WaypointManager(ctk.CTkFrame):
             )
             if confirm:
                 self.waypoints = []
+                self.valid_waypoints = []
                 self._update_display()
                 self.controller.clear_waypoints()
     
     def _transfer_to_sprayer(self):
-        """Transfer waypoints to the sprayer drone."""
+        """Transfer only valid waypoints to the sprayer drone."""
         if not self.waypoints:
             self._refresh_from_spots()
         
-        if not self.waypoints:
-            messagebox.showwarning("No Waypoints", "No waypoints to transfer.")
+        if not self.valid_waypoints:
+            messagebox.showwarning(
+                "No Valid Waypoints", 
+                f"No waypoints with ≥{MIN_DETECTION_COUNT} detections to transfer."
+            )
             return
         
         try:
+            # Ensure controller has valid waypoints
+            self.controller.set_waypoints(self.valid_waypoints)
             success = self.controller.transfer_waypoints_to_sprayer()
             
             if success:
                 messagebox.showinfo(
                     "Transfer Successful",
-                    f"Transferred {len(self.waypoints)} waypoints to Sprayer drone."
+                    f"Transferred {len(self.valid_waypoints)} valid waypoints to Sprayer drone.\n"
+                    f"(Spots with ≥{MIN_DETECTION_COUNT} detections only)"
                 )
             else:
                 messagebox.showerror(
@@ -317,6 +345,7 @@ class WaypointManager(ctk.CTkFrame):
     def set_waypoints(self, waypoints: List[Dict]):
         """Set waypoints externally and update display."""
         self.waypoints = waypoints or []
+        self.valid_waypoints = self._filter_valid_waypoints(self.waypoints)
         self._update_display()
     
     def update_from_spots(self, spots_data: Dict[str, List[Dict]]):
@@ -347,29 +376,44 @@ class WaypointManager(ctk.CTkFrame):
         
         waypoints.sort(key=lambda x: int(x['spot_id']) if x['spot_id'].isdigit() else 0)
         self.waypoints = waypoints
+        self.valid_waypoints = self._filter_valid_waypoints(waypoints)
         self._update_display()
     
     def _update_display(self):
-        """Update the waypoint display."""
+        """Update the waypoint display - shows only valid waypoints."""
         # Clear existing waypoint rows (keep header)
         for widget in self.waypoint_frame.winfo_children()[1:]:
             widget.destroy()
         
-        # Get spot count from controller
-        try:
-            spots_data = self.controller.get_yellow_spots(DroneName.Scanner)
-            spot_count = len(spots_data) if spots_data else 0
-        except:
-            spot_count = len(self.waypoints)
-        
-        # Update count
+        # Update count label
+        total_spots = len(self.waypoints)
+        valid_count = len(self.valid_waypoints)
         self.count_label.configure(
-            text=f"Spots: {spot_count} | Waypoints: {len(self.waypoints)}"
+            text=f"Spots: {total_spots} | Valid (≥{MIN_DETECTION_COUNT} detections): {valid_count}"
         )
         
-        # Add waypoint rows
-        for i, wp in enumerate(self.waypoints):
+        # Add only valid waypoint rows
+        for i, wp in enumerate(self.valid_waypoints):
             self._add_waypoint_row(i + 1, wp)
+        
+        # Show message if there are spots but none are valid yet
+        if total_spots > 0 and valid_count == 0:
+            info_frame = ctk.CTkFrame(self.waypoint_frame, fg_color="#2d2d2d")
+            info_frame.pack(fill="x", pady=10, padx=5)
+            
+            ctk.CTkLabel(
+                info_frame,
+                text=f"⏳ Waiting for spots to be detected {MIN_DETECTION_COUNT}+ times...",
+                font=ctk.CTkFont(size=11),
+                text_color="#ffc107"
+            ).pack(pady=10)
+            
+            ctk.CTkLabel(
+                info_frame,
+                text=f"({total_spots} spot(s) detected but need more confirmations)",
+                font=ctk.CTkFont(size=10),
+                text_color="#888888"
+            ).pack(pady=(0, 10))
     
     def _add_waypoint_row(self, index: int, waypoint: Dict):
         """Add a single waypoint row to the display."""
@@ -419,17 +463,27 @@ class WaypointManager(ctk.CTkFrame):
             font=ctk.CTkFont(size=10)
         ).pack(side="left", padx=1)
         
-        # Detection count
-        det_count = waypoint.get('detection_count', 1)
-        det_color = "#28a745" if det_count >= 5 else "#17a2b8" if det_count >= 2 else "#6c757d"
+        # Detection count with color coding
+        det_count = waypoint.get('detection_count', 0)
+        if det_count >= 5:
+            det_color = "#28a745"  # Green - high confidence
+        elif det_count >= MIN_DETECTION_COUNT:
+            det_color = "#17a2b8"  # Blue - valid
+        else:
+            det_color = "#6c757d"  # Gray - below threshold (shouldn't appear)
+        
         ctk.CTkLabel(
             row_frame,
             text=str(det_count),
             width=70,
-            font=ctk.CTkFont(size=10),
+            font=ctk.CTkFont(size=10, weight="bold"),
             text_color=det_color
         ).pack(side="left", padx=1)
     
     def get_waypoints(self) -> List[Dict]:
-        """Get current waypoints."""
+        """Get all waypoints (including those below threshold)."""
         return self.waypoints
+    
+    def get_valid_waypoints(self) -> List[Dict]:
+        """Get only valid waypoints (detection_count >= MIN_DETECTION_COUNT)."""
+        return self.valid_waypoints
