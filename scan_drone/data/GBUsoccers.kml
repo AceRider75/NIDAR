@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="kmlwb">
+	<name>KML Workbench</name>
+	<Snippet maxLines="0"></Snippet>
+	<styleUrl>#kmlwb-document</styleUrl>
+	<Style id="kmlwb-document">
+		<BalloonStyle>
+			<text><![CDATA[<div style="width:240px;">
+<img src="https://www.scottmurray.me/assets/images/earth-64x64.png" width="32">
+<span style="Verdana,Geneva,sans-serif; font-size:24px; color:#042b49;">$[name]</span>
+<p style="color:#492b04;background-color:#eafad1; text-align:center;">
+Created with 
+<a style="color:#376b7b; text-decoration:none; font-weight:bold;" href="https://www.scottmurray.me/kml/">KML Workbench</a>
+</p>
+<p>Generated: 2026-01-13 15:10:25 UTC</p></div>]]></text>
+			<textColor>ff042b49</textColor>
+			<bgColor>ffd1faea</bgColor>
+		</BalloonStyle>
+		<ListStyle>
+			<ItemIcon>
+				<state>open closed</state>
+				<href>mirth-vfs://hxrn/https://www.scottmurray.me/assets/images/earth-64x64.png</href>
+			</ItemIcon>
+			<bgColor>ffd1faea</bgColor>
+		</ListStyle>
+	</Style>
+</Document>
+</kml>
