@@ -50,10 +50,30 @@ class MissionPlanner:
             else:
                 raise ValueError(f"Placemark '{polygon_name}' not found and no other placemarks in file.")
 
-        coords_text = placemarks[0].xpath(
+        coords_list = placemarks[0].xpath(
             ".//kml:Polygon//kml:coordinates/text()",
             namespaces=ns
-        )[0]
+        )
+        
+        if not coords_list:
+            # Check if it's a Point instead of a Polygon
+            point_coords = placemarks[0].xpath(
+                ".//kml:Point//kml:coordinates/text()",
+                namespaces=ns
+            )
+            if point_coords:
+                raise ValueError(
+                    f"KML file contains a Point, not a Polygon. "
+                    f"Mission planner requires a Polygon to generate scan waypoints. "
+                    f"Point coordinates: {point_coords[0]}"
+                )
+            else:
+                raise ValueError(
+                    f"No Polygon or Point geometry found in Placemark '{polygon_name}'. "
+                    f"KML must contain a Polygon with coordinates."
+                )
+        
+        coords_text = coords_list[0]
 
         corners = []
         for c in coords_text.strip().split():

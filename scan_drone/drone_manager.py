@@ -207,7 +207,7 @@ class DroneManager:
             connection_string='127.0.0.1:14551',
             geofence_mode="polygon",
             kml_file=KML_PATH,
-            polygon_name="MultiGeometry",
+            polygon_name="Field",
             max_altitude=30.0,
             geofence_radius=500.0,
             waypoint_radius=3.0,
