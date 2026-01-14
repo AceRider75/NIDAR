@@ -46,3 +46,7 @@
 "
 1768380675.111746,RPi,"Radio Connection Failed: [Errno 2] could not open port /dev/ttyAMA0: [Errno 2] No such file or directory: '/dev/ttyAMA0'
 "
+1768425609.927549,RPi,"Radio Connection Failed: [Errno 2] could not open port /dev/ttyAMA0: [Errno 2] No such file or directory: '/dev/ttyAMA0'
+"
+1768425729.401669,RPi,"Radio Connection Failed: [Errno 2] could not open port /dev/ttyAMA0: [Errno 2] No such file or directory: '/dev/ttyAMA0'
+"

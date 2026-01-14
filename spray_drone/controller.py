@@ -122,7 +122,7 @@ class DroneController:
         self.telemetry_log_lock = threading.Lock()
 
         # Spray system - Simple relay control
-        self.spray_relay_pin = getattr(self.config, 'spray_relay_pin', 18)  # GPIO pin for relay
+        self.spray_relay_pin = getattr(self.config, 'spray_relay_pin', 6)  # GPIO pin for relay
         self.spray_duration = getattr(self.config, 'spray_duration', 10.0)  # Default 10 seconds
         self.spray_active = threading.Event()
         self.spray_thread = None
@@ -146,7 +146,7 @@ class DroneController:
             GPIO.setmode(GPIO.BCM)
             GPIO.setwarnings(False)
             GPIO.setup(self.spray_relay_pin, GPIO.OUT)
-            GPIO.output(self.spray_relay_pin, GPIO.LOW)  # Ensure relay is OFF initially
+            GPIO.output(self.spray_relay_pin, GPIO.HIGH)  # Ensure relay is OFF initially
             self.logger.info(f"Spray relay initialized on GPIO pin {self.spray_relay_pin}")
         except Exception as e:
             self.logger.error(f"Failed to initialize spray GPIO: {e}")
@@ -155,7 +155,7 @@ class DroneController:
         """Turn spray relay ON"""
         if GPIO_AVAILABLE:
             try:
-                GPIO.output(self.spray_relay_pin, GPIO.HIGH)
+                GPIO.output(self.spray_relay_pin, GPIO.LOW)
                 self.logger.info("Spray ON")
                 self._add_log("Spray ON")
                 return True
@@ -170,7 +170,7 @@ class DroneController:
         """Turn spray relay OFF"""
         if GPIO_AVAILABLE:
             try:
-                GPIO.output(self.spray_relay_pin, GPIO.LOW)
+                GPIO.output(self.spray_relay_pin, GPIO.HIGH)
                 self.logger.info("Spray OFF")
                 self._add_log("Spray OFF")
                 return True
@@ -1223,11 +1223,12 @@ class DroneController:
         
         # Set home position for geofence
         with self.telemetry_lock:
-            if self.geofence.mode == "radius":
-                self.geofence.home_lat = self.telemetry.lat
-                self.geofence.home_lon = self.telemetry.lon
-                self.logger.info(f"Home set: {self.geofence.home_lat:.6f}, {self.geofence.home_lon:.6f}")
-            else:
+        
+            self.geofence.home_lat = self.telemetry.lat
+            self.geofence.home_lon = self.telemetry.lon
+            self.logger.info(f"Home set: {self.geofence.home_lat:.6f}, {self.geofence.home_lon:.6f}")
+
+            if self.geofence.mode != "radius":
                 self.logger.info("Using polygon geofence from KML")
         
         # Change to GUIDED mode
@@ -1248,6 +1249,8 @@ class DroneController:
             return False
         
         self._change_state(DroneState.ARMED)
+
+        time.sleep(2)  # brief pause before takeoff
         
         # Takeoff
         self._change_state(DroneState.TAKING_OFF)
