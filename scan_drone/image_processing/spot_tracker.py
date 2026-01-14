@@ -75,10 +75,22 @@ def log_spot_data_logfile(spot_id: int, drone_coords: tuple, spot_coords: tuple)
     """
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    d_lat = spot_coords[0] - drone_coords[0]
+    d_lon = spot_coords[1] - drone_coords[1]
+    dist_root = math.sqrt(d_lat**2 + d_lon**2)
+    print(f"[SpotTracker] Spot {spot_id} offset magnitude (sqrt(dlat^2+dlon^2)): {dist_root:.9f}")
+
+    # Calculate distance in meters
+    R = 6371000.0
+    d_lat_m = d_lat * (math.pi / 180) * R
+    d_lon_m = d_lon * (math.pi / 180) * R * math.cos(math.radians(drone_coords[0]))
+    dist_m = math.sqrt(d_lat_m**2 + d_lon_m**2)
+    print(f"[SpotTracker] Spot {spot_id} offset in meters: {dist_m:.4f} m")
+
     entry = (
         f"{timestamp} | spot_id={spot_id} | "
         f"drone_lat={drone_coords[0]:.7f}, drone_lon={drone_coords[1]:.7f}, drone_alt={drone_coords[2]:.2f} | "
-        f"spot_lat={spot_coords[0]:.7f}, spot_lon={spot_coords[1]:.7f}, d_lat={spot_coords[0] - drone_coords[0]:.7f}, d_lon={spot_coords[1] - drone_coords[1]:.7f}"
+        f"spot_lat={spot_coords[0]:.7f}, spot_lon={spot_coords[1]:.7f}, d_lat={d_lat:.7f}, d_lon={d_lon:.7f}"
     )
 
     logger.info(entry)  # logged + printed
@@ -226,7 +238,8 @@ class SpotTracker:
                  max_frames_missing: int = 10,
                  dilation_kernel_size: int = 0,
                  clustering_distance: float = 50.0,
-                 min_cluster_samples: int = 1):
+                 min_cluster_samples: int = 1,
+                 min_spot_distance: float = 0.10):
         """
         Initialize spot tracker.
 
@@ -237,6 +250,7 @@ class SpotTracker:
             dilation_kernel_size: Kernel size for dilation to merge nearby contours (0 = no dilation)
             clustering_distance: Maximum distance between spots to be considered in same cluster
             min_cluster_samples: Minimum samples for DBSCAN clustering
+            min_spot_distance: Minimum distance between spots in meters (default 0.10m = 10cm)
         """
         self.max_distance = max_distance
         self.area_tolerance = area_tolerance
@@ -244,6 +258,7 @@ class SpotTracker:
         self.dilation_kernel_size = dilation_kernel_size
         self.clustering_distance = clustering_distance
         self.min_cluster_samples = min_cluster_samples
+        self.min_spot_distance = min_spot_distance
 
         self.tracked_spots: Dict[int, TrackedSpot] = {}
         self.next_id = 1
@@ -359,7 +374,9 @@ class SpotTracker:
     def update(self, centers: List[Tuple[int, int]],
                contours: List[np.ndarray],
                areas: Optional[List[float]] = None,
-               mask: Optional[np.ndarray] = None) -> Dict[int, TrackedSpot]:
+               mask: Optional[np.ndarray] = None,
+               drone_alt: Optional[float] = None,
+               image_w: Optional[int] = None) -> Dict[int, TrackedSpot]:
         """
         Update tracking with new detections.
 
@@ -368,6 +385,8 @@ class SpotTracker:
             contours: List of spot contours
             areas: Optional list of spot areas (calculated if not provided)
             mask: Optional mask for clustering and dilation processing
+            drone_alt: Optional drone altitude in meters (for distance filtering)
+            image_w: Optional image width in pixels (for distance filtering)
 
         Returns:
             Dictionary of currently tracked spots
@@ -430,7 +449,60 @@ class SpotTracker:
         # Rank spots by area
         self._rank_spots_by_area()
 
+        # Filter spots by minimum distance if altitude is available
+        if drone_alt is not None and image_w is not None:
+            self._filter_spots_by_distance(drone_alt, image_w)
+
         return self.tracked_spots
+
+    def _filter_spots_by_distance(self, drone_alt: float, image_w: int, fov_h: float = 57.16):
+        """
+        Filter spots that are too close to higher-ranked spots.
+        Enforces min_spot_distance (e.g., 10cm).
+        """
+        if drone_alt <= 0.1:  # Too low to calculate reliable scale
+            return
+
+        # Calculate pixels per meter
+        # FOV formula: width_m = 2 * alt * tan(fov/2)
+        fov_rad = math.radians(fov_h)
+        visible_width_m = 2.0 * drone_alt * math.tan(fov_rad / 2.0)
+        
+        if visible_width_m <= 0:
+            return
+            
+        pixels_per_m = image_w / visible_width_m
+        min_dist_px = self.min_spot_distance * pixels_per_m
+        
+        # Sort spots by rank (1 is highest priority/largest area)
+        sorted_spots = sorted(self.tracked_spots.values(), key=lambda s: s.area_rank)
+        
+        kept_ids = set()
+        spots_to_remove = []
+        
+        for spot in sorted_spots:
+            # Check distance against all currently kept spots
+            is_too_close = False
+            for kept_id in kept_ids:
+                kept_spot = self.tracked_spots[kept_id]
+                dist = math.sqrt((spot.center[0] - kept_spot.center[0])**2 + 
+                               (spot.center[1] - kept_spot.center[1])**2)
+                if dist < min_dist_px:
+                    is_too_close = True
+                    break
+            
+            if is_too_close:
+                spots_to_remove.append(spot.id)
+            else:
+                kept_ids.add(spot.id)
+        
+        # Remove suppressed spots
+        for spot_id in spots_to_remove:
+            del self.tracked_spots[spot_id]
+            
+        # Re-rank if we removed anything
+        if spots_to_remove:
+            self._rank_spots_by_area()
 
     def _match_spots(self, centers: List[Tuple[int, int]],
                      areas: List[float],
@@ -731,7 +803,7 @@ class DroneManagerSocket:
 def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, 
                           drone_yaw: float, drone_roll: float, drone_pitch: float,
                           spot_center: Tuple[int, int], image_size: Tuple[int, int],
-                          fov_h: float = 62.2) -> Tuple[float, float]:
+                          fov_h: float = 57.16) -> Tuple[float, float]:
     """
     Calculate real-world coordinates of a spot.
 
@@ -788,7 +860,8 @@ def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float,
     # Camera x (right) corresponds to East (at 0 yaw)
     # Camera y (forward) corresponds to North (at 0 yaw)
 
-    yaw_rad = math.radians(drone_yaw)
+    # Adjust for 150 degrees anticlockwise offset relative to Pixhawk
+    yaw_rad = math.radians(drone_yaw - 150)
 
     # NED frame offsets
     # x_b = forward (camera y), y_b = right (camera x)
@@ -1291,11 +1364,14 @@ def main():
             # Detect yellow spots
             centers, contours, mask = detector.detect_yellow_spots(frame)
 
-            # Update tracker with mask for dilation
-            tracked_spots = tracker.update(centers, contours, mask=mask)
-
             # Read latest telemetry from drone_manager via socket
             telemetry = drone_socket.get_latest_telemetry()
+
+            # Update tracker with mask for dilation
+            # Pass altitude and width for distance filtering (10cm radius)
+            drone_alt = telemetry['alt'] if telemetry else None
+            tracked_spots = tracker.update(centers, contours, mask=mask, 
+                                         drone_alt=drone_alt, image_w=width)
             
             # Log telemetry status periodically
             now = time.time()
