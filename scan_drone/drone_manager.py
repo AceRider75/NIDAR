@@ -199,7 +199,7 @@ class DroneManager:
 
         # Setup controller configuration
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        KML_PATH = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
+        KML_PATH = os.path.join(BASE_DIR, "data", "GBUsoccer.kml")
         
         print(f"[DroneManager] Loading KML from: {KML_PATH}")
         

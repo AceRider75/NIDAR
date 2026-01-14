@@ -731,7 +731,7 @@ class DroneManagerSocket:
 def calculate_real_coords(drone_lat: float, drone_lon: float, drone_alt: float, 
                           drone_yaw: float, drone_roll: float, drone_pitch: float,
                           spot_center: Tuple[int, int], image_size: Tuple[int, int],
-                          fov_h: float = 62.2) -> Tuple[float, float]:
+                          fov_h: float = 57.16) -> Tuple[float, float]:
     """
     Calculate real-world coordinates of a spot.
 
