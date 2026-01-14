@@ -116,7 +116,7 @@ class SprayController:
         """Turn spray relay ON"""
         try:
             if self.gpio_initialized:
-                GPIO.output(self.config.relay_pin, GPIO.HIGH)
+                GPIO.output(self.config.relay_pin, GPIO.LOW)
                 self.logger.info("Spray relay ON")
             else:
                 self.logger.info("Spray ON (simulation mode - no GPIO)")
@@ -129,7 +129,7 @@ class SprayController:
         """Turn spray relay OFF"""
         try:
             if self.gpio_initialized:
-                GPIO.output(self.config.relay_pin, GPIO.LOW)
+                GPIO.output(self.config.relay_pin, GPIO.HIGH)
                 self.logger.info("Spray relay OFF")
             else:
                 self.logger.info("Spray OFF (simulation mode - no GPIO)")
@@ -327,7 +327,7 @@ class SprayController:
         # Cleanup GPIO
         if self.gpio_initialized:
             try:
-                GPIO.output(self.config.relay_pin, GPIO.LOW)  # Ensure relay is OFF
+                GPIO.output(self.config.relay_pin, GPIO.HIGH)  # Ensure relay is OFF
                 GPIO.cleanup(self.config.relay_pin)
                 self.logger.info("Spray GPIO cleanup completed")
             except Exception as e:
