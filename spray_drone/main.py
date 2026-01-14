@@ -9,13 +9,13 @@ def main():
 
     # Configure
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    KML_PATH = os.path.join(BASE_DIR, "data", "JUxs.kml")
+    KML_PATH = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
     
     config = DroneConfig(
         connection_string='127.0.0.1:14551',
         geofence_mode="polygon",
         kml_file=KML_PATH,
-        polygon_name="Field",
+        polygon_name="MultiGeometry",
         max_altitude=30.0,
         waypoint_radius=3.0,
         default_altitude=3.0,
@@ -47,13 +47,11 @@ def main():
 
         # Define mission waypoints
         waypoints = [
-            (22.497764, 88.372255, 3.0),
-            (22.497701, 88.372401, 3.0),
-            (22.497600, 88.372300, 3.0),
-            (22.497943, 88.372148, 3.0),
-            (22.597600, 88.372300, 3.0),#outside geofence
-            (22.497943, 88.472148, 3.0),#outside geofence
-            (22.498022, 88.372386, 3.0),
+
+            (28.4241739,77.5271940,3),
+            (28.4244791,77.5272674,3),
+            (28.4246866,77.5275658,3),
+            (28.4244393,77.5275621,3),
         ]
         
         # Load mission (validates against KML polygon)

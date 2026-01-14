@@ -5425,3 +5425,153 @@
 2026-01-14 14:23:01 - DroneController - [INFO] - Controller stopped
 2026-01-14 14:23:01 - DroneController - [INFO] - Stopping controller...
 2026-01-14 14:23:01 - DroneController - [INFO] - Controller stopped
+2026-01-15 02:50:09 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/GBUsoccerxs.kml
+2026-01-15 02:50:09 - DroneController - [INFO] - DroneController initialized
+2026-01-15 02:50:09 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 02:50:09 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 02:50:09 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 02:50:09 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 02:50:10 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 02:50:10 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 02:50:10 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 02:50:10 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 02:50:11 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 02:50:11 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 02:50:14 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 02:50:14 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_025014.csv
+2026-01-15 02:50:14 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 02:50:14 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 02:50:14 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 02:50:14 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 02:50:14 - DroneController - [INFO] - Command processor started
+2026-01-15 02:50:14 - DroneController - [INFO] - Mission controller started
+2026-01-15 02:50:14 - DroneController - [INFO] - All threads started
+2026-01-15 02:50:14 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 02:50:19 - DroneController - [INFO] - Loading mission with 14 points
+2026-01-15 02:50:19 - DroneController - [INFO] - Starting and home position: lat=28.424445, lon=77.527522
+2026-01-15 02:50:19 - DroneController - [INFO] - Mission validated: 14 waypoints
+2026-01-15 02:50:19 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-15 02:50:19 - DroneController - [INFO] - Home set: 28.424445, 77.527522
+2026-01-15 02:50:19 - DroneController - [INFO] - Using polygon geofence from KML (with home exception)
+2026-01-15 02:50:19 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-15 02:50:20 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-15 02:50:20 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-15 02:50:20 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-15 02:50:20 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-15 02:50:20 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-15 02:50:20 - DroneController - [INFO] - Armed successfully
+2026-01-15 02:50:20 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-15 02:50:22 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-15 02:50:22 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-15 02:50:22 - DroneController - [INFO] - Takeoff command accepted
+2026-01-15 02:50:24 - DroneController - [INFO] - Telemetry: 7246 msgs | GPS: (28.424445, 77.527522, 0.07m) | Battery: 82% | Mode: GUIDED
+2026-01-15 02:50:26 - DroneController - [INFO] - Target altitude reached: 2.57m
+2026-01-15 02:50:26 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-15 02:50:26 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-15 02:50:26 - DroneController - [INFO] - Starting mission with 14 waypoints
+2026-01-15 02:50:26 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-15 02:50:26 - DroneController - [INFO] - Sending waypoint: (28.422516, 77.526234, 3.00)
+2026-01-15 02:50:34 - DroneController - [ERROR] - Geofence violation: Outside polygon boundary: (28.424042, 77.527254)
+2026-01-15 02:50:34 - DroneController - [CRITICAL] - Emergency RTL triggered
+2026-01-15 02:50:34 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> RETURNING_HOME
+2026-01-15 02:50:34 - DroneController - [INFO] - Returning to home (28.424445, 77.527522) before landing
+2026-01-15 02:50:34 - DroneController - [INFO] - Sending waypoint: (28.424445, 77.527522, 2.92)
+2026-01-15 02:50:34 - DroneController - [INFO] - Telemetry: 8436 msgs | GPS: (28.424042, 77.527254, 2.92m) | Battery: 80% | Mode: GUIDED
+2026-01-15 02:50:44 - DroneController - [INFO] - Telemetry: 9629 msgs | GPS: (28.424125, 77.527308, 2.92m) | Battery: 77% | Mode: GUIDED
+2026-01-15 02:50:50 - DroneController - [INFO] - Reached home position - initiating LAND
+2026-01-15 02:50:50 - DroneController - [INFO] - State transition: RETURNING_HOME -> LANDING
+2026-01-15 02:50:50 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-15 02:50:51 - DroneController - [INFO] - Mode changed to LAND
+2026-01-15 02:50:51 - DroneController - [INFO] - Landing in progress
+2026-01-15 02:50:54 - DroneController - [INFO] - Telemetry: 10807 msgs | GPS: (28.424447, 77.527524, 1.17m) | Battery: 75% | Mode: LAND
+2026-01-15 02:51:04 - DroneController - [INFO] - Telemetry: 11966 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:51:14 - DroneController - [INFO] - Telemetry: 13119 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:51:24 - DroneController - [INFO] - Telemetry: 14272 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:51:34 - DroneController - [INFO] - Telemetry: 15426 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:51:44 - DroneController - [INFO] - Telemetry: 16579 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:51:54 - DroneController - [INFO] - Telemetry: 17732 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:52:04 - DroneController - [INFO] - Telemetry: 18886 msgs | GPS: (28.424446, 77.527524, 0.01m) | Battery: 74% | Mode: LAND
+2026-01-15 02:52:07 - DroneController - [INFO] - Stopping controller...
+2026-01-15 02:52:07 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 19174
+2026-01-15 02:52:07 - DroneController - [INFO] - Message type distribution: {'AHRS': 668, 'AHRS2': 667, 'ATTITUDE': 667, 'BATTERY_STATUS': 667, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 667, 'ESC_TELEMETRY_1_TO_4': 667, 'ESC_TELEMETRY_5_TO_8': 667, 'EXTENDED_SYS_STATE': 116, 'GLOBAL_POSITION_INT': 667, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 667, 'HEARTBEAT': 117, 'HOME_POSITION': 117, 'LOCAL_POSITION_NED': 667, 'MEMINFO': 667, 'MISSION_CURRENT': 667, 'NAV_CONTROLLER_OUTPUT': 667, 'PARAM_VALUE': 10, 'POSITION_TARGET_GLOBAL_INT': 95, 'POWER_STATUS': 667, 'RAW_IMU': 667, 'RC_CHANNELS': 667, 'SCALED_IMU2': 667, 'SCALED_IMU3': 667, 'SCALED_PRESSURE': 667, 'SCALED_PRESSURE2': 667, 'SERVO_OUTPUT_RAW': 667, 'SIMSTATE': 667, 'STATUSTEXT': 5, 'SYSTEM_TIME': 667, 'SYS_STATUS': 667, 'TERRAIN_REPORT': 667, 'TIMESYNC': 11, 'UNKNOWN_437': 23, 'VFR_HUD': 667, 'VIBRATION': 667, 'WIND': 667}
+2026-01-15 02:52:07 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 02:52:07 - DroneController - [INFO] - Command processor stopped
+2026-01-15 02:52:07 - DroneController - [INFO] - Stopping controller...
+2026-01-15 02:52:07 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 02:52:07 - DroneController - [INFO] - Controller stopped
+2026-01-15 02:52:07 - DroneController - [INFO] - Stopping controller...
+2026-01-15 02:52:07 - DroneController - [INFO] - Controller stopped
+2026-01-15 02:52:09 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/scan_drone/data/GBULcircle.kml
+2026-01-15 02:52:09 - DroneController - [INFO] - DroneController initialized
+2026-01-15 02:52:09 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 02:52:09 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 02:52:09 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 02:52:09 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 02:52:09 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 02:52:09 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 02:52:09 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 02:52:09 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 02:52:10 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 02:52:10 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 02:52:13 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 02:52:13 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_025213.csv
+2026-01-15 02:52:13 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 02:52:13 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 02:52:13 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 02:52:13 - DroneController - [INFO] - Command processor started
+2026-01-15 02:52:13 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 02:52:13 - DroneController - [INFO] - Mission controller started
+2026-01-15 02:52:13 - DroneController - [INFO] - All threads started
+2026-01-15 02:52:13 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 02:52:18 - DroneController - [INFO] - Loading mission with 30 points
+2026-01-15 02:52:18 - DroneController - [INFO] - Starting and home position: lat=28.424446, lon=77.527524
+2026-01-15 02:52:18 - DroneController - [INFO] - Mission validated: 30 waypoints
+2026-01-15 02:52:18 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-15 02:52:18 - DroneController - [INFO] - Home set: 28.424446, 77.527524
+2026-01-15 02:52:18 - DroneController - [INFO] - Using polygon geofence from KML (with home exception)
+2026-01-15 02:52:18 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-15 02:52:19 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-15 02:52:19 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-15 02:52:19 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-15 02:52:19 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-15 02:52:19 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-15 02:52:19 - DroneController - [INFO] - Armed successfully
+2026-01-15 02:52:19 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-15 02:52:21 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-15 02:52:21 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-15 02:52:21 - DroneController - [INFO] - Takeoff command accepted
+2026-01-15 02:52:23 - DroneController - [INFO] - Telemetry: 7330 msgs | GPS: (28.424446, 77.527524, 0.12m) | Battery: 74% | Mode: GUIDED
+2026-01-15 02:52:25 - DroneController - [INFO] - Target altitude reached: 2.57m
+2026-01-15 02:52:25 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-15 02:52:25 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-15 02:52:25 - DroneController - [INFO] - Starting mission with 30 waypoints
+2026-01-15 02:52:25 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-15 02:52:25 - DroneController - [INFO] - Sending waypoint: (28.424364, 77.527028, 3.00)
+2026-01-15 02:52:33 - DroneController - [INFO] - Telemetry: 8884 msgs | GPS: (28.424374, 77.527090, 2.99m) | Battery: 72% | Mode: GUIDED
+2026-01-15 02:52:34 - DroneController - [INFO] - Waypoint 1/30 reached
+2026-01-15 02:52:34 - DroneController - [INFO] - Sending waypoint: (28.424132, 77.527028, 3.00)
+2026-01-15 02:52:40 - DroneController - [INFO] - Waypoint 2/30 reached
+2026-01-15 02:52:40 - DroneController - [INFO] - Sending waypoint: (28.423986, 77.527080, 3.00)
+2026-01-15 02:52:43 - DroneController - [INFO] - Telemetry: 10077 msgs | GPS: (28.424036, 77.527060, 3.00m) | Battery: 69% | Mode: GUIDED
+2026-01-15 02:52:44 - DroneController - [INFO] - Waypoint 3/30 reached
+2026-01-15 02:52:44 - DroneController - [INFO] - Sending waypoint: (28.424510, 77.527080, 3.00)
+2026-01-15 02:52:53 - DroneController - [INFO] - Telemetry: 11272 msgs | GPS: (28.424438, 77.527079, 2.99m) | Battery: 67% | Mode: GUIDED
+2026-01-15 02:52:54 - DroneController - [INFO] - Waypoint 4/30 reached
+2026-01-15 02:52:54 - DroneController - [INFO] - Sending waypoint: (28.424594, 77.527131, 3.00)
+2026-01-15 02:52:57 - DroneController - [INFO] - Waypoint 5/30 reached
+2026-01-15 02:52:57 - DroneController - [INFO] - Sending waypoint: (28.423902, 77.527131, 3.00)
+2026-01-15 02:53:03 - DroneController - [INFO] - Telemetry: 12468 msgs | GPS: (28.424377, 77.527133, 3.00m) | Battery: 64% | Mode: GUIDED
+2026-01-15 02:53:09 - DroneController - [INFO] - Waypoint 6/30 reached
+2026-01-15 02:53:09 - DroneController - [INFO] - Sending waypoint: (28.423838, 77.527182, 3.00)
+2026-01-15 02:53:12 - DroneController - [INFO] - Waypoint 7/30 reached
+2026-01-15 02:53:12 - DroneController - [INFO] - Sending waypoint: (28.424658, 77.527182, 3.00)
+2026-01-15 02:53:13 - DroneController - [INFO] - Telemetry: 13661 msgs | GPS: (28.423842, 77.527175, 2.99m) | Battery: 62% | Mode: GUIDED
+2026-01-15 02:53:14 - DroneController - [INFO] - Stopping controller...
+2026-01-15 02:53:14 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 13821
+2026-01-15 02:53:14 - DroneController - [INFO] - Message type distribution: {'AHRS': 479, 'AHRS2': 479, 'ATTITUDE': 479, 'BATTERY_STATUS': 478, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 478, 'ESC_TELEMETRY_1_TO_4': 478, 'ESC_TELEMETRY_5_TO_8': 478, 'EXTENDED_SYS_STATE': 65, 'GLOBAL_POSITION_INT': 479, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 478, 'HEARTBEAT': 65, 'HOME_POSITION': 66, 'LOCAL_POSITION_NED': 478, 'MEMINFO': 479, 'MISSION_CURRENT': 479, 'NAV_CONTROLLER_OUTPUT': 479, 'PARAM_VALUE': 7, 'POSITION_TARGET_GLOBAL_INT': 196, 'POWER_STATUS': 479, 'RAW_IMU': 479, 'RC_CHANNELS': 479, 'SCALED_IMU2': 478, 'SCALED_IMU3': 478, 'SCALED_PRESSURE': 478, 'SCALED_PRESSURE2': 478, 'SERVO_OUTPUT_RAW': 479, 'SIMSTATE': 478, 'STATUSTEXT': 3, 'SYSTEM_TIME': 478, 'SYS_STATUS': 479, 'TERRAIN_REPORT': 478, 'TIMESYNC': 6, 'UNKNOWN_437': 13, 'VFR_HUD': 479, 'VIBRATION': 478, 'WIND': 478}
+2026-01-15 02:53:14 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 02:53:14 - DroneController - [INFO] - Command processor stopped
+2026-01-15 02:53:15 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 02:53:15 - DroneController - [INFO] - Controller stopped
+2026-01-15 02:53:15 - DroneController - [INFO] - Stopping controller...
+2026-01-15 02:53:15 - DroneController - [INFO] - Controller stopped

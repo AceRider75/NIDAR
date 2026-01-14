@@ -199,7 +199,7 @@ class DroneManager:
 
         # Setup controller configuration
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        KML_PATH = os.path.join(BASE_DIR, "data", "GBUsoccerxs.kml")
+        KML_PATH = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
         
         print(f"[DroneManager] Loading KML from: {KML_PATH}")
         
@@ -207,7 +207,7 @@ class DroneManager:
             connection_string='127.0.0.1:14551',
             geofence_mode="polygon",
             kml_file=KML_PATH,
-            polygon_name="Field",
+            polygon_name="MultiGeometry",
             max_altitude=30.0,
             geofence_radius=500.0,
             waypoint_radius=3.0,
