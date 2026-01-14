@@ -31,9 +31,21 @@ from datetime import datetime
 from sklearn.cluster import DBSCAN
 
 # ========= SPOT LOGGING CONFIGURATION =========
-# DO NOT CHANGE THIS PATH (your requested directory)
-MISSIONS_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/scan_drone/missions"
-os.makedirs(MISSIONS_DIR, exist_ok=True)
+# Default path; try to create it, but fall back to a repository-local `missions` directory on failure.
+_DEFAULT_MISSIONS_DIR = "/home/vihang/python_scripts/auto_test_with_rpi/scan_drone/missions"
+
+def _ensure_missions_dir(path_str: str) -> str:
+    p = Path(os.path.expanduser(path_str))
+    try:
+        p.mkdir(parents=True, exist_ok=True)
+        return str(p)
+    except OSError:
+        # Fallback to a local missions folder inside the package
+        fallback = Path(__file__).resolve().parent.parent / "missions"
+        fallback.mkdir(parents=True, exist_ok=True)
+        return str(fallback)
+
+MISSIONS_DIR = _ensure_missions_dir(_DEFAULT_MISSIONS_DIR)
 
 def get_current_mission_dir() -> str:
     """
@@ -239,7 +251,8 @@ class SpotTracker:
                  dilation_kernel_size: int = 0,
                  clustering_distance: float = 50.0,
                  min_cluster_samples: int = 1,
-                 min_spot_distance: float = 0.10):
+                 min_spot_distance: float = 0.10,
+                 use_clustering: bool = True):
         """
         Initialize spot tracker.
 
@@ -259,6 +272,8 @@ class SpotTracker:
         self.clustering_distance = clustering_distance
         self.min_cluster_samples = min_cluster_samples
         self.min_spot_distance = min_spot_distance
+        # Optionally bypass clustering/merge for debugging/visualization
+        self.use_clustering = use_clustering
 
         self.tracked_spots: Dict[int, TrackedSpot] = {}
         self.next_id = 1
@@ -393,8 +408,8 @@ class SpotTracker:
         """
         self.current_frame += 1
 
-        # Apply clustering followed by dilation if enabled
-        if mask is not None and len(centers) > 0:
+        # Apply clustering followed by dilation if enabled and requested
+        if self.use_clustering and mask is not None and len(centers) > 0:
             centers, contours, areas = self._cluster_and_merge_spots(
                 centers, contours, mask)
         elif areas is None:
@@ -1214,8 +1229,8 @@ def main():
     tracker = SpotTracker(
         max_distance=80,
         max_frames_missing=5,
-        dilation_kernel_size=15,
-        clustering_distance=60.0,
+        dilation_kernel_size=5,
+        clustering_distance=30.0,
         min_cluster_samples=1
     )
     msg = "[SpotTracker] ✓ Detector and tracker ready"
