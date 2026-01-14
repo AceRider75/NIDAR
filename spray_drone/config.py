@@ -55,4 +55,10 @@ class DroneConfig:
     # Spray system configuration
     spray_relay_pin: int = 6  # GPIO pin for relay control
     spray_duration: float = 10.0  # Default spray duration in seconds
+    
+    # Spiral spray pattern configuration
+    spiral_radius: float = 1.0  # Spiral radius in meters
+    spiral_points: int = 12  # Number of points in spiral pattern (more = smoother)
+    spiral_spray_duration: float = 5.0  # Spray duration per spiral point in seconds
+    enable_spiral_spray: bool = True  # Enable spiral pattern (False for stationary spray)
 

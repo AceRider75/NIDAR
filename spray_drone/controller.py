@@ -12,7 +12,7 @@ from datetime import datetime
 import logging
 
 from config import DroneConfig
-from utils import setup_logger, haversine_dist, DroneState, FlightMode, Waypoint
+from utils import setup_logger, haversine_dist, DroneState, FlightMode, Waypoint, generate_spiral_waypoints
 from telemetry import Telemetry
 from geofence import GeoFence
 from mission_plan import MissionPlanner
@@ -768,27 +768,129 @@ class DroneController:
                     self._add_log(
                         f"Waypoint {self.current_waypoint_index + 1}/{len(self.waypoints)} reached")
 
-                    # SPRAY AT WAYPOINT - Check if spray is enabled for this waypoint
+                    # SPIRAL SPRAY PATTERN - Check if spray is enabled for this waypoint
                     if getattr(waypoint, 'spray_enabled', True):  # Default to enabled
                         waypoint_spray_duration = getattr(waypoint, 'spray_duration', self.spray_controller.config.default_duration)
-                        self.logger.info(f"Starting spray at waypoint for {waypoint_spray_duration}s")
-                        self._add_log(f"Spraying for {waypoint_spray_duration}s")
                         
-                        if self.spray_controller.start_spray(waypoint_spray_duration):
-                            # Wait for spray to complete
-                            spray_start = time.time()
-                            while self.spray_controller.is_spraying() and time.time() - spray_start < waypoint_spray_duration + 5:
-                                # Check for emergency during spray
-                                if self.emergency_land.is_set() or self.emergency_rtl.is_set():
-                                    self.spray_controller.emergency_stop()
-                                    break
-                                time.sleep(0.1)
+                        # Check if spiral pattern is enabled in config
+                        if self.config.enable_spiral_spray:
+                            self.logger.info(f"Starting continuous spiral spray pattern at waypoint")
+                            self._add_log(f"Executing continuous spiral spray")
                             
-                            self.logger.info("Spray sequence completed at waypoint")
-                            self._add_log("Spray completed")
+                            # Generate spiral waypoints around current position
+                            spiral_waypoints = generate_spiral_waypoints(
+                                center_lat=waypoint.lat,
+                                center_lon=waypoint.lon,
+                                center_alt=waypoint.alt,
+                                radius=self.config.spiral_radius,
+                                num_points=self.config.spiral_points
+                            )
+                            
+                            # Validate spiral waypoints against geofence
+                            valid_spiral_points = []
+                            for spiral_wp in spiral_waypoints:
+                                valid, msg = self.geofence.is_within_bounds(
+                                    spiral_wp.lat, spiral_wp.lon, spiral_wp.alt)
+                                if valid:
+                                    spiral_wp.validated = True
+                                    valid_spiral_points.append(spiral_wp)
+                                else:
+                                    self.logger.warning(f"Spiral waypoint outside geofence: {msg}")
+                            
+                            if valid_spiral_points:
+                                # Start continuous spray for entire spiral pattern
+                                total_spiral_time = len(valid_spiral_points) * 8.0  # Estimate 8 seconds per point
+                                self.logger.info(f"Starting continuous spray for {total_spiral_time:.1f}s spiral pattern")
+                                
+                                if self.spray_controller.start_spray(total_spiral_time):
+                                    self.logger.info(f"Executing continuous spiral with {len(valid_spiral_points)} points")
+                                    
+                                    # Execute spiral pattern with continuous movement - no waiting at points
+                                    for idx, spiral_wp in enumerate(valid_spiral_points):
+                                        # Check for emergency during spiral
+                                        if self.emergency_land.is_set() or self.emergency_rtl.is_set():
+                                            self.spray_controller.emergency_stop()
+                                            break
+                                        
+                                        self.logger.info(f"Moving to spiral point {idx + 1}/{len(valid_spiral_points)}: "
+                                                       f"({spiral_wp.lat:.6f}, {spiral_wp.lon:.6f})")
+                                        self._send_waypoint(spiral_wp)
+                                        
+                                        # Short delay to allow drone to start moving towards point
+                                        # Don't wait for arrival - keep moving continuously
+                                        time.sleep(1.0)
+                                        
+                                        # Check if we've reached close enough to this point
+                                        check_start = time.time()
+                                        while time.time() - check_start < 8.0:  # Max 8 seconds per point
+                                            with self.telemetry_lock:
+                                                current_pos = (self.telemetry.lat, self.telemetry.lon, self.telemetry.alt)
+                                            
+                                            spiral_dist_h = haversine_dist(
+                                                current_pos[0], current_pos[1], spiral_wp.lat, spiral_wp.lon)
+                                            
+                                            # If we're getting close (within 3m), move to next point
+                                            if spiral_dist_h <= 3.0:
+                                                self.logger.debug(f"Close to spiral point {idx + 1}, continuing to next")
+                                                break
+                                            
+                                            # Check for emergency during movement
+                                            if self.emergency_land.is_set() or self.emergency_rtl.is_set():
+                                                self.spray_controller.emergency_stop()
+                                                break
+                                            
+                                            time.sleep(0.2)
+                                    
+                                    # Move back to original waypoint center after spiral
+                                    self.logger.info("Returning to waypoint center after spiral")
+                                    self._send_waypoint(waypoint)
+                                    
+                                    # Wait a moment to return to center
+                                    time.sleep(3.0)
+                                    
+                                    # Stop spray after spiral completion
+                                    self.spray_controller.stop_spray()
+                                    
+                                    self.logger.info("Continuous spiral spray pattern completed")
+                                    self._add_log("Continuous spiral spray completed")
+                                else:
+                                    self.logger.error("Failed to start spray for spiral pattern")
+                                    self._add_log("ERROR: Spiral spray failed to start")
+                            else:
+                                self.logger.warning("No valid spiral points - performing stationary spray")
+                                # Fallback to stationary spray
+                                if self.spray_controller.start_spray(waypoint_spray_duration):
+                                    spray_start = time.time()
+                                    while self.spray_controller.is_spraying() and time.time() - spray_start < waypoint_spray_duration + 5:
+                                        if self.emergency_land.is_set() or self.emergency_rtl.is_set():
+                                            self.spray_controller.emergency_stop()
+                                            break
+                                        time.sleep(0.1)
+                                    self.logger.info("Stationary spray completed")
+                                    self._add_log("Stationary spray completed")
+                                else:
+                                    self.logger.error("Failed to start fallback spray")
+                                    self._add_log("ERROR: Fallback spray failed")
                         else:
-                            self.logger.error("Failed to start spray at waypoint")
-                            self._add_log("ERROR: Spray failed")
+                            # Spiral disabled - use original stationary spray
+                            self.logger.info(f"Starting stationary spray at waypoint for {waypoint_spray_duration}s")
+                            self._add_log(f"Spraying for {waypoint_spray_duration}s")
+                            
+                            if self.spray_controller.start_spray(waypoint_spray_duration):
+                                # Wait for spray to complete
+                                spray_start = time.time()
+                                while self.spray_controller.is_spraying() and time.time() - spray_start < waypoint_spray_duration + 5:
+                                    # Check for emergency during spray
+                                    if self.emergency_land.is_set() or self.emergency_rtl.is_set():
+                                        self.spray_controller.emergency_stop()
+                                        break
+                                    time.sleep(0.1)
+                                
+                                self.logger.info("Spray sequence completed at waypoint")
+                                self._add_log("Spray completed")
+                            else:
+                                self.logger.error("Failed to start spray at waypoint")
+                                self._add_log("ERROR: Spray failed")
 
                     with self.mission_lock:
                         self.current_waypoint_index += 1

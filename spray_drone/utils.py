@@ -111,6 +111,83 @@ def dict_to_json(data_dict: dict, indent=4) -> str:
         print("Cannot convert dictionary to JSON:", e)
         return None
 
+def generate_spiral_waypoints(center_lat: float, center_lon: float, center_alt: float, 
+                             radius: float = 1.0, num_points: int = 12) -> List[Waypoint]:
+    """
+    Generate waypoints in a smooth outward spiral pattern for continuous movement
+    Creates a spiral that starts from near the center and spirals outward smoothly
+    
+    Args:
+        center_lat: Center latitude
+        center_lon: Center longitude 
+        center_alt: Center altitude
+        radius: Maximum spiral radius in meters
+        num_points: Number of waypoints in the spiral (more points = smoother movement)
+        
+    Returns:
+        List of Waypoint objects forming a smooth outward spiral pattern
+    """
+    waypoints = []
+    
+    # Convert radius to degrees approximately
+    lat_deg_per_meter = 1.0 / 111320.0
+    lon_deg_per_meter = 1.0 / (111320.0 * math.cos(math.radians(center_lat)))
+    
+    # Generate smooth spiral points
+    for i in range(num_points):
+        # Create smooth outward spiral
+        # More rotations for better coverage: 2-3 full rotations
+        angle = 3 * 2 * math.pi * i / num_points  # 3 full rotations
+        
+        # Spiral radius increases smoothly from small to max radius
+        # Start from 10% of radius to avoid center clustering
+        min_radius = radius * 0.1
+        current_radius = min_radius + (radius - min_radius) * (i / (num_points - 1))
+        
+        # Calculate offset in meters
+        delta_lat_m = current_radius * math.cos(angle)
+        delta_lon_m = current_radius * math.sin(angle)
+        
+        # Convert to lat/lon
+        new_lat = center_lat + (delta_lat_m * lat_deg_per_meter)
+        new_lon = center_lon + (delta_lon_m * lon_deg_per_meter)
+        
+        waypoint = Waypoint(
+            lat=new_lat,
+            lon=new_lon,
+            alt=center_alt,
+            radius=1.0,  # Small radius for continuous movement
+            spray_enabled=True,
+            spray_duration=0.0,  # Not used for continuous spray
+            validated=False  # Will be validated later
+        )
+        
+        waypoints.append(waypoint)
+    
+    return waypoints
+
+
+def test_spiral_pattern(center_lat: float = 40.7128, center_lon: float = -74.0060, 
+                       radius: float = 1.0, num_points: int = 8):
+    """
+    Test function to visualize spiral pattern generation
+    Prints the spiral waypoints for debugging
+    """
+    print(f"\nGenerating spiral pattern:")
+    print(f"Center: ({center_lat:.6f}, {center_lon:.6f})")
+    print(f"Radius: {radius}m, Points: {num_points}")
+    print("-" * 60)
+    
+    waypoints = generate_spiral_waypoints(center_lat, center_lon, 10.0, radius, num_points)
+    
+    for i, wp in enumerate(waypoints):
+        dist_from_center = haversine_dist(center_lat, center_lon, wp.lat, wp.lon)
+        print(f"Point {i:2d}: ({wp.lat:.6f}, {wp.lon:.6f}) - Distance: {dist_from_center:.2f}m")
+    
+    print(f"\nTotal waypoints: {len(waypoints)}")
+    return waypoints
+
+
 def log_message(device: str, message: str) -> str:
 
     os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
