@@ -53,6 +53,6 @@ class DroneConfig:
     log_level: int = logging.INFO
     
     # Spray system configuration
-    spray_relay_pin: int = 18  # GPIO pin for relay control
+    spray_relay_pin: int = 6  # GPIO pin for relay control
     spray_duration: float = 10.0  # Default spray duration in seconds
 
