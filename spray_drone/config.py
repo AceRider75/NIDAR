@@ -51,4 +51,8 @@ class DroneConfig:
     log_file: str = "drone_flight.log"
     telemetry_log_dir: str = "telemetry/"
     log_level: int = logging.INFO
+    
+    # Spray system configuration
+    spray_relay_pin: int = 18  # GPIO pin for relay control
+    spray_duration: float = 10.0  # Default spray duration in seconds
 

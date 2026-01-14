@@ -11,6 +11,13 @@ import math
 from datetime import datetime
 import logging
 
+# Add GPIO import for relay control
+try:
+    import RPi.GPIO as GPIO
+    GPIO_AVAILABLE = True
+except ImportError:
+    GPIO_AVAILABLE = False
+
 from config import DroneConfig
 from utils import setup_logger, haversine_dist, DroneState, FlightMode, Waypoint
 from telemetry import Telemetry
@@ -28,6 +35,7 @@ class DroneController:
     - Command queue for ordered execution
     - Separate threads for telemetry, heartbeat, and mission control
     - Single message reader pattern (only telemetry thread reads MAVLink)
+    - Simple relay-based spray control system
     """
 
     def __init__(self, config: DroneConfig = None):
@@ -113,8 +121,157 @@ class DroneController:
         self.telemetry_log_file = None
         self.telemetry_log_lock = threading.Lock()
 
-        self.logger.info("DroneController initialized")
+        # Spray system - Simple relay control
+        self.spray_relay_pin = getattr(self.config, 'spray_relay_pin', 18)  # GPIO pin for relay
+        self.spray_duration = getattr(self.config, 'spray_duration', 10.0)  # Default 10 seconds
+        self.spray_active = threading.Event()
+        self.spray_thread = None
+        self.spray_lock = threading.Lock()
+        self.total_spray_time = 0.0
+        self.spray_count = 0
+        
+        # Initialize GPIO for spray relay
+        self._init_spray_gpio()
+
+        self.logger.info("DroneController initialized with relay spray system")
         self.logger.info(f"Geofence mode: {self.config.geofence_mode}")
+
+    def _init_spray_gpio(self):
+        """Initialize GPIO for spray relay control"""
+        if not GPIO_AVAILABLE:
+            self.logger.warning("GPIO not available - spray system disabled")
+            return
+            
+        try:
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setwarnings(False)
+            GPIO.setup(self.spray_relay_pin, GPIO.OUT)
+            GPIO.output(self.spray_relay_pin, GPIO.LOW)  # Ensure relay is OFF initially
+            self.logger.info(f"Spray relay initialized on GPIO pin {self.spray_relay_pin}")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize spray GPIO: {e}")
+
+    def _spray_on(self):
+        """Turn spray relay ON"""
+        if GPIO_AVAILABLE:
+            try:
+                GPIO.output(self.spray_relay_pin, GPIO.HIGH)
+                self.logger.info("Spray ON")
+                self._add_log("Spray ON")
+                return True
+            except Exception as e:
+                self.logger.error(f"Failed to turn spray ON: {e}")
+                return False
+        else:
+            self.logger.info("Spray ON (simulation - no GPIO)")
+            return True
+
+    def _spray_off(self):
+        """Turn spray relay OFF"""
+        if GPIO_AVAILABLE:
+            try:
+                GPIO.output(self.spray_relay_pin, GPIO.LOW)
+                self.logger.info("Spray OFF")
+                self._add_log("Spray OFF")
+                return True
+            except Exception as e:
+                self.logger.error(f"Failed to turn spray OFF: {e}")
+                return False
+        else:
+            self.logger.info("Spray OFF (simulation - no GPIO)")
+            return True
+
+    def _spray_worker(self, duration: float):
+        """Worker thread for spray operation with timing"""
+        try:
+            start_time = time.time()
+            self.spray_active.set()
+            
+            # Turn spray ON
+            if not self._spray_on():
+                return
+                
+            self.logger.info(f"Spraying for {duration} seconds...")
+            
+            # Wait for duration or early stop
+            end_time = start_time + duration
+            while time.time() < end_time:
+                if not self.spray_active.is_set():  # Check for early stop
+                    break
+                time.sleep(0.1)
+            
+            # Turn spray OFF
+            self._spray_off()
+            
+            # Update statistics
+            actual_duration = time.time() - start_time
+            with self.spray_lock:
+                self.total_spray_time += actual_duration
+                self.spray_count += 1
+            
+            self.logger.info(f"Spray completed - Duration: {actual_duration:.1f}s")
+            self._add_log(f"Spray completed: {actual_duration:.1f}s")
+            
+        except Exception as e:
+            self.logger.error(f"Error in spray worker: {e}")
+            self._spray_off()  # Ensure spray is turned off on error
+        finally:
+            self.spray_active.clear()
+
+    def start_spray(self, duration: float = None) -> bool:
+        """
+        Start spraying for specified duration
+        
+        Args:
+            duration: Spray duration in seconds (uses config default if None)
+            
+        Returns:
+            True if spray started successfully
+        """
+        duration = duration or self.spray_duration
+        
+        # Check if already spraying
+        if self.spray_active.is_set():
+            self.logger.warning("Already spraying, ignoring start command")
+            return False
+        
+        # Start spray thread
+        self.spray_thread = threading.Thread(
+            target=self._spray_worker,
+            args=(duration,),
+            name="SprayWorker",
+            daemon=True
+        )
+        
+        try:
+            self.spray_thread.start()
+            self.logger.info(f"Started spraying for {duration}s")
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to start spray: {e}")
+            return False
+
+    def stop_spray(self) -> bool:
+        """Stop spraying immediately"""
+        if not self.spray_active.is_set():
+            return True
+            
+        self.logger.info("Stopping spray...")
+        self.spray_active.clear()
+        
+        # Emergency turn off
+        self._spray_off()
+        
+        # Wait for spray thread to finish
+        if self.spray_thread and self.spray_thread.is_alive():
+            self.spray_thread.join(timeout=3.0)
+        
+        self._add_log("Spray stopped")
+        return True
+
+    def is_spraying(self) -> bool:
+        """Check if currently spraying"""
+        return self.spray_active.is_set()
 
     # ==========================================================================
     # CONNECTION MANAGEMENT
@@ -362,15 +519,27 @@ class DroneController:
         return True
 
     def stop(self):
-        """Stop all threads gracefully"""
+        """Stop all threads gracefully including spray system"""
         self.logger.info("Stopping controller...")
         self._add_log("Shutting down...")
         self.running.clear()
         self.mission_active.clear()
 
+        # Stop spray system
+        self.stop_spray()
+
         # Wait for threads to finish
         for thread in self.threads:
             thread.join(timeout=2.0)
+
+        # Cleanup GPIO
+        if GPIO_AVAILABLE:
+            try:
+                GPIO.output(self.spray_relay_pin, GPIO.LOW)  # Ensure relay is OFF
+                GPIO.cleanup(self.spray_relay_pin)
+                self.logger.info("GPIO cleanup completed")
+            except Exception as e:
+                self.logger.error(f"GPIO cleanup error: {e}")
 
         # Close connection
         with self.connection_lock:
@@ -683,7 +852,7 @@ class DroneController:
     # ==========================================================================
 
     def _mission_controller(self):
-        """Main mission control loop"""
+        """Main mission control loop with spray integration"""
         self.logger.info("Mission controller started")
 
         while self.running.is_set():
@@ -696,12 +865,14 @@ class DroneController:
                 if self.emergency_rtl.is_set():
                     self.logger.critical("Emergency RTL triggered")
                     self.mission_active.clear()
+                    self.stop_spray()  # Stop spray immediately
                     self._execute_rtl()
                     self.emergency_rtl.clear()
                     continue
 
                 if self.emergency_land.is_set():
                     self.logger.critical("Emergency land triggered")
+                    self.stop_spray()  # Stop spray immediately
                     self._execute_land()
                     self.emergency_land.clear()
                     continue
@@ -710,6 +881,7 @@ class DroneController:
                 if time.time() - self.mission_start_time > self.config.mission_timeout:
                     self.logger.warning("Mission timeout - returning home")
                     self._add_log("Mission timeout - RTL")
+                    self.stop_spray()  # Stop spray on timeout
                     self._execute_rtl()
                     continue
 
@@ -724,6 +896,7 @@ class DroneController:
                 if not valid:
                     self.logger.error(f"Geofence violation: {msg}")
                     self._add_log(f"GEOFENCE VIOLATION: {msg}")
+                    self.stop_spray()  # Stop spray on geofence violation
                     self.emergency_rtl.set()
                     continue
 
@@ -752,27 +925,45 @@ class DroneController:
                     self._add_log(
                         f"Waypoint {self.current_waypoint_index + 1}/{len(self.waypoints)} reached")
 
+                    # SPRAY AT WAYPOINT - Check if spray is enabled for this waypoint
+                    if getattr(waypoint, 'spray_enabled', True):  # Default to enabled
+                        waypoint_spray_duration = getattr(waypoint, 'spray_duration', self.spray_duration)
+                        self.logger.info(f"Starting spray at waypoint for {waypoint_spray_duration}s")
+                        
+                        if self.start_spray(waypoint_spray_duration):
+                            # Wait for spray to complete
+                            spray_start = time.time()
+                            while self.spray_active.is_set() and time.time() - spray_start < waypoint_spray_duration + 5:
+                                # Check for emergency during spray
+                                if self.emergency_land.is_set() or self.emergency_rtl.is_set():
+                                    self.stop_spray()
+                                    break
+                                time.sleep(0.1)
+                            
+                            self.logger.info("Spray sequence completed at waypoint")
+                        else:
+                            self.logger.error("Failed to start spray at waypoint")
+
                     with self.mission_lock:
                         self.current_waypoint_index += 1
 
                     # Send next waypoint
                     if self.current_waypoint_index < len(self.waypoints):
                         next_wp = self.waypoints[self.current_waypoint_index]
+                        self.logger.info(f"Next waypoint: {self.current_waypoint_index + 1} "
+                                       f"({next_wp.lat:.6f}, {next_wp.lon:.6f})")
                         self._send_waypoint(next_wp)
                     else:
                         # Mission complete
                         self.logger.info("All waypoints reached")
-
-                        # send waypoint to home and land
-
                         self._add_log("All waypoints reached - returning control to main")
                         self.mission_active.clear()
-                        # self._execute_land()
 
                 time.sleep(0.1)
 
             except Exception as e:
                 self.logger.error(f"Mission controller error: {e}")
+                self.stop_spray()  # Stop spray on any error
                 time.sleep(0.5)
 
         self.logger.info("Mission controller stopped")
@@ -1118,28 +1309,14 @@ class DroneController:
         return self._execute_rtl()
     
     def emergency_stop(self):
-        """Emergency landing"""
+        """Emergency landing with immediate spray stop"""
         self.logger.critical("EMERGENCY STOP")
         self._add_log("EMERGENCY STOP")
+        
+        # Stop spray immediately
+        self.stop_spray()
+        
         self.emergency_land.set()
-    
-    def pause_mission(self):
-        """Pause current mission"""
-        if self.get_state() == DroneState.MISSION_ACTIVE:
-            self.mission_active.clear()
-            self._set_mode(FlightMode.LOITER)
-            self._change_state(DroneState.MISSION_PAUSED)
-            self.logger.info("Mission paused")
-            self._add_log("Mission paused")
-    
-    def resume_mission(self):
-        """Resume paused mission"""
-        if self.get_state() == DroneState.MISSION_PAUSED:
-            self._set_mode(FlightMode.GUIDED)
-            self.mission_active.set()
-            self._change_state(DroneState.MISSION_ACTIVE)
-            self.logger.info("Mission resumed")
-            self._add_log("Mission resumed")
 
     # ==========================================================================
     # LOW-LEVEL COMMANDS
@@ -1425,8 +1602,27 @@ class DroneController:
         with self.telemetry_lock:
             return self.telemetry.to_dict()
     
+    def manual_spray(self, duration: float = None) -> bool:
+        """Manually trigger spray (for testing)"""
+        duration = duration or self.spray_duration
+        self.logger.info(f"Manual spray activated for {duration}s")
+        self._add_log(f"Manual spray: {duration}s")
+        return self.start_spray(duration)
+
+    def get_spray_status(self) -> dict:
+        """Get spray system status"""
+        with self.spray_lock:
+            return {
+                'active': self.spray_active.is_set(),
+                'gpio_available': GPIO_AVAILABLE,
+                'relay_pin': self.spray_relay_pin,
+                'default_duration': self.spray_duration,
+                'total_spray_time': self.total_spray_time,
+                'spray_count': self.spray_count
+            }
+
     def get_status(self) -> Dict[str, Any]:
-        """Get comprehensive status"""
+        """Get comprehensive status including spray system"""
         with self.telemetry_lock:
             telem = self.telemetry.to_dict()
         
@@ -1447,6 +1643,7 @@ class DroneController:
             'healthy': self.health_ok.is_set(),
             'telemetry': telem,
             'mission': mission_info,
+            'spray': self.get_spray_status(),
             'geofence': {
                 'mode': self.geofence.mode,
                 'enabled': self.geofence.enabled,
