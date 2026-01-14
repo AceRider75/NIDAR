@@ -58,7 +58,7 @@ class DroneConfig:
     
     # Spiral spray pattern configuration
     spiral_radius: float = 1.0  # Spiral radius in meters
-    spiral_points: int = 12  # Number of points in spiral pattern (more = smoother)
+    spiral_points: int = 5  # Number of points in spiral pattern (more = smoother)
     spiral_spray_duration: float = 5.0  # Spray duration per spiral point in seconds
     enable_spiral_spray: bool = True  # Enable spiral pattern (False for stationary spray)
 

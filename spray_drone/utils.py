@@ -112,7 +112,7 @@ def dict_to_json(data_dict: dict, indent=4) -> str:
         return None
 
 def generate_spiral_waypoints(center_lat: float, center_lon: float, center_alt: float, 
-                             radius: float = 1.0, num_points: int = 12) -> List[Waypoint]:
+                             radius: float = 1.0, num_points: int = 5) -> List[Waypoint]:
     """
     Generate waypoints in a smooth outward spiral pattern for continuous movement
     Creates a spiral that starts from near the center and spirals outward smoothly
