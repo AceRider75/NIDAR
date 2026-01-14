@@ -75,10 +75,22 @@ def log_spot_data_logfile(spot_id: int, drone_coords: tuple, spot_coords: tuple)
     """
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    d_lat = spot_coords[0] - drone_coords[0]
+    d_lon = spot_coords[1] - drone_coords[1]
+    dist_root = math.sqrt(d_lat**2 + d_lon**2)
+    print(f"[SpotTracker] Spot {spot_id} offset magnitude (sqrt(dlat^2+dlon^2)): {dist_root:.9f}")
+
+    # Calculate distance in meters
+    R = 6371000.0
+    d_lat_m = d_lat * (math.pi / 180) * R
+    d_lon_m = d_lon * (math.pi / 180) * R * math.cos(math.radians(drone_coords[0]))
+    dist_m = math.sqrt(d_lat_m**2 + d_lon_m**2)
+    print(f"[SpotTracker] Spot {spot_id} offset in meters: {dist_m:.4f} m")
+
     entry = (
         f"{timestamp} | spot_id={spot_id} | "
         f"drone_lat={drone_coords[0]:.7f}, drone_lon={drone_coords[1]:.7f}, drone_alt={drone_coords[2]:.2f} | "
-        f"spot_lat={spot_coords[0]:.7f}, spot_lon={spot_coords[1]:.7f}, d_lat={spot_coords[0] - drone_coords[0]:.7f}, d_lon={spot_coords[1] - drone_coords[1]:.7f}"
+        f"spot_lat={spot_coords[0]:.7f}, spot_lon={spot_coords[1]:.7f}, d_lat={d_lat:.7f}, d_lon={d_lon:.7f}"
     )
 
     logger.info(entry)  # logged + printed
