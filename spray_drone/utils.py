@@ -112,20 +112,20 @@ def dict_to_json(data_dict: dict, indent=4) -> str:
         return None
 
 def generate_spiral_waypoints(center_lat: float, center_lon: float, center_alt: float, 
-                             radius: float = 1.0, num_points: int = 5) -> List[Waypoint]:
+                             radius: float = 1.0, num_points: int = 12) -> List[Waypoint]:
     """
-    Generate waypoints in a smooth outward spiral pattern for continuous movement
-    Creates a spiral that starts from near the center and spirals outward smoothly
+    Generate waypoints in an optimal spiral pattern for maximum area coverage
+    Uses Archimedes spiral with optimal spacing for spray coverage
     
     Args:
         center_lat: Center latitude
         center_lon: Center longitude 
         center_alt: Center altitude
         radius: Maximum spiral radius in meters
-        num_points: Number of waypoints in the spiral (more points = smoother movement)
+        num_points: Number of waypoints (12-16 optimal for 1m radius)
         
     Returns:
-        List of Waypoint objects forming a smooth outward spiral pattern
+        List of Waypoint objects forming optimal coverage spiral
     """
     waypoints = []
     
@@ -133,20 +133,27 @@ def generate_spiral_waypoints(center_lat: float, center_lon: float, center_alt: 
     lat_deg_per_meter = 1.0 / 111320.0
     lon_deg_per_meter = 1.0 / (111320.0 * math.cos(math.radians(center_lat)))
     
-    # Generate smooth spiral points
+    # Archimedes spiral: r = a * theta
+    # For maximum coverage, space points based on spray width
+    # Assuming spray width of ~0.3m, we need ~6-7 spirals for 1m radius
+    max_theta = 6 * 2 * math.pi  # 6 full rotations for good coverage
+    
     for i in range(num_points):
-        # Create smooth outward spiral
-        # More rotations for better coverage: 2-3 full rotations
-        angle = 3 * 2 * math.pi * i / num_points  # 3 full rotations
+        # Linear progression through spiral
+        progress = i / (num_points - 1) if num_points > 1 else 0
+        theta = max_theta * progress
         
-        # Spiral radius increases smoothly from small to max radius
-        # Start from 10% of radius to avoid center clustering
-        min_radius = radius * 0.1
-        current_radius = min_radius + (radius - min_radius) * (i / (num_points - 1))
+        # Archimedes spiral - radius increases linearly with angle
+        current_radius = radius * progress
         
-        # Calculate offset in meters
-        delta_lat_m = current_radius * math.cos(angle)
-        delta_lon_m = current_radius * math.sin(angle)
+        # Add small randomization to avoid perfect geometric patterns
+        # This helps with natural coverage variation
+        angle_offset = 0.1 * math.sin(theta * 3)  # Small perturbation
+        theta_adjusted = theta + angle_offset
+        
+        # Calculate position
+        delta_lat_m = current_radius * math.cos(theta_adjusted)
+        delta_lon_m = current_radius * math.sin(theta_adjusted)
         
         # Convert to lat/lon
         new_lat = center_lat + (delta_lat_m * lat_deg_per_meter)
@@ -156,13 +163,131 @@ def generate_spiral_waypoints(center_lat: float, center_lon: float, center_alt: 
             lat=new_lat,
             lon=new_lon,
             alt=center_alt,
-            radius=1.0,  # Small radius for continuous movement
+            radius=0.8,  # Small acceptance radius for smooth movement
             spray_enabled=True,
-            spray_duration=0.0,  # Not used for continuous spray
-            validated=False  # Will be validated later
+            spray_duration=0.0,  # Continuous spray, not per-waypoint
+            validated=False
         )
         
         waypoints.append(waypoint)
+    
+    return waypoints
+
+
+def generate_zigzag_waypoints(center_lat: float, center_lon: float, center_alt: float,
+                             radius: float = 1.0, spacing: float = 0.3) -> List[Waypoint]:
+    """
+    Generate waypoints in a zig-zag pattern for comparison
+    Creates parallel lines across the circle
+    
+    Args:
+        center_lat: Center latitude
+        center_lon: Center longitude
+        center_alt: Center altitude  
+        radius: Circle radius in meters
+        spacing: Distance between parallel lines in meters
+        
+    Returns:
+        List of Waypoint objects forming zig-zag pattern
+    """
+    waypoints = []
+    
+    lat_deg_per_meter = 1.0 / 111320.0
+    lon_deg_per_meter = 1.0 / (111320.0 * math.cos(math.radians(center_lat)))
+    
+    # Calculate number of lines needed
+    num_lines = int(2 * radius / spacing) + 1
+    
+    for i in range(num_lines):
+        # Y position for this line
+        y_offset = -radius + (i * spacing)
+        
+        # Calculate line length at this Y position (chord length)
+        if abs(y_offset) >= radius:
+            continue
+            
+        x_extent = math.sqrt(radius**2 - y_offset**2)
+        
+        # Create points along this line
+        num_points_per_line = max(3, int(2 * x_extent / 0.2))  # Point every 0.2m
+        
+        for j in range(num_points_per_line):
+            if i % 2 == 0:  # Left to right
+                x_offset = -x_extent + (j * 2 * x_extent / (num_points_per_line - 1))
+            else:  # Right to left (zig-zag)
+                x_offset = x_extent - (j * 2 * x_extent / (num_points_per_line - 1))
+            
+            # Convert to lat/lon
+            new_lat = center_lat + (y_offset * lat_deg_per_meter)
+            new_lon = center_lon + (x_offset * lon_deg_per_meter)
+            
+            waypoint = Waypoint(
+                lat=new_lat,
+                lon=new_lon,
+                alt=center_alt,
+                radius=0.8,
+                spray_enabled=True,
+                spray_duration=0.0,
+                validated=False
+            )
+            
+            waypoints.append(waypoint)
+    
+    return waypoints
+
+
+def generate_concentric_circles_waypoints(center_lat: float, center_lon: float, center_alt: float,
+                                        radius: float = 1.0, num_circles: int = 4) -> List[Waypoint]:
+    """
+    Generate waypoints in concentric circles pattern
+    Good for ensuring even coverage without missing spots
+    
+    Args:
+        center_lat: Center latitude
+        center_lon: Center longitude
+        center_alt: Center altitude
+        radius: Maximum radius in meters
+        num_circles: Number of concentric circles
+        
+    Returns:
+        List of Waypoint objects forming concentric circles
+    """
+    waypoints = []
+    
+    lat_deg_per_meter = 1.0 / 111320.0
+    lon_deg_per_meter = 1.0 / (111320.0 * math.cos(math.radians(center_lat)))
+    
+    for circle_idx in range(num_circles):
+        circle_radius = radius * (circle_idx + 1) / num_circles
+        
+        # Points per circle based on circumference (one point per ~0.3m)
+        circumference = 2 * math.pi * circle_radius
+        num_points = max(4, int(circumference / 0.3))
+        
+        for i in range(num_points):
+            angle = 2 * math.pi * i / num_points
+            
+            # Add slight offset to each circle to avoid overlap
+            angle_offset = (circle_idx * math.pi / num_circles)
+            angle += angle_offset
+            
+            delta_lat_m = circle_radius * math.cos(angle)
+            delta_lon_m = circle_radius * math.sin(angle)
+            
+            new_lat = center_lat + (delta_lat_m * lat_deg_per_meter)
+            new_lon = center_lon + (delta_lon_m * lon_deg_per_meter)
+            
+            waypoint = Waypoint(
+                lat=new_lat,
+                lon=new_lon,
+                alt=center_alt,
+                radius=0.8,
+                spray_enabled=True,
+                spray_duration=0.0,
+                validated=False
+            )
+            
+            waypoints.append(waypoint)
     
     return waypoints
 

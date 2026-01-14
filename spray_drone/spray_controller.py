@@ -85,7 +85,7 @@ class SprayController:
             GPIO.setmode(GPIO.BCM)
             GPIO.setwarnings(False)
             GPIO.setup(self.config.relay_pin, GPIO.OUT)
-            GPIO.output(self.config.relay_pin, GPIO.LOW)  # Ensure relay is OFF initially
+            GPIO.output(self.config.relay_pin, GPIO.HIGH)  # Ensure relay is OFF initially
             self.gpio_initialized = True
             self.logger.info(f"Spray relay initialized on GPIO pin {self.config.relay_pin}")
             

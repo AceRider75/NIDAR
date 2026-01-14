@@ -799,7 +799,8 @@ class DroneController:
                             
                             if valid_spiral_points:
                                 # Start continuous spray for entire spiral pattern
-                                total_spiral_time = len(valid_spiral_points) * 8.0  # Estimate 8 seconds per point
+                                # total_spiral_time = len(valid_spiral_points) * 8.0  # Estimate 8 seconds per point
+                                total_spiral_time = 15
                                 self.logger.info(f"Starting continuous spray for {total_spiral_time:.1f}s spiral pattern")
                                 
                                 if self.spray_controller.start_spray(total_spiral_time):
