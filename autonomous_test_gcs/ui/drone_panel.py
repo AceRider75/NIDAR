@@ -86,28 +86,6 @@ class DronePanel(ctk.CTkFrame):
             command=self.land
         ).grid(row=0, column=2, padx=3, pady=2)
 
-        # Transfer Waypoints button for scanner drone
-        if self.title == "Scanner Drone":
-            self.transfer_btn = ctk.CTkButton(
-                self,
-                text="Transfer Waypoints",
-                font=("Arial", 9),
-                fg_color="#FFC107",
-                hover_color="#FFA000",
-                text_color="black",
-                height=28,
-                command=self._transfer_waypoints
-            )
-            self.transfer_btn.pack(pady=4, padx=5, fill="x")
-
-            self.transfer_status_label = ctk.CTkLabel(
-                self,
-                text="Ready",
-                font=("Arial", 8),
-                text_color="#4CAF50"
-            )
-            self.transfer_status_label.pack(pady=1)
-
         # Telemetry Boxes with better styling
         telemetry_label = ctk.CTkLabel(
             self,

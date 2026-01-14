@@ -44,9 +44,14 @@ class Waypoint:
     lat: float
     lon: float
     alt: float
-    radius: float = 5.0
-    timestamp: float = field(default_factory=time.time)
+    radius: float = 5.0  # meters
     validated: bool = False
+    spray_enabled: bool = True  # Enable spraying at this waypoint
+    spray_duration: float = 10.0  # Spray duration in seconds
+    
+    def __str__(self):
+        return f"WP({self.lat:.6f}, {self.lon:.6f}, {self.alt:.1f}m, " \
+               f"r={self.radius}m, spray={'ON' if self.spray_enabled else 'OFF'})"
 
 
 def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging.Logger:
