@@ -610,7 +610,7 @@ class GCSController:
                         'index': i + 1,
                         'latitude': wp.get('lat', 0),
                         'longitude': wp.get('lon', 0),
-                        'altitude': wp.get('alt', 3.0),
+                        'altitude': wp.get('alt', 4.0),
                         'type': wp.get('type', 'waypoint')
                     })
             return True
@@ -629,7 +629,7 @@ class GCSController:
                     waypoint = {
                         'lat': float(row.get('latitude', row.get('lat', 0))),
                         'lon': float(row.get('longitude', row.get('lon', 0))),
-                        'alt': float(row.get('altitude', row.get('alt', 3.0))),
+                        'alt': float(row.get('altitude', row.get('alt', 4.0))),
                         'type': row.get('type', 'waypoint')
                     }
                     waypoints.append(waypoint)

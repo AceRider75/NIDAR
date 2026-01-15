@@ -219,7 +219,7 @@ class DroneManager:
                 start_packet = {
                     "command": "START",
                     "params": {
-                        "altitude": 3.0
+                        "altitude": 4.0
                     }
                 }
                 self.handle_command(start_packet)
