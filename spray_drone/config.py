@@ -33,7 +33,7 @@ class DroneConfig:
     waypoint_radius: float = 5.0  # meters
     home_tolerance: float = 1.0  # meters
     altitude_tolerance: float = 0.5
-    default_altitude: float = 3.0
+    default_altitude: float = 4.0
     mission_timeout: int = 1800  # 30 minutes
     optimize_waypoint_order: bool = True  # Use nearest-neighbor optimization
     

@@ -223,7 +223,7 @@ class DroneManager:
             geofence_radius=500.0,
             waypoint_radius=3.0,
             optimize_waypoint_order=True,
-            default_altitude=3.0
+            default_altitude=4.0
         )
         
         # Initialize controller
@@ -350,7 +350,7 @@ class DroneManager:
         if cmd == "START":
             # Get mission parameters from command (or use defaults)
             waypoints = params.get("waypoints", [])
-            altitude = params.get("altitude", 3.0)
+            altitude = params.get("altitude", 4.0)
             
             # If no waypoints provided, generate spiral pattern from KML
             if not waypoints and self.controller.mission_planner:
@@ -523,7 +523,7 @@ class DroneManager:
                 start_packet = {
                     "command": "START",
                     "params": {
-                        "altitude": 3.0
+                        "altitude": 4.0
                     }
                 }
                 self.handle_command(start_packet)

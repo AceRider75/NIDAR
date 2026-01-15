@@ -128,9 +128,44 @@ class GCSController:
             if "yellow_spots" in packet:
                 self._process_yellow_spots(state, packet["yellow_spots"])
 
+    # def _process_yellow_spots(self, state: DroneState, spots: List[Dict[str, Any]]) -> None:
+    #     """Process and store yellow spot detections with full details."""
+    #     with state.yellow_spots_lock:
+    #         for spot in spots:
+    #             spot_id = str(spot.get("id"))
+    #             if not spot_id:
+    #                 continue
+                
+    #             try:
+    #                 coord_data = {
+    #                     "lat": float(spot.get("lat", 0)),
+    #                     "lon": float(spot.get("lon", 0)),
+    #                     "cx": int(spot.get("cx", 0)),
+    #                     "cy": int(spot.get("cy", 0)),
+    #                     "area": float(spot.get("area", 0)),
+    #                     "rank": int(spot.get("rank", 0)),
+    #                     "timestamp": time.time()
+    #                 }
+                    
+    #                 if spot_id not in state.yellow_spots:
+    #                     state.yellow_spots[spot_id] = []
+    #                     log_message("GCSController", f"New spot detected: ID={spot_id}")
+                    
+    #                 state.yellow_spots[spot_id].append(coord_data)
+                    
+    #                 log_message("GCSController", 
+    #                     f"Spot {spot_id}: ({coord_data['lat']:.7f}, {coord_data['lon']:.7f}) "
+    #                     f"Rank={coord_data['rank']}, Area={coord_data['area']:.0f}px - "
+    #                     f"Total coords: {len(state.yellow_spots[spot_id])}")
+                        
+    #             except (ValueError, TypeError) as e:
+    #                 log_message("GCSController", f"Error processing spot {spot_id}: {e}")
+
     def _process_yellow_spots(self, state: DroneState, spots: List[Dict[str, Any]]) -> None:
         """Process and store yellow spot detections with full details."""
         with state.yellow_spots_lock:
+            current_time = time.time()
+            
             for spot in spots:
                 spot_id = str(spot.get("id"))
                 if not spot_id:
@@ -144,20 +179,27 @@ class GCSController:
                         "cy": int(spot.get("cy", 0)),
                         "area": float(spot.get("area", 0)),
                         "rank": int(spot.get("rank", 0)),
-                        "timestamp": time.time()
+                        "timestamp": current_time
                     }
                     
                     if spot_id not in state.yellow_spots:
                         state.yellow_spots[spot_id] = []
                         log_message("GCSController", f"New spot detected: ID={spot_id}")
-                    
-                    state.yellow_spots[spot_id].append(coord_data)
-                    
-                    log_message("GCSController", 
-                        f"Spot {spot_id}: ({coord_data['lat']:.7f}, {coord_data['lon']:.7f}) "
-                        f"Rank={coord_data['rank']}, Area={coord_data['area']:.0f}px - "
-                        f"Total coords: {len(state.yellow_spots[spot_id])}")
+                        state.yellow_spots[spot_id].append(coord_data)
+                    else:
+                        # Only add if this is a NEW detection (not from the same packet burst)
+                        # Check if last detection was more than 0.5 seconds ago
+                        last_detection = state.yellow_spots[spot_id][-1]
+                        time_since_last = current_time - last_detection["timestamp"]
                         
+                        # Only add if enough time has passed (new unique detection)
+                        if time_since_last > 0.5:  # 500ms threshold
+                            state.yellow_spots[spot_id].append(coord_data)
+                            log_message("GCSController", 
+                                f"Spot {spot_id}: ({coord_data['lat']:.7f}, {coord_data['lon']:.7f}) "
+                                f"Rank={coord_data['rank']}, Area={coord_data['area']:.0f}px - "
+                                f"Total coords: {len(state.yellow_spots[spot_id])}")
+                    
                 except (ValueError, TypeError) as e:
                     log_message("GCSController", f"Error processing spot {spot_id}: {e}")
 
@@ -227,21 +269,58 @@ class GCSController:
                 
                 return summary
 
-    def get_spot_centers(self, drone: DroneName) -> List[Tuple[float, float]]:
+    def get_spot_centers(self, drone: DroneName, min_detections: int = 2) -> List[Tuple[float, float]]:
         """
-        Get averaged center coordinates for each spot.
-        Returns list of (lat, lon) tuples representing the average position of each spot.
+        Get averaged center coordinates for each spot that has been detected at least min_detections times.
+        Returns list of (lat, lon) tuples representing the average position of each valid spot.
+        
+        Args:
+            drone: Which drone to get spots from
+            min_detections: Minimum number of detections required for a spot to be considered valid (default: 2)
         """
         with self.lock:
             state = self.drone_states[drone.value]
             with state.yellow_spots_lock:
                 centers = []
                 for spot_id, coords in state.yellow_spots.items():
-                    if coords:
+                    # Only include spots that have been detected min_detections or more times
+                    if coords and len(coords) >= min_detections:
                         avg_lat = sum(c["lat"] for c in coords) / len(coords)
                         avg_lon = sum(c["lon"] for c in coords) / len(coords)
                         centers.append((avg_lat, avg_lon))
                 return centers
+
+    def get_valid_yellow_spots(self, drone: DroneName, min_detections: int = 2) -> Dict[str, Dict]:
+        """
+        Get yellow spots that have been detected at least min_detections times.
+        Returns averaged coordinates for each valid spot.
+        
+        Args:
+            drone: Which drone to get spots from
+            min_detections: Minimum number of detections required for a spot to be considered valid (default: 2)
+            
+        Returns:
+            Dictionary with spot_id as key and dict with avg lat, lon, area, detection_count as value
+        """
+        with self.lock:
+            state = self.drone_states[drone.value]
+            with state.yellow_spots_lock:
+                valid_spots = {}
+                for spot_id, coords in state.yellow_spots.items():
+                    if coords and len(coords) >= min_detections:
+                        avg_lat = sum(c["lat"] for c in coords) / len(coords)
+                        avg_lon = sum(c["lon"] for c in coords) / len(coords)
+                        avg_area = sum(c["area"] for c in coords) / len(coords)
+                        valid_spots[spot_id] = {
+                            "lat": avg_lat,
+                            "lon": avg_lon,
+                            "area": avg_area,
+                            "detection_count": len(coords),
+                            "rank": coords[-1].get("rank", 0),
+                            "first_seen": coords[0]["timestamp"],
+                            "last_seen": coords[-1]["timestamp"]
+                        }
+                return valid_spots
 
     def clear_yellow_spots(self, drone: DroneName) -> None:
         """Clear all stored yellow spots for a drone."""
@@ -336,11 +415,16 @@ class GCSController:
             {"x": x, "y": y, "z": z}
         )
 
-    def transfer_waypoints_to_sprayer(self, scanner_drone: DroneName = DroneName.Scanner) -> bool:
+    def transfer_waypoints_to_sprayer(self, scanner_drone: DroneName = DroneName.Scanner, min_detections: int = 2) -> bool:
         """
         Transfer detected yellow spot centers from scanner to sprayer drone incrementally.
+        Only transfers spots that have been detected at least min_detections times.
         Also checks for imported waypoints if no yellow spots are available.
         Sends START_WAYPOINTS, then ADD_WAYPOINT for each, and END_WAYPOINTS.
+        
+        Args:
+            scanner_drone: Which drone to get spots from
+            min_detections: Minimum number of detections required for a spot to be considered valid (default: 2)
         """
         try:
             # Check if sprayer radio is connected
@@ -349,22 +433,34 @@ class GCSController:
                 log_message("GCSController", "Sprayer radio not connected - cannot transfer waypoints")
                 return False
 
-            # First try to get yellow spots from scanner
-            centers = self.get_spot_centers(scanner_drone)
+            # Get total spots vs valid spots for logging
+            all_spots = self.get_yellow_spots(scanner_drone)
+            total_spots = len(all_spots)
             
-            # If no yellow spots, check for imported/set waypoints
+            # Get only valid yellow spots from scanner (filtered by min_detections)
+            centers = self.get_spot_centers(scanner_drone, min_detections=min_detections)
+            
+            if centers:
+                log_message("GCSController", 
+                    f"Valid spots: {len(centers)}/{total_spots} (min {min_detections} detections)")
+            
+            # If no valid yellow spots, check for imported/set waypoints
             if not centers:
                 if hasattr(self, 'sprayer_waypoints') and self.sprayer_waypoints:
-                    log_message("GCSController", f"No yellow spots, using {len(self.sprayer_waypoints)} imported waypoints")
-                    centers = [(wp.get('lat', wp.get('latitude')), wp.get('lon', wp.get('longitude'))) 
-                               for wp in self.sprayer_waypoints 
-                               if wp.get('lat', wp.get('latitude')) and wp.get('lon', wp.get('longitude'))]
+                    # Filter imported waypoints by detection_count as well
+                    valid_imported = [wp for wp in self.sprayer_waypoints 
+                                     if wp.get('detection_count', min_detections) >= min_detections]
+                    if valid_imported:
+                        log_message("GCSController", f"No valid yellow spots, using {len(valid_imported)} imported waypoints")
+                        centers = [(wp.get('lat', wp.get('latitude')), wp.get('lon', wp.get('longitude'))) 
+                                   for wp in valid_imported 
+                                   if wp.get('lat', wp.get('latitude')) and wp.get('lon', wp.get('longitude'))]
                 
             if not centers:
-                log_message("GCSController", "No yellow spots or imported waypoints to transfer")
+                log_message("GCSController", f"No valid spots (≥{min_detections} detections) or imported waypoints to transfer")
                 return False
 
-            default_alt = 3.0
+            default_alt = 4.0
             total = len(centers)
             log_message("GCSController", f"Transferring {total} waypoints to Sprayer...")
 
@@ -401,10 +497,18 @@ class GCSController:
             return False
 
     def transfer_waypoints_detailed(self, scanner_drone: DroneName = DroneName.Scanner, 
-                                   altitude: float = 3.0, 
-                                   use_weighted_centers: bool = True) -> bool:
+                                   altitude: float = 4.0, 
+                                   use_weighted_centers: bool = True,
+                                   min_detections: int = 2) -> bool:
         """
         Incremental transfer with detailed options.
+        Only transfers spots that have been detected at least min_detections times.
+        
+        Args:
+            scanner_drone: Which drone to get spots from
+            altitude: Altitude for waypoints
+            use_weighted_centers: Whether to weight by area
+            min_detections: Minimum number of detections required for a spot to be considered valid (default: 2)
         """
         try:
             with self.lock:
@@ -415,9 +519,11 @@ class GCSController:
                         return False
 
                     # Build list first to know expected_count
+                    # Only include spots with min_detections or more coordinates
+                    total_spots = len(state.yellow_spots)
                     points = []
                     for spot_id, coords in state.yellow_spots.items():
-                        if not coords:
+                        if not coords or len(coords) < min_detections:
                             continue
                         if use_weighted_centers:
                             total_weight = sum(c.get("area", 1.0) for c in coords)
@@ -431,10 +537,12 @@ class GCSController:
                             points.append((avg_lat, avg_lon))
 
             if not points:
-                log_message("GCSController", "No valid waypoints to transfer")
+                log_message("GCSController", f"No valid waypoints (≥{min_detections} detections) to transfer")
                 return False
 
             total = len(points)
+            log_message("GCSController", 
+                f"Valid spots: {total}/{total_spots} (min {min_detections} detections)")
             
             # Start batch - send multiple times for reliability
             for _ in range(2):
@@ -603,7 +711,7 @@ class GCSController:
                         'index': i + 1,
                         'latitude': wp.get('lat', 0),
                         'longitude': wp.get('lon', 0),
-                        'altitude': wp.get('alt', 3.0),
+                        'altitude': wp.get('alt', 4.0),
                         'type': wp.get('type', 'waypoint')
                     })
             return True
@@ -622,7 +730,7 @@ class GCSController:
                     waypoint = {
                         'lat': float(row.get('latitude', row.get('lat', 0))),
                         'lon': float(row.get('longitude', row.get('lon', 0))),
-                        'alt': float(row.get('altitude', row.get('alt', 3.0))),
+                        'alt': float(row.get('altitude', row.get('alt', 4.0))),
                         'type': row.get('type', 'waypoint')
                     }
                     waypoints.append(waypoint)
