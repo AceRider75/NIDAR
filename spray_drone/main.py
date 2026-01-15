@@ -9,10 +9,10 @@ def main():
 
     # Configure
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    KML_PATH = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
+    KML_PATH = os.path.join(BASE_DIR, "data", "GBU_Actual.kml")
     
     config = DroneConfig(
-        connection_string='127.0.0.1:14551',
+        connection_string='/dev/ttyACM0',
         geofence_mode="polygon",
         kml_file=KML_PATH,
         polygon_name="MultiGeometry",
@@ -48,10 +48,10 @@ def main():
         # Define mission waypoints
         waypoints = [
 
-            (28.4241739,77.5271940,3),
-            (28.4244791,77.5272674,3),
-            (28.4246866,77.5275658,3),
-            (28.4244393,77.5275621,3),
+            (28.423640,77.527939,3)
+            (28.423637,77.527937,3),
+            (28.4243818,77.527882,3),
+            (28.423722,77.528006,3),
         ]
         
         # Load mission (validates against KML polygon)
