@@ -400,6 +400,7 @@ class DroneController:
 
         # Stop spray system
         self.spray_controller.cleanup()
+        self.land()
 
         self.land()  # Ensure drone is landed
 

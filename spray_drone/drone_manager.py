@@ -349,7 +349,20 @@ class DroneManager:
             traceback.print_exc()
         finally:
             self.stop()
-
+    def stop(self):
+        """Clean shutdown of all components."""
+        print("\n" + "=" * 60)
+        print("DRONE MANAGER - Shutting Down")
+        print("=" * 60)
+        
+        print("[DroneManager] Stopping controller...")
+        self.controller.stop()
+        print("[DroneManager] Stopping radio...")
+        self.radio.stop()
+        
+        print("=" * 60)
+        print("DRONE MANAGER - Shutdown Complete")
+        print("=" * 60)
 
 if __name__ == "__main__":
     drone = DroneManager()

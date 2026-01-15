@@ -158,7 +158,12 @@ class RadioComm:
     # TX
     # -------------------------------------------------
     def send_packet(self, packet: dict):
-        packet["timestamp"] = time.time()
-        data = json.dumps(packet) + "\n"  # newline frame
-        self.serial.write(data.encode('utf-8'))
-        self.serial.flush()
+        if self.serial is None:
+            return
+        try:
+            packet["timestamp"] = time.time()
+            data = json.dumps(packet) + "\n"  # newline frame
+            self.serial.write(data.encode('utf-8'))
+            self.serial.flush()
+        except Exception as e:
+            print(f"[DEBUG] Error sending packet: {e}")
