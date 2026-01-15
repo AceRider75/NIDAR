@@ -4,8 +4,9 @@ import time
 import os
 import base64
 from config import DroneConfig
-# from utils import log_message
+from utils import log_message
 from utils import setup_logger
+import threading
 
 DRONE_NAME = "Sprayer"
 PASSWORD = "vihang@2025"
@@ -20,7 +21,7 @@ class DroneManager:
         
         # Prioritize GCS-provided geofence, otherwise use fallback
         gcs_kml_path = os.path.join(BASE_DIR, "data", "gcs_geofence.kml")
-        default_kml_path = os.path.join(BASE_DIR, "data", "JUs.kml")
+        default_kml_path = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
 
         if os.path.exists(gcs_kml_path):
             KML_PATH = gcs_kml_path
@@ -30,7 +31,7 @@ class DroneManager:
             print(f"[DroneManager] Loading default geofence: {KML_PATH}")
         
         config = DroneConfig(
-            connection_string='/dev/ttyACM1',  # Change to '/dev/ttyACM0' for real hardware
+            connection_string='127.0.0.1:14551',  # Change to '/dev/ttyACM0' for real hardware
             geofence_mode="polygon",  # or "radius"
             kml_file=KML_PATH,
             polygon_name="Field",
@@ -56,6 +57,28 @@ class DroneManager:
         self._pending_waypoints = []
         self._expected_waypoints = 0
         self._pending_altitude = 4.0
+
+    # # stop drone
+    # def stop(self):
+    #     """Stop all threads gracefully including spray system"""
+    #     self.logger.info("Stopping controller...")
+    #     self._add_log("Shutting down...")
+    #     self.running.clear()
+    #     self.mission_active.clear()
+
+    #     # Stop spray system
+    #     self.spray_controller.cleanup()
+
+    #     # Wait for threads to finish
+    #     for thread in self.threads:
+    #         thread.join(timeout=2.0)
+
+    #     # Close connection
+    #     with self.connection_lock:
+    #         if self.connection:
+    #             self.connection.close()
+
+    #     self.logger.info("Controller stopped")
 
     # -------------------------------------------------
     # COMMAND HANDLING - UPDATED
@@ -237,6 +260,29 @@ class DroneManager:
         }
         self.radio.send_packet(packet)
 
+    def stop(self):
+        """Clean shutdown of all components."""
+        print("\n" + "=" * 60)
+        print("DRONE MANAGER - Shutting Down")
+        print("=" * 60)
+        
+        # self._stop_spot_tracker()
+        
+        # print("[DroneManager] Stopping socket server...")
+        # self.spot_socket.stop()
+        
+        print("[DroneManager] Stopping controller...")
+        self.controller.stop()
+        
+        print("[DroneManager] Stopping radio...")
+        self.radio.stop()
+        
+        print("=" * 60)
+        print("DRONE MANAGER - Shutdown Complete")
+        print("=" * 60)
+
+
+
     # -------------------------------------------------
     # MAIN LOOP
     # -------------------------------------------------
@@ -279,7 +325,7 @@ class DroneManager:
                     self._last_tx = time.time()
                 
                 time.sleep(0.01)
-                
+            
         except KeyboardInterrupt:
             print("\n[DroneManager] Keyboard Interrupt detected (Ctrl+C)")
             print("[DroneManager] !!! TRIGGERING EMERGENCY LANDING !!!")

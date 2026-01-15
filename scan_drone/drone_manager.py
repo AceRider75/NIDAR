@@ -203,7 +203,7 @@ class DroneManager:
         
         # Prioritize GCS-provided geofence, otherwise use fallback
         gcs_kml_path = os.path.join(BASE_DIR, "data", "gcs_geofence.kml")
-        default_kml_path = os.path.join(BASE_DIR, "data", "GBULcircle.kml")
+        default_kml_path = os.path.join(BASE_DIR, "data", "GBU_Actual.kml")
 
         if os.path.exists(gcs_kml_path):
             KML_PATH = gcs_kml_path

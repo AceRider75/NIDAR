@@ -370,8 +370,29 @@ class DroneController:
         self._change_state(DroneState.IDLE)
         return True
 
+    # def stop(self):
+    #     """Stop all threads gracefully including spray system"""
+    #     self.logger.info("Stopping controller...")
+    #     self._add_log("Shutting down...")
+    #     self.running.clear()
+    #     self.mission_active.clear()
+
+    #     # Stop spray system
+    #     self.spray_controller.cleanup()
+
+    #     # Wait for threads to finish
+    #     for thread in self.threads:
+    #         thread.join(timeout=2.0)
+
+    #     # Close connection
+    #     with self.connection_lock:
+    #         if self.connection:
+    #             self.connection.close()
+
+        # self.logger.info("Controller stopped")
+
     def stop(self):
-        """Stop all threads gracefully including spray system"""
+        """Stop all threads gracefully"""
         self.logger.info("Stopping controller...")
         self._add_log("Shutting down...")
         self.running.clear()
@@ -379,6 +400,8 @@ class DroneController:
 
         # Stop spray system
         self.spray_controller.cleanup()
+
+        self.land()  # Ensure drone is landed
 
         # Wait for threads to finish
         for thread in self.threads:

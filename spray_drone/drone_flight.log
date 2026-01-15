@@ -1802,3 +1802,886 @@
 2026-01-15 02:56:57 - DroneController - [INFO] - Mission controller stopped
 2026-01-15 02:56:57 - DroneController - [INFO] - Heartbeat monitor stopped
 2026-01-15 02:56:57 - DroneController - [INFO] - Controller stopped
+2026-01-15 03:42:02 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/GBULcircle.kml
+2026-01-15 03:42:02 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 03:42:02 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 03:42:02 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 03:42:02 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 03:42:02 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 03:42:02 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 03:42:02 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 03:42:02 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 03:42:02 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 03:42:02 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 03:42:03 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 03:42:03 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 03:42:06 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 03:42:06 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_034206.csv
+2026-01-15 03:42:06 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 03:42:06 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 03:42:06 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 03:42:06 - DroneController - [INFO] - Command processor started
+2026-01-15 03:42:06 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 03:42:06 - DroneController - [INFO] - Mission controller started
+2026-01-15 03:42:06 - DroneController - [INFO] - All threads started
+2026-01-15 03:42:06 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 03:42:08 - DroneController - [INFO] - Loading mission with 4 points
+2026-01-15 03:42:08 - DroneController - [INFO] - Starting and home position: lat=28.423520, lon=77.527510
+2026-01-15 03:42:08 - DroneController - [INFO] - Mission validated: 4 waypoints
+2026-01-15 03:42:08 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-15 03:42:08 - DroneController - [INFO] - Home set: 28.423520, 77.527510
+2026-01-15 03:42:08 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-15 03:42:08 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-15 03:42:09 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-15 03:42:09 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-15 03:42:09 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-15 03:42:09 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-15 03:42:09 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-15 03:42:09 - DroneController - [INFO] - Armed successfully
+2026-01-15 03:42:09 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-15 03:42:11 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-15 03:42:11 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-15 03:42:11 - DroneController - [INFO] - Takeoff command accepted
+2026-01-15 03:42:16 - DroneController - [INFO] - Target altitude reached: 2.76m
+2026-01-15 03:42:16 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-15 03:42:16 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-15 03:42:16 - DroneController - [INFO] - Starting mission with 4 waypoints
+2026-01-15 03:42:16 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-15 03:42:16 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:42:16 - DroneController - [INFO] - Telemetry: 2080 msgs | GPS: (28.423520, 77.527510, 2.98m) | Battery: 99% | Mode: GUIDED
+2026-01-15 03:42:26 - DroneController - [INFO] - Telemetry: 3280 msgs | GPS: (28.424104, 77.527228, 3.00m) | Battery: 96% | Mode: GUIDED
+2026-01-15 03:42:28 - DroneController - [INFO] - Waypoint 1/4 reached
+2026-01-15 03:42:28 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:42:28 - DroneController - [INFO] - Starting continuous spray for 96.0s spiral pattern
+2026-01-15 03:42:28 - DroneController - [WARNING] - Duration 96.0s too long, using maximum 60.0s
+2026-01-15 03:42:28 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:42:28 - DroneController - [INFO] - Started spraying for 60.0s
+2026-01-15 03:42:28 - DroneController - [INFO] - Spraying for 60.0 seconds...
+2026-01-15 03:42:28 - DroneController - [INFO] - Executing continuous spiral with 12 points
+2026-01-15 03:42:28 - DroneController - [INFO] - Moving to spiral point 1/12: (28.424175, 77.527194)
+2026-01-15 03:42:28 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527194, 3.00)
+2026-01-15 03:42:29 - DroneController - [INFO] - Moving to spiral point 2/12: (28.424174, 77.527196)
+2026-01-15 03:42:29 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527196, 3.00)
+2026-01-15 03:42:30 - DroneController - [INFO] - Moving to spiral point 3/12: (28.424172, 77.527194)
+2026-01-15 03:42:30 - DroneController - [INFO] - Sending waypoint: (28.424172, 77.527194, 3.00)
+2026-01-15 03:42:31 - DroneController - [INFO] - Moving to spiral point 4/12: (28.424174, 77.527190)
+2026-01-15 03:42:31 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527190, 3.00)
+2026-01-15 03:42:32 - DroneController - [INFO] - Moving to spiral point 5/12: (28.424178, 77.527194)
+2026-01-15 03:42:32 - DroneController - [INFO] - Sending waypoint: (28.424178, 77.527194, 3.00)
+2026-01-15 03:42:33 - DroneController - [INFO] - Moving to spiral point 6/12: (28.424174, 77.527199)
+2026-01-15 03:42:33 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527199, 3.00)
+2026-01-15 03:42:34 - DroneController - [INFO] - Moving to spiral point 7/12: (28.424169, 77.527194)
+2026-01-15 03:42:34 - DroneController - [INFO] - Sending waypoint: (28.424169, 77.527194, 3.00)
+2026-01-15 03:42:35 - DroneController - [INFO] - Moving to spiral point 8/12: (28.424174, 77.527187)
+2026-01-15 03:42:35 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527187, 3.00)
+2026-01-15 03:42:36 - DroneController - [INFO] - Moving to spiral point 9/12: (28.424181, 77.527194)
+2026-01-15 03:42:36 - DroneController - [INFO] - Sending waypoint: (28.424181, 77.527194, 3.00)
+2026-01-15 03:42:36 - DroneController - [INFO] - Telemetry: 4478 msgs | GPS: (28.424174, 77.527189, 2.99m) | Battery: 94% | Mode: GUIDED
+2026-01-15 03:42:37 - DroneController - [INFO] - Moving to spiral point 10/12: (28.424174, 77.527203)
+2026-01-15 03:42:37 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527203, 3.00)
+2026-01-15 03:42:38 - DroneController - [INFO] - Moving to spiral point 11/12: (28.424166, 77.527194)
+2026-01-15 03:42:38 - DroneController - [INFO] - Sending waypoint: (28.424166, 77.527194, 3.00)
+2026-01-15 03:42:39 - DroneController - [INFO] - Moving to spiral point 12/12: (28.424174, 77.527184)
+2026-01-15 03:42:39 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527184, 3.00)
+2026-01-15 03:42:40 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:42:40 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:42:43 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:42:43 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:42:43 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:42:43 - DroneController - [INFO] - Spray stopped early after 15.1s
+2026-01-15 03:42:43 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:42:43 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:42:43 - DroneController - [INFO] - Next waypoint: 2 (28.424479, 77.527267)
+2026-01-15 03:42:43 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:42:46 - DroneController - [INFO] - Telemetry: 5676 msgs | GPS: (28.424290, 77.527222, 3.01m) | Battery: 91% | Mode: GUIDED
+2026-01-15 03:42:50 - DroneController - [INFO] - Waypoint 2/4 reached
+2026-01-15 03:42:50 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:42:50 - DroneController - [INFO] - Starting continuous spray for 96.0s spiral pattern
+2026-01-15 03:42:50 - DroneController - [WARNING] - Duration 96.0s too long, using maximum 60.0s
+2026-01-15 03:42:50 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:42:50 - DroneController - [INFO] - Started spraying for 60.0s
+2026-01-15 03:42:50 - DroneController - [INFO] - Spraying for 60.0 seconds...
+2026-01-15 03:42:50 - DroneController - [INFO] - Executing continuous spiral with 12 points
+2026-01-15 03:42:50 - DroneController - [INFO] - Moving to spiral point 1/12: (28.424480, 77.527267)
+2026-01-15 03:42:50 - DroneController - [INFO] - Sending waypoint: (28.424480, 77.527267, 3.00)
+2026-01-15 03:42:51 - DroneController - [INFO] - Moving to spiral point 2/12: (28.424479, 77.527269)
+2026-01-15 03:42:51 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527269, 3.00)
+2026-01-15 03:42:52 - DroneController - [INFO] - Moving to spiral point 3/12: (28.424477, 77.527267)
+2026-01-15 03:42:52 - DroneController - [INFO] - Sending waypoint: (28.424477, 77.527267, 3.00)
+2026-01-15 03:42:53 - DroneController - [INFO] - Moving to spiral point 4/12: (28.424479, 77.527264)
+2026-01-15 03:42:53 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527264, 3.00)
+2026-01-15 03:42:54 - DroneController - [INFO] - Moving to spiral point 5/12: (28.424483, 77.527267)
+2026-01-15 03:42:54 - DroneController - [INFO] - Sending waypoint: (28.424483, 77.527267, 3.00)
+2026-01-15 03:42:55 - DroneController - [INFO] - Moving to spiral point 6/12: (28.424479, 77.527273)
+2026-01-15 03:42:55 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527273, 3.00)
+2026-01-15 03:42:56 - DroneController - [INFO] - Moving to spiral point 7/12: (28.424474, 77.527267)
+2026-01-15 03:42:56 - DroneController - [INFO] - Sending waypoint: (28.424474, 77.527267, 3.00)
+2026-01-15 03:42:56 - DroneController - [INFO] - Telemetry: 6869 msgs | GPS: (28.424480, 77.527270, 3.00m) | Battery: 89% | Mode: GUIDED
+2026-01-15 03:42:57 - DroneController - [INFO] - Moving to spiral point 8/12: (28.424479, 77.527261)
+2026-01-15 03:42:57 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527261, 3.00)
+2026-01-15 03:42:58 - DroneController - [INFO] - Moving to spiral point 9/12: (28.424486, 77.527267)
+2026-01-15 03:42:58 - DroneController - [INFO] - Sending waypoint: (28.424486, 77.527267, 3.00)
+2026-01-15 03:42:59 - DroneController - [INFO] - Moving to spiral point 10/12: (28.424479, 77.527276)
+2026-01-15 03:42:59 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527276, 3.00)
+2026-01-15 03:43:00 - DroneController - [INFO] - Moving to spiral point 11/12: (28.424471, 77.527267)
+2026-01-15 03:43:00 - DroneController - [INFO] - Sending waypoint: (28.424471, 77.527267, 3.00)
+2026-01-15 03:43:01 - DroneController - [INFO] - Moving to spiral point 12/12: (28.424479, 77.527257)
+2026-01-15 03:43:01 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527257, 3.00)
+2026-01-15 03:43:02 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:43:02 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:43:05 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:43:05 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:05 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:05 - DroneController - [INFO] - Spray stopped early after 15.1s
+2026-01-15 03:43:05 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:05 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:43:05 - DroneController - [INFO] - Next waypoint: 3 (28.424439, 77.527562)
+2026-01-15 03:43:05 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527562, 3.00)
+2026-01-15 03:43:06 - DroneController - [INFO] - Telemetry: 8062 msgs | GPS: (28.424477, 77.527288, 3.00m) | Battery: 86% | Mode: GUIDED
+2026-01-15 03:43:11 - DroneController - [INFO] - Waypoint 3/4 reached
+2026-01-15 03:43:11 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:43:11 - DroneController - [INFO] - Starting continuous spray for 96.0s spiral pattern
+2026-01-15 03:43:11 - DroneController - [WARNING] - Duration 96.0s too long, using maximum 60.0s
+2026-01-15 03:43:11 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:43:11 - DroneController - [INFO] - Started spraying for 60.0s
+2026-01-15 03:43:11 - DroneController - [INFO] - Spraying for 60.0 seconds...
+2026-01-15 03:43:11 - DroneController - [INFO] - Executing continuous spiral with 12 points
+2026-01-15 03:43:11 - DroneController - [INFO] - Moving to spiral point 1/12: (28.424440, 77.527562)
+2026-01-15 03:43:11 - DroneController - [INFO] - Sending waypoint: (28.424440, 77.527562, 3.00)
+2026-01-15 03:43:12 - DroneController - [INFO] - Moving to spiral point 2/12: (28.424439, 77.527564)
+2026-01-15 03:43:12 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527564, 3.00)
+2026-01-15 03:43:13 - DroneController - [INFO] - Moving to spiral point 3/12: (28.424437, 77.527562)
+2026-01-15 03:43:13 - DroneController - [INFO] - Sending waypoint: (28.424437, 77.527562, 3.00)
+2026-01-15 03:43:14 - DroneController - [INFO] - Moving to spiral point 4/12: (28.424439, 77.527559)
+2026-01-15 03:43:14 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527559, 3.00)
+2026-01-15 03:43:15 - DroneController - [INFO] - Moving to spiral point 5/12: (28.424443, 77.527562)
+2026-01-15 03:43:15 - DroneController - [INFO] - Sending waypoint: (28.424443, 77.527562, 3.00)
+2026-01-15 03:43:16 - DroneController - [INFO] - Moving to spiral point 6/12: (28.424439, 77.527567)
+2026-01-15 03:43:16 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527567, 3.00)
+2026-01-15 03:43:17 - DroneController - [INFO] - Telemetry: 9257 msgs | GPS: (28.424441, 77.527562, 3.00m) | Battery: 84% | Mode: GUIDED
+2026-01-15 03:43:17 - DroneController - [INFO] - Moving to spiral point 7/12: (28.424434, 77.527562)
+2026-01-15 03:43:17 - DroneController - [INFO] - Sending waypoint: (28.424434, 77.527562, 3.00)
+2026-01-15 03:43:18 - DroneController - [INFO] - Moving to spiral point 8/12: (28.424439, 77.527555)
+2026-01-15 03:43:18 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527555, 3.00)
+2026-01-15 03:43:19 - DroneController - [INFO] - Moving to spiral point 9/12: (28.424446, 77.527562)
+2026-01-15 03:43:19 - DroneController - [INFO] - Sending waypoint: (28.424446, 77.527562, 3.00)
+2026-01-15 03:43:20 - DroneController - [INFO] - Moving to spiral point 10/12: (28.424439, 77.527571)
+2026-01-15 03:43:20 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527571, 3.00)
+2026-01-15 03:43:21 - DroneController - [INFO] - Moving to spiral point 11/12: (28.424431, 77.527562)
+2026-01-15 03:43:21 - DroneController - [INFO] - Sending waypoint: (28.424431, 77.527562, 3.00)
+2026-01-15 03:43:22 - DroneController - [INFO] - Moving to spiral point 12/12: (28.424439, 77.527552)
+2026-01-15 03:43:22 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527552, 3.00)
+2026-01-15 03:43:23 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:43:23 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527562, 3.00)
+2026-01-15 03:43:26 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:43:26 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:26 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:26 - DroneController - [INFO] - Spray stopped early after 15.1s
+2026-01-15 03:43:26 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:26 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:43:26 - DroneController - [INFO] - Next waypoint: 4 (28.424687, 77.527566)
+2026-01-15 03:43:26 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:43:27 - DroneController - [INFO] - Telemetry: 10453 msgs | GPS: (28.424439, 77.527562, 3.00m) | Battery: 82% | Mode: GUIDED
+2026-01-15 03:43:32 - DroneController - [INFO] - Waypoint 4/4 reached
+2026-01-15 03:43:32 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:43:32 - DroneController - [INFO] - Starting continuous spray for 96.0s spiral pattern
+2026-01-15 03:43:32 - DroneController - [WARNING] - Duration 96.0s too long, using maximum 60.0s
+2026-01-15 03:43:32 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:43:32 - DroneController - [INFO] - Started spraying for 60.0s
+2026-01-15 03:43:32 - DroneController - [INFO] - Spraying for 60.0 seconds...
+2026-01-15 03:43:32 - DroneController - [INFO] - Executing continuous spiral with 12 points
+2026-01-15 03:43:32 - DroneController - [INFO] - Moving to spiral point 1/12: (28.424687, 77.527566)
+2026-01-15 03:43:32 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:43:33 - DroneController - [INFO] - Moving to spiral point 2/12: (28.424687, 77.527568)
+2026-01-15 03:43:33 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527568, 3.00)
+2026-01-15 03:43:34 - DroneController - [INFO] - Moving to spiral point 3/12: (28.424684, 77.527566)
+2026-01-15 03:43:34 - DroneController - [INFO] - Sending waypoint: (28.424684, 77.527566, 3.00)
+2026-01-15 03:43:35 - DroneController - [INFO] - Moving to spiral point 4/12: (28.424687, 77.527562)
+2026-01-15 03:43:35 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527562, 3.00)
+2026-01-15 03:43:36 - DroneController - [INFO] - Moving to spiral point 5/12: (28.424690, 77.527566)
+2026-01-15 03:43:36 - DroneController - [INFO] - Sending waypoint: (28.424690, 77.527566, 3.00)
+2026-01-15 03:43:37 - DroneController - [INFO] - Telemetry: 11646 msgs | GPS: (28.424688, 77.527565, 3.00m) | Battery: 79% | Mode: GUIDED
+2026-01-15 03:43:37 - DroneController - [INFO] - Moving to spiral point 6/12: (28.424687, 77.527571)
+2026-01-15 03:43:37 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527571, 3.00)
+2026-01-15 03:43:38 - DroneController - [INFO] - Moving to spiral point 7/12: (28.424681, 77.527566)
+2026-01-15 03:43:38 - DroneController - [INFO] - Sending waypoint: (28.424681, 77.527566, 3.00)
+2026-01-15 03:43:39 - DroneController - [INFO] - Moving to spiral point 8/12: (28.424687, 77.527559)
+2026-01-15 03:43:39 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527559, 3.00)
+2026-01-15 03:43:40 - DroneController - [INFO] - Moving to spiral point 9/12: (28.424693, 77.527566)
+2026-01-15 03:43:40 - DroneController - [INFO] - Sending waypoint: (28.424693, 77.527566, 3.00)
+2026-01-15 03:43:41 - DroneController - [INFO] - Moving to spiral point 10/12: (28.424687, 77.527574)
+2026-01-15 03:43:41 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527574, 3.00)
+2026-01-15 03:43:42 - DroneController - [INFO] - Moving to spiral point 11/12: (28.424678, 77.527566)
+2026-01-15 03:43:42 - DroneController - [INFO] - Sending waypoint: (28.424678, 77.527566, 3.00)
+2026-01-15 03:43:43 - DroneController - [INFO] - Moving to spiral point 12/12: (28.424687, 77.527556)
+2026-01-15 03:43:43 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527556, 3.00)
+2026-01-15 03:43:44 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:43:44 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:43:47 - DroneController - [INFO] - Telemetry: 12839 msgs | GPS: (28.424687, 77.527563, 3.00m) | Battery: 77% | Mode: GUIDED
+2026-01-15 03:43:47 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:43:47 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:48 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:48 - DroneController - [INFO] - Spray stopped early after 15.2s
+2026-01-15 03:43:48 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:43:48 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:43:48 - DroneController - [INFO] - All waypoints reached
+2026-01-15 03:43:48 - DroneController - [INFO] - Returning to home and landing
+2026-01-15 03:43:48 - DroneController - [INFO] - Sending waypoint: (28.423520, 77.527510, 3.00)
+2026-01-15 03:43:57 - DroneController - [INFO] - Telemetry: 14035 msgs | GPS: (28.424179, 77.527542, 2.99m) | Battery: 74% | Mode: GUIDED
+2026-01-15 03:44:06 - DroneController - [INFO] - Reached home position, initiating landing
+2026-01-15 03:44:07 - DroneController - [INFO] - Telemetry: 15228 msgs | GPS: (28.423515, 77.527510, 2.99m) | Battery: 72% | Mode: GUIDED
+2026-01-15 03:44:08 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-15 03:44:08 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-15 03:44:09 - DroneController - [INFO] - Mode changed to LAND
+2026-01-15 03:44:09 - DroneController - [INFO] - Landing in progress
+2026-01-15 03:44:09 - DroneController - [INFO] - Landing command sent
+2026-01-15 03:44:17 - DroneController - [INFO] - Telemetry: 16393 msgs | GPS: (28.423519, 77.527510, -0.02m) | Battery: 70% | Mode: LAND
+2026-01-15 03:44:24 - DroneController - [INFO] - Stopping controller...
+2026-01-15 03:44:24 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:44:24 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 03:44:24 - DroneController - [INFO] - Command processor stopped
+2026-01-15 03:44:24 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 17285
+2026-01-15 03:44:24 - DroneController - [INFO] - Message type distribution: {'AHRS': 574, 'AHRS2': 631, 'ATTITUDE': 631, 'BATTERY_STATUS': 573, 'COMMAND_ACK': 6, 'EKF_STATUS_REPORT': 573, 'ESC_TELEMETRY_1_TO_4': 631, 'ESC_TELEMETRY_5_TO_8': 631, 'EXTENDED_SYS_STATE': 141, 'GLOBAL_POSITION_INT': 552, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 580, 'HEARTBEAT': 142, 'HOME_POSITION': 142, 'LOCAL_POSITION_NED': 552, 'MEMINFO': 580, 'MISSION_CURRENT': 580, 'NAV_CONTROLLER_OUTPUT': 580, 'PARAM_VALUE': 17, 'POSITION_TARGET_GLOBAL_INT': 449, 'POWER_STATUS': 580, 'RAW_IMU': 571, 'RC_CHANNELS': 540, 'SCALED_IMU2': 571, 'SCALED_IMU3': 571, 'SCALED_PRESSURE': 571, 'SCALED_PRESSURE2': 571, 'SERVO_OUTPUT_RAW': 540, 'SIMSTATE': 631, 'STATUSTEXT': 5, 'SYSTEM_TIME': 573, 'SYS_STATUS': 580, 'TERRAIN_REPORT': 573, 'TERRAIN_REQUEST': 18, 'TIMESYNC': 14, 'UNKNOWN_437': 28, 'VFR_HUD': 636, 'VIBRATION': 573, 'WIND': 573}
+2026-01-15 03:44:25 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 03:44:25 - DroneController - [INFO] - Controller stopped
+2026-01-15 03:44:25 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:45:34 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/GBULcircle.kml
+2026-01-15 03:45:34 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 03:45:34 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 03:45:34 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 03:45:34 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 03:45:34 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 03:45:34 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 03:45:34 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 03:45:34 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 03:45:34 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 03:45:34 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 03:45:35 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 03:45:35 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 03:45:39 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 03:45:39 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_034539.csv
+2026-01-15 03:45:39 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 03:45:39 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 03:45:39 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 03:45:39 - DroneController - [INFO] - Command processor started
+2026-01-15 03:45:39 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 03:45:39 - DroneController - [INFO] - Mission controller started
+2026-01-15 03:45:39 - DroneController - [INFO] - All threads started
+2026-01-15 03:45:39 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 03:45:41 - DroneController - [INFO] - Loading mission with 4 points
+2026-01-15 03:45:41 - DroneController - [INFO] - Starting and home position: lat=28.423519, lon=77.527510
+2026-01-15 03:45:41 - DroneController - [INFO] - Mission validated: 4 waypoints
+2026-01-15 03:45:41 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-15 03:45:41 - DroneController - [INFO] - Home set: 28.423519, 77.527510
+2026-01-15 03:45:41 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-15 03:45:41 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-15 03:45:42 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-15 03:45:42 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-15 03:45:42 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-15 03:45:42 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-15 03:45:42 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-15 03:45:42 - DroneController - [INFO] - Armed successfully
+2026-01-15 03:45:42 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-15 03:45:44 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-15 03:45:44 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-15 03:45:44 - DroneController - [INFO] - Takeoff command accepted
+2026-01-15 03:45:48 - DroneController - [INFO] - Target altitude reached: 2.78m
+2026-01-15 03:45:48 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-15 03:45:48 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-15 03:45:48 - DroneController - [INFO] - Starting mission with 4 waypoints
+2026-01-15 03:45:48 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-15 03:45:48 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:45:49 - DroneController - [INFO] - Telemetry: 5570 msgs | GPS: (28.423519, 77.527510, 2.98m) | Battery: 69% | Mode: GUIDED
+2026-01-15 03:45:59 - DroneController - [INFO] - Telemetry: 6767 msgs | GPS: (28.424103, 77.527229, 3.00m) | Battery: 66% | Mode: GUIDED
+2026-01-15 03:46:00 - DroneController - [INFO] - Waypoint 1/4 reached
+2026-01-15 03:46:00 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:46:00 - DroneController - [INFO] - Starting continuous spray for 96.0s spiral pattern
+2026-01-15 03:46:00 - DroneController - [WARNING] - Duration 96.0s too long, using maximum 60.0s
+2026-01-15 03:46:00 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:46:00 - DroneController - [INFO] - Spraying for 60.0 seconds...
+2026-01-15 03:46:00 - DroneController - [INFO] - Started spraying for 60.0s
+2026-01-15 03:46:00 - DroneController - [INFO] - Executing continuous spiral with 12 points
+2026-01-15 03:46:00 - DroneController - [INFO] - Moving to spiral point 1/12: (28.424175, 77.527194)
+2026-01-15 03:46:00 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527194, 3.00)
+2026-01-15 03:46:01 - DroneController - [INFO] - Moving to spiral point 2/12: (28.424174, 77.527196)
+2026-01-15 03:46:01 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527196, 3.00)
+2026-01-15 03:46:02 - DroneController - [CRITICAL] - EMERGENCY STOP
+2026-01-15 03:46:02 - DroneController - [WARNING] - EMERGENCY STOP - Spray system
+2026-01-15 03:46:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:46:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:46:02 - DroneController - [INFO] - Spray stopped early after 1.9s
+2026-01-15 03:46:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:46:02 - DroneController - [WARNING] - EMERGENCY STOP - Spray system
+2026-01-15 03:46:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:46:02 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:46:02 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:46:05 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:46:05 - DroneController - [INFO] - Next waypoint: 2 (28.424479, 77.527267)
+2026-01-15 03:46:05 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:46:05 - DroneController - [CRITICAL] - Emergency land triggered
+2026-01-15 03:46:05 - DroneController - [WARNING] - EMERGENCY STOP - Spray system
+2026-01-15 03:46:05 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:46:05 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-15 03:46:05 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-15 03:46:06 - DroneController - [INFO] - Mode changed to LAND
+2026-01-15 03:46:06 - DroneController - [INFO] - Landing in progress
+2026-01-15 03:46:09 - DroneController - [INFO] - Telemetry: 7948 msgs | GPS: (28.424175, 77.527193, 1.38m) | Battery: 64% | Mode: LAND
+2026-01-15 03:46:12 - DroneController - [INFO] - Stopping controller...
+2026-01-15 03:46:12 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:46:12 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 8297
+2026-01-15 03:46:12 - DroneController - [INFO] - Message type distribution: {'AHRS': 289, 'AHRS2': 289, 'ATTITUDE': 289, 'BATTERY_STATUS': 289, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 289, 'ESC_TELEMETRY_1_TO_4': 289, 'ESC_TELEMETRY_5_TO_8': 289, 'EXTENDED_SYS_STATE': 36, 'GLOBAL_POSITION_INT': 289, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 289, 'HEARTBEAT': 38, 'HOME_POSITION': 37, 'LOCAL_POSITION_NED': 289, 'MEMINFO': 289, 'MISSION_CURRENT': 289, 'NAV_CONTROLLER_OUTPUT': 289, 'PARAM_VALUE': 8, 'POSITION_TARGET_GLOBAL_INT': 67, 'POWER_STATUS': 289, 'RAW_IMU': 289, 'RC_CHANNELS': 289, 'SCALED_IMU2': 289, 'SCALED_IMU3': 289, 'SCALED_PRESSURE': 289, 'SCALED_PRESSURE2': 289, 'SERVO_OUTPUT_RAW': 289, 'SIMSTATE': 289, 'STATUSTEXT': 5, 'SYSTEM_TIME': 289, 'SYS_STATUS': 289, 'TERRAIN_REPORT': 289, 'TIMESYNC': 3, 'UNKNOWN_437': 8, 'VFR_HUD': 289, 'VIBRATION': 289, 'WIND': 289}
+2026-01-15 03:46:12 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 03:46:12 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 03:46:12 - DroneController - [INFO] - Command processor stopped
+2026-01-15 03:46:12 - DroneController - [INFO] - Controller stopped
+2026-01-15 03:46:12 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:49:37 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/GBULcircle.kml
+2026-01-15 03:49:37 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 03:49:37 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 03:49:37 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 03:49:37 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 03:49:37 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 03:49:37 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 03:49:38 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 03:49:38 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 03:49:38 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 03:49:38 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 03:49:39 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 03:49:39 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 03:49:42 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 03:49:42 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_034942.csv
+2026-01-15 03:49:42 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 03:49:42 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 03:49:42 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 03:49:42 - DroneController - [INFO] - Command processor started
+2026-01-15 03:49:42 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 03:49:42 - DroneController - [INFO] - Mission controller started
+2026-01-15 03:49:42 - DroneController - [INFO] - All threads started
+2026-01-15 03:49:42 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 03:49:44 - DroneController - [INFO] - Loading mission with 4 points
+2026-01-15 03:49:44 - DroneController - [INFO] - Starting and home position: lat=28.424175, lon=77.527194
+2026-01-15 03:49:44 - DroneController - [INFO] - Mission validated: 4 waypoints
+2026-01-15 03:49:44 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-15 03:49:44 - DroneController - [INFO] - Home set: 28.424175, 77.527194
+2026-01-15 03:49:44 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-15 03:49:44 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-15 03:49:45 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-15 03:49:45 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-15 03:49:45 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-15 03:49:45 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-15 03:49:45 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-15 03:49:45 - DroneController - [INFO] - Armed successfully
+2026-01-15 03:49:45 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-15 03:49:47 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-15 03:49:47 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-15 03:49:47 - DroneController - [INFO] - Takeoff command accepted
+2026-01-15 03:49:51 - DroneController - [INFO] - Target altitude reached: 2.54m
+2026-01-15 03:49:51 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-15 03:49:51 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-15 03:49:51 - DroneController - [INFO] - Starting mission with 4 waypoints
+2026-01-15 03:49:51 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-15 03:49:51 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:49:51 - DroneController - [INFO] - Waypoint 1/4 reached
+2026-01-15 03:49:51 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:49:51 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:49:51 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:49:51 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:49:51 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:49:51 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:49:51 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424175, 77.527194)
+2026-01-15 03:49:51 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527194, 3.00)
+2026-01-15 03:49:52 - DroneController - [INFO] - Telemetry: 4200 msgs | GPS: (28.424175, 77.527194, 2.96m) | Battery: 59% | Mode: GUIDED
+2026-01-15 03:49:52 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424172, 77.527192)
+2026-01-15 03:49:52 - DroneController - [INFO] - Sending waypoint: (28.424172, 77.527192, 3.00)
+2026-01-15 03:49:53 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424175, 77.527199)
+2026-01-15 03:49:53 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527199, 3.00)
+2026-01-15 03:49:54 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424176, 77.527186)
+2026-01-15 03:49:54 - DroneController - [INFO] - Sending waypoint: (28.424176, 77.527186, 3.00)
+2026-01-15 03:49:55 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424167, 77.527200)
+2026-01-15 03:49:55 - DroneController - [INFO] - Sending waypoint: (28.424167, 77.527200, 3.00)
+2026-01-15 03:49:56 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:49:56 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:49:59 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:49:59 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:49:59 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:49:59 - DroneController - [INFO] - Spray stopped early after 8.1s
+2026-01-15 03:49:59 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:49:59 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:49:59 - DroneController - [INFO] - Next waypoint: 2 (28.424479, 77.527267)
+2026-01-15 03:49:59 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:50:02 - DroneController - [INFO] - Telemetry: 5393 msgs | GPS: (28.424188, 77.527198, 3.00m) | Battery: 57% | Mode: GUIDED
+2026-01-15 03:50:12 - DroneController - [INFO] - Telemetry: 6586 msgs | GPS: (28.424277, 77.527219, 3.00m) | Battery: 54% | Mode: GUIDED
+2026-01-15 03:50:22 - DroneController - [INFO] - Telemetry: 7782 msgs | GPS: (28.424364, 77.527240, 3.00m) | Battery: 52% | Mode: GUIDED
+2026-01-15 03:50:32 - DroneController - [INFO] - Telemetry: 8975 msgs | GPS: (28.424452, 77.527261, 3.00m) | Battery: 50% | Mode: GUIDED
+2026-01-15 03:50:32 - DroneController - [INFO] - Waypoint 2/4 reached
+2026-01-15 03:50:32 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:50:32 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:50:32 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:50:32 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:50:32 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:50:32 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:50:32 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424480, 77.527267)
+2026-01-15 03:50:32 - DroneController - [INFO] - Sending waypoint: (28.424480, 77.527267, 3.00)
+2026-01-15 03:50:33 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424477, 77.527265)
+2026-01-15 03:50:33 - DroneController - [INFO] - Sending waypoint: (28.424477, 77.527265, 3.00)
+2026-01-15 03:50:34 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424481, 77.527273)
+2026-01-15 03:50:34 - DroneController - [INFO] - Sending waypoint: (28.424481, 77.527273, 3.00)
+2026-01-15 03:50:35 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424481, 77.527260)
+2026-01-15 03:50:35 - DroneController - [INFO] - Sending waypoint: (28.424481, 77.527260, 3.00)
+2026-01-15 03:50:36 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424472, 77.527273)
+2026-01-15 03:50:36 - DroneController - [INFO] - Sending waypoint: (28.424472, 77.527273, 3.00)
+2026-01-15 03:50:37 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:50:37 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:50:40 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:50:40 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:50:40 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:50:40 - DroneController - [INFO] - Spray stopped early after 8.1s
+2026-01-15 03:50:40 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:50:40 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:50:40 - DroneController - [INFO] - Next waypoint: 3 (28.424439, 77.527562)
+2026-01-15 03:50:40 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527562, 3.00)
+2026-01-15 03:50:42 - DroneController - [INFO] - Telemetry: 10168 msgs | GPS: (28.424478, 77.527275, 3.00m) | Battery: 47% | Mode: GUIDED
+2026-01-15 03:50:52 - DroneController - [INFO] - Telemetry: 11365 msgs | GPS: (28.424464, 77.527376, 3.00m) | Battery: 45% | Mode: GUIDED
+2026-01-15 03:51:02 - DroneController - [INFO] - Telemetry: 12558 msgs | GPS: (28.424451, 77.527477, 3.00m) | Battery: 43% | Mode: GUIDED
+2026-01-15 03:51:07 - DroneController - [INFO] - Waypoint 3/4 reached
+2026-01-15 03:51:07 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:51:07 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:51:07 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:51:07 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:51:07 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:51:07 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:51:07 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424440, 77.527562)
+2026-01-15 03:51:07 - DroneController - [INFO] - Sending waypoint: (28.424440, 77.527562, 3.00)
+2026-01-15 03:51:08 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424437, 77.527560)
+2026-01-15 03:51:08 - DroneController - [INFO] - Sending waypoint: (28.424437, 77.527560, 3.00)
+2026-01-15 03:51:09 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424441, 77.527567)
+2026-01-15 03:51:09 - DroneController - [INFO] - Sending waypoint: (28.424441, 77.527567, 3.00)
+2026-01-15 03:51:10 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424441, 77.527555)
+2026-01-15 03:51:10 - DroneController - [INFO] - Sending waypoint: (28.424441, 77.527555, 3.00)
+2026-01-15 03:51:11 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424432, 77.527568)
+2026-01-15 03:51:11 - DroneController - [INFO] - Sending waypoint: (28.424432, 77.527568, 3.00)
+2026-01-15 03:51:12 - DroneController - [INFO] - Telemetry: 13751 msgs | GPS: (28.424439, 77.527565, 3.00m) | Battery: 40% | Mode: GUIDED
+2026-01-15 03:51:12 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:51:12 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527562, 3.00)
+2026-01-15 03:51:15 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:51:15 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:51:15 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:51:15 - DroneController - [INFO] - Spray stopped early after 8.0s
+2026-01-15 03:51:15 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:51:15 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:51:15 - DroneController - [INFO] - Next waypoint: 4 (28.424687, 77.527566)
+2026-01-15 03:51:15 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:51:22 - DroneController - [INFO] - Telemetry: 14947 msgs | GPS: (28.424490, 77.527563, 3.00m) | Battery: 38% | Mode: GUIDED
+2026-01-15 03:51:32 - DroneController - [INFO] - Telemetry: 16140 msgs | GPS: (28.424580, 77.527564, 3.00m) | Battery: 35% | Mode: GUIDED
+2026-01-15 03:51:41 - DroneController - [INFO] - Waypoint 4/4 reached
+2026-01-15 03:51:41 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:51:41 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:51:41 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:51:41 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:51:41 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:51:41 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:51:41 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424687, 77.527566)
+2026-01-15 03:51:41 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:51:42 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424684, 77.527564)
+2026-01-15 03:51:42 - DroneController - [INFO] - Sending waypoint: (28.424684, 77.527564, 3.00)
+2026-01-15 03:51:42 - DroneController - [INFO] - Telemetry: 17333 msgs | GPS: (28.424670, 77.527565, 3.00m) | Battery: 33% | Mode: GUIDED
+2026-01-15 03:51:43 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424688, 77.527571)
+2026-01-15 03:51:43 - DroneController - [INFO] - Sending waypoint: (28.424688, 77.527571, 3.00)
+2026-01-15 03:51:44 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424689, 77.527558)
+2026-01-15 03:51:44 - DroneController - [INFO] - Sending waypoint: (28.424689, 77.527558, 3.00)
+2026-01-15 03:51:45 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424679, 77.527572)
+2026-01-15 03:51:45 - DroneController - [INFO] - Sending waypoint: (28.424679, 77.527572, 3.00)
+2026-01-15 03:51:46 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:51:46 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:51:49 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:51:49 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:51:49 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:51:49 - DroneController - [INFO] - Spray stopped early after 8.1s
+2026-01-15 03:51:49 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:51:49 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:51:49 - DroneController - [INFO] - All waypoints reached
+2026-01-15 03:51:49 - DroneController - [INFO] - Returning to home and landing
+2026-01-15 03:51:49 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527194, 3.00)
+2026-01-15 03:51:52 - DroneController - [INFO] - Telemetry: 18529 msgs | GPS: (28.424674, 77.527557, 3.00m) | Battery: 31% | Mode: GUIDED
+2026-01-15 03:52:02 - DroneController - [INFO] - Telemetry: 19722 msgs | GPS: (28.424598, 77.527502, 3.00m) | Battery: 28% | Mode: GUIDED
+2026-01-15 03:52:12 - DroneController - [INFO] - Telemetry: 20915 msgs | GPS: (28.424522, 77.527447, 3.00m) | Battery: 26% | Mode: GUIDED
+2026-01-15 03:52:22 - DroneController - [INFO] - Telemetry: 22108 msgs | GPS: (28.424447, 77.527392, 2.99m) | Battery: 24% | Mode: GUIDED
+2026-01-15 03:52:32 - DroneController - [INFO] - Telemetry: 23304 msgs | GPS: (28.424371, 77.527337, 2.99m) | Battery: 21% | Mode: GUIDED
+2026-01-15 03:52:42 - DroneController - [INFO] - Telemetry: 24498 msgs | GPS: (28.424295, 77.527282, 2.99m) | Battery: 19% | Mode: GUIDED
+2026-01-15 03:52:52 - DroneController - [INFO] - Telemetry: 25690 msgs | GPS: (28.424220, 77.527227, 2.99m) | Battery: 16% | Mode: GUIDED
+2026-01-15 03:52:57 - DroneController - [INFO] - Reached home position, initiating landing
+2026-01-15 03:52:59 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-15 03:52:59 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-15 03:53:00 - DroneController - [INFO] - Mode changed to LAND
+2026-01-15 03:53:00 - DroneController - [INFO] - Landing in progress
+2026-01-15 03:53:00 - DroneController - [INFO] - Landing command sent
+2026-01-15 03:53:02 - DroneController - [INFO] - Telemetry: 26878 msgs | GPS: (28.424174, 77.527193, 1.96m) | Battery: 14% | Mode: LAND
+2026-01-15 03:53:12 - DroneController - [INFO] - Telemetry: 28037 msgs | GPS: (28.424174, 77.527194, 0.00m) | Battery: 13% | Mode: LAND
+2026-01-15 03:53:15 - DroneController - [INFO] - Stopping controller...
+2026-01-15 03:53:15 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:53:15 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 03:53:15 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 03:53:15 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 28441
+2026-01-15 03:53:15 - DroneController - [INFO] - Message type distribution: {'AHRS': 963, 'AHRS2': 962, 'ATTITUDE': 962, 'BATTERY_STATUS': 962, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 962, 'ESC_TELEMETRY_1_TO_4': 962, 'ESC_TELEMETRY_5_TO_8': 962, 'EXTENDED_SYS_STATE': 217, 'GLOBAL_POSITION_INT': 962, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 962, 'HEARTBEAT': 218, 'HOME_POSITION': 218, 'LOCAL_POSITION_NED': 962, 'MEMINFO': 962, 'MISSION_CURRENT': 962, 'NAV_CONTROLLER_OUTPUT': 962, 'PARAM_VALUE': 25, 'POSITION_TARGET_GLOBAL_INT': 753, 'POWER_STATUS': 962, 'RAW_IMU': 962, 'RC_CHANNELS': 962, 'SCALED_IMU2': 962, 'SCALED_IMU3': 962, 'SCALED_PRESSURE': 962, 'SCALED_PRESSURE2': 962, 'SERVO_OUTPUT_RAW': 962, 'SIMSTATE': 962, 'STATUSTEXT': 5, 'SYSTEM_TIME': 962, 'SYS_STATUS': 962, 'TERRAIN_REPORT': 962, 'TIMESYNC': 22, 'UNKNOWN_437': 43, 'VFR_HUD': 962, 'VIBRATION': 962, 'WIND': 962}
+2026-01-15 03:53:16 - DroneController - [INFO] - Command processor stopped
+2026-01-15 03:53:16 - DroneController - [INFO] - Controller stopped
+2026-01-15 03:53:16 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:53:40 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/GBULcircle.kml
+2026-01-15 03:53:40 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 03:53:40 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 03:53:40 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 03:53:40 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 03:53:40 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 03:53:40 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 03:53:41 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 03:53:41 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 03:53:41 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 03:53:41 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 03:53:42 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 03:53:42 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 03:53:45 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 03:53:45 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_035345.csv
+2026-01-15 03:53:45 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 03:53:45 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 03:53:45 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 03:53:45 - DroneController - [INFO] - Command processor started
+2026-01-15 03:53:45 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 03:53:45 - DroneController - [INFO] - Mission controller started
+2026-01-15 03:53:45 - DroneController - [INFO] - All threads started
+2026-01-15 03:53:45 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 03:53:47 - DroneController - [INFO] - Loading mission with 4 points
+2026-01-15 03:53:47 - DroneController - [INFO] - Starting and home position: lat=28.424174, lon=77.527194
+2026-01-15 03:53:47 - DroneController - [INFO] - Mission validated: 4 waypoints
+2026-01-15 03:53:47 - DroneController - [INFO] - Starting arm and takeoff to 3.0m
+2026-01-15 03:53:47 - DroneController - [INFO] - Home set: 28.424174, 77.527194
+2026-01-15 03:53:47 - DroneController - [INFO] - Using polygon geofence from KML
+2026-01-15 03:53:47 - DroneController - [INFO] - Setting mode to GUIDED (attempt 1)
+2026-01-15 03:53:48 - DroneController - [INFO] - Mode changed to GUIDED
+2026-01-15 03:53:48 - DroneController - [INFO] - State transition: IDLE -> ARMING
+2026-01-15 03:53:48 - DroneController - [INFO] - Waiting for drone to become armable...
+2026-01-15 03:53:48 - DroneController - [INFO] - ✓ Drone is armable
+2026-01-15 03:53:48 - DroneController - [INFO] - Arming attempt 1/3
+2026-01-15 03:53:48 - DroneController - [INFO] - Armed successfully
+2026-01-15 03:53:48 - DroneController - [INFO] - State transition: ARMING -> ARMED
+2026-01-15 03:53:50 - DroneController - [INFO] - State transition: ARMED -> TAKING_OFF
+2026-01-15 03:53:50 - DroneController - [INFO] - Takeoff attempt 1/3
+2026-01-15 03:53:50 - DroneController - [INFO] - Takeoff command accepted
+2026-01-15 03:53:54 - DroneController - [INFO] - Target altitude reached: 2.56m
+2026-01-15 03:53:54 - DroneController - [INFO] - Arm and takeoff complete
+2026-01-15 03:53:54 - DroneController - [INFO] - State transition: TAKING_OFF -> ARMED
+2026-01-15 03:53:54 - DroneController - [INFO] - Starting mission with 4 waypoints
+2026-01-15 03:53:54 - DroneController - [INFO] - State transition: ARMED -> MISSION_ACTIVE
+2026-01-15 03:53:54 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:53:54 - DroneController - [INFO] - Waypoint 1/4 reached
+2026-01-15 03:53:54 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:53:54 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:53:54 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:53:54 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:53:54 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:53:54 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:53:54 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424175, 77.527194)
+2026-01-15 03:53:54 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527194, 3.00)
+2026-01-15 03:53:55 - DroneController - [INFO] - Telemetry: 2854 msgs | GPS: (28.424174, 77.527194, 2.96m) | Battery: 12% | Mode: GUIDED
+2026-01-15 03:53:55 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424172, 77.527192)
+2026-01-15 03:53:55 - DroneController - [INFO] - Sending waypoint: (28.424172, 77.527192, 3.00)
+2026-01-15 03:53:56 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424175, 77.527199)
+2026-01-15 03:53:56 - DroneController - [INFO] - Sending waypoint: (28.424175, 77.527199, 3.00)
+2026-01-15 03:53:57 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424176, 77.527186)
+2026-01-15 03:53:57 - DroneController - [INFO] - Sending waypoint: (28.424176, 77.527186, 3.00)
+2026-01-15 03:53:58 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424167, 77.527200)
+2026-01-15 03:53:58 - DroneController - [INFO] - Sending waypoint: (28.424167, 77.527200, 3.00)
+2026-01-15 03:53:59 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:53:59 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:54:02 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:54:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:02 - DroneController - [INFO] - Spray stopped early after 8.0s
+2026-01-15 03:54:02 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:02 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:54:02 - DroneController - [INFO] - Next waypoint: 2 (28.424479, 77.527267)
+2026-01-15 03:54:02 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:54:05 - DroneController - [INFO] - Telemetry: 4047 msgs | GPS: (28.424190, 77.527198, 3.00m) | Battery: 10% | Mode: GUIDED
+2026-01-15 03:54:15 - DroneController - [INFO] - Telemetry: 5244 msgs | GPS: (28.424366, 77.527240, 3.00m) | Battery: 7% | Mode: GUIDED
+2026-01-15 03:54:20 - DroneController - [INFO] - Waypoint 2/4 reached
+2026-01-15 03:54:20 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:54:20 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:54:20 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:54:20 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:54:20 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:54:20 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:54:20 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424480, 77.527267)
+2026-01-15 03:54:20 - DroneController - [INFO] - Sending waypoint: (28.424480, 77.527267, 3.00)
+2026-01-15 03:54:21 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424477, 77.527265)
+2026-01-15 03:54:21 - DroneController - [INFO] - Sending waypoint: (28.424477, 77.527265, 3.00)
+2026-01-15 03:54:22 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424481, 77.527273)
+2026-01-15 03:54:22 - DroneController - [INFO] - Sending waypoint: (28.424481, 77.527273, 3.00)
+2026-01-15 03:54:23 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424481, 77.527260)
+2026-01-15 03:54:23 - DroneController - [INFO] - Sending waypoint: (28.424481, 77.527260, 3.00)
+2026-01-15 03:54:24 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424472, 77.527273)
+2026-01-15 03:54:24 - DroneController - [INFO] - Sending waypoint: (28.424472, 77.527273, 3.00)
+2026-01-15 03:54:25 - DroneController - [INFO] - Telemetry: 6437 msgs | GPS: (28.424481, 77.527270, 3.00m) | Battery: 5% | Mode: GUIDED
+2026-01-15 03:54:25 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:54:25 - DroneController - [INFO] - Sending waypoint: (28.424479, 77.527267, 3.00)
+2026-01-15 03:54:28 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:54:28 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:28 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:28 - DroneController - [INFO] - Spray stopped early after 8.1s
+2026-01-15 03:54:28 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:28 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:54:28 - DroneController - [INFO] - Next waypoint: 3 (28.424439, 77.527562)
+2026-01-15 03:54:28 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527562, 3.00)
+2026-01-15 03:54:35 - DroneController - [INFO] - Telemetry: 7630 msgs | GPS: (28.424466, 77.527365, 3.00m) | Battery: 3% | Mode: GUIDED
+2026-01-15 03:54:43 - DroneController - [INFO] - Waypoint 3/4 reached
+2026-01-15 03:54:43 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:54:43 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:54:43 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:54:43 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:54:43 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:54:43 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:54:43 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424440, 77.527562)
+2026-01-15 03:54:43 - DroneController - [INFO] - Sending waypoint: (28.424440, 77.527562, 3.00)
+2026-01-15 03:54:44 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424437, 77.527560)
+2026-01-15 03:54:44 - DroneController - [INFO] - Sending waypoint: (28.424437, 77.527560, 3.00)
+2026-01-15 03:54:45 - DroneController - [INFO] - Telemetry: 8826 msgs | GPS: (28.424442, 77.527550, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:54:45 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424441, 77.527567)
+2026-01-15 03:54:45 - DroneController - [INFO] - Sending waypoint: (28.424441, 77.527567, 3.00)
+2026-01-15 03:54:46 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424441, 77.527555)
+2026-01-15 03:54:46 - DroneController - [INFO] - Sending waypoint: (28.424441, 77.527555, 3.00)
+2026-01-15 03:54:47 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424432, 77.527568)
+2026-01-15 03:54:47 - DroneController - [INFO] - Sending waypoint: (28.424432, 77.527568, 3.00)
+2026-01-15 03:54:48 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:54:48 - DroneController - [INFO] - Sending waypoint: (28.424439, 77.527562, 3.00)
+2026-01-15 03:54:51 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:54:51 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:51 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:51 - DroneController - [INFO] - Spray stopped early after 8.1s
+2026-01-15 03:54:51 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:54:51 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:54:51 - DroneController - [INFO] - Next waypoint: 4 (28.424687, 77.527566)
+2026-01-15 03:54:51 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:54:55 - DroneController - [INFO] - Telemetry: 10019 msgs | GPS: (28.424467, 77.527562, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:55:05 - DroneController - [INFO] - Telemetry: 11212 msgs | GPS: (28.424647, 77.527565, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:55:06 - DroneController - [INFO] - Waypoint 4/4 reached
+2026-01-15 03:55:06 - DroneController - [INFO] - Starting continuous spiral spray pattern at waypoint
+2026-01-15 03:55:06 - DroneController - [INFO] - Starting continuous spray for 40.0s spiral pattern
+2026-01-15 03:55:06 - DroneController - [INFO] - Spray ON (simulation mode - no GPIO)
+2026-01-15 03:55:06 - DroneController - [INFO] - Started spraying for 40.0s
+2026-01-15 03:55:06 - DroneController - [INFO] - Spraying for 40.0 seconds...
+2026-01-15 03:55:06 - DroneController - [INFO] - Executing continuous spiral with 5 points
+2026-01-15 03:55:06 - DroneController - [INFO] - Moving to spiral point 1/5: (28.424687, 77.527566)
+2026-01-15 03:55:06 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:55:07 - DroneController - [INFO] - Moving to spiral point 2/5: (28.424684, 77.527564)
+2026-01-15 03:55:07 - DroneController - [INFO] - Sending waypoint: (28.424684, 77.527564, 3.00)
+2026-01-15 03:55:08 - DroneController - [INFO] - Moving to spiral point 3/5: (28.424688, 77.527571)
+2026-01-15 03:55:08 - DroneController - [INFO] - Sending waypoint: (28.424688, 77.527571, 3.00)
+2026-01-15 03:55:09 - DroneController - [INFO] - Moving to spiral point 4/5: (28.424689, 77.527558)
+2026-01-15 03:55:09 - DroneController - [INFO] - Sending waypoint: (28.424689, 77.527558, 3.00)
+2026-01-15 03:55:10 - DroneController - [INFO] - Moving to spiral point 5/5: (28.424679, 77.527572)
+2026-01-15 03:55:10 - DroneController - [INFO] - Sending waypoint: (28.424679, 77.527572, 3.00)
+2026-01-15 03:55:11 - DroneController - [INFO] - Returning to waypoint center after spiral
+2026-01-15 03:55:11 - DroneController - [INFO] - Sending waypoint: (28.424687, 77.527566, 3.00)
+2026-01-15 03:55:14 - DroneController - [INFO] - Stopping spray...
+2026-01-15 03:55:14 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:55:14 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:55:14 - DroneController - [INFO] - Spray stopped early after 8.1s
+2026-01-15 03:55:14 - DroneController - [INFO] - Spray OFF (simulation mode - no GPIO)
+2026-01-15 03:55:14 - DroneController - [INFO] - Continuous spiral spray pattern completed
+2026-01-15 03:55:14 - DroneController - [INFO] - All waypoints reached
+2026-01-15 03:55:14 - DroneController - [INFO] - Returning to home and landing
+2026-01-15 03:55:14 - DroneController - [INFO] - Sending waypoint: (28.424174, 77.527194, 3.00)
+2026-01-15 03:55:15 - DroneController - [INFO] - Telemetry: 12408 msgs | GPS: (28.424686, 77.527565, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:55:25 - DroneController - [INFO] - Telemetry: 13600 msgs | GPS: (28.424552, 77.527468, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:55:35 - DroneController - [INFO] - Telemetry: 14794 msgs | GPS: (28.424401, 77.527358, 3.00m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:55:45 - DroneController - [INFO] - Telemetry: 15990 msgs | GPS: (28.424249, 77.527248, 2.99m) | Battery: 0% | Mode: GUIDED
+2026-01-15 03:55:51 - DroneController - [INFO] - Reached home position, initiating landing
+2026-01-15 03:55:53 - DroneController - [INFO] - State transition: MISSION_ACTIVE -> LANDING
+2026-01-15 03:55:53 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-15 03:55:54 - DroneController - [INFO] - Mode changed to LAND
+2026-01-15 03:55:54 - DroneController - [INFO] - Landing in progress
+2026-01-15 03:55:54 - DroneController - [INFO] - Landing command sent
+2026-01-15 03:55:55 - DroneController - [INFO] - Telemetry: 17177 msgs | GPS: (28.424174, 77.527193, 2.43m) | Battery: 0% | Mode: LAND
+2026-01-15 03:56:05 - DroneController - [INFO] - Telemetry: 18336 msgs | GPS: (28.424174, 77.527194, 0.00m) | Battery: 0% | Mode: LAND
+2026-01-15 03:56:09 - DroneController - [INFO] - Stopping controller...
+2026-01-15 03:56:09 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 03:56:09 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 18828
+2026-01-15 03:56:09 - DroneController - [INFO] - Message type distribution: {'AHRS': 638, 'AHRS2': 637, 'ATTITUDE': 637, 'BATTERY_STATUS': 637, 'COMMAND_ACK': 2, 'EKF_STATUS_REPORT': 637, 'ESC_TELEMETRY_1_TO_4': 637, 'ESC_TELEMETRY_5_TO_8': 637, 'EXTENDED_SYS_STATE': 148, 'GLOBAL_POSITION_INT': 637, 'GPS_GLOBAL_ORIGIN': 1, 'GPS_RAW_INT': 637, 'HEARTBEAT': 149, 'HOME_POSITION': 149, 'LOCAL_POSITION_NED': 637, 'MEMINFO': 637, 'MISSION_CURRENT': 637, 'NAV_CONTROLLER_OUTPUT': 637, 'PARAM_VALUE': 17, 'POSITION_TARGET_GLOBAL_INT': 476, 'POWER_STATUS': 637, 'RAW_IMU': 637, 'RC_CHANNELS': 637, 'SCALED_IMU2': 637, 'SCALED_IMU3': 637, 'SCALED_PRESSURE': 637, 'SCALED_PRESSURE2': 637, 'SERVO_OUTPUT_RAW': 637, 'SIMSTATE': 637, 'STATUSTEXT': 5, 'SYSTEM_TIME': 637, 'SYS_STATUS': 637, 'TERRAIN_REPORT': 637, 'TIMESYNC': 15, 'UNKNOWN_437': 29, 'VFR_HUD': 637, 'VIBRATION': 637, 'WIND': 637}
+2026-01-15 03:56:09 - DroneController - [INFO] - Command processor stopped
+2026-01-15 03:56:09 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 03:56:09 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 03:56:09 - DroneController - [INFO] - Controller stopped
+2026-01-15 03:56:09 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 11:51:18 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/JUs.kml
+2026-01-15 11:51:18 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 11:51:18 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 11:51:18 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 11:51:18 - DroneController - [INFO] - Connecting to /dev/ttyACM1
+2026-01-15 11:51:18 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 11:51:18 - DroneController - [ERROR] - Connection attempt 1 failed: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2026-01-15 11:51:20 - DroneController - [INFO] - Connection attempt 2/3...
+2026-01-15 11:51:20 - DroneController - [ERROR] - Connection attempt 2 failed: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2026-01-15 11:51:22 - DroneController - [INFO] - Connection attempt 3/3...
+2026-01-15 11:51:22 - DroneController - [ERROR] - Connection attempt 3 failed: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2026-01-15 11:51:22 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 11:51:38 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/JUs.kml
+2026-01-15 11:51:38 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 11:51:38 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 11:51:38 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 11:51:38 - DroneController - [INFO] - Connecting to /dev/ttyACM1
+2026-01-15 11:51:38 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 11:51:38 - DroneController - [ERROR] - Connection attempt 1 failed: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2026-01-15 11:51:40 - DroneController - [INFO] - Connection attempt 2/3...
+2026-01-15 11:51:40 - DroneController - [ERROR] - Connection attempt 2 failed: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2026-01-15 11:51:42 - DroneController - [INFO] - Connection attempt 3/3...
+2026-01-15 11:51:42 - DroneController - [ERROR] - Connection attempt 3 failed: [Errno 2] could not open port /dev/ttyACM1: [Errno 2] No such file or directory: '/dev/ttyACM1'
+2026-01-15 11:51:43 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 11:52:02 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/JUs.kml
+2026-01-15 11:52:02 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 11:52:02 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 11:52:02 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 11:52:02 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 11:52:02 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 11:52:02 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 11:52:03 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 11:52:03 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 11:52:03 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 11:52:03 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 11:52:04 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 11:52:04 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 11:52:07 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 11:52:07 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_115207.csv
+2026-01-15 11:52:07 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 11:52:07 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 11:52:07 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 11:52:07 - DroneController - [INFO] - Command processor started
+2026-01-15 11:52:07 - DroneController - [INFO] - Mission controller started
+2026-01-15 11:52:07 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 11:52:07 - DroneController - [INFO] - All threads started
+2026-01-15 11:52:07 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 11:52:17 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/JUs.kml
+2026-01-15 11:52:17 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 11:52:17 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 11:52:17 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 11:52:17 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 11:52:17 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 11:52:17 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 11:52:18 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 11:52:18 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 11:52:18 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 11:52:18 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 11:52:19 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 11:52:19 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 11:52:22 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 11:52:22 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_115222.csv
+2026-01-15 11:52:22 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 11:52:22 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 11:52:22 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 11:52:22 - DroneController - [INFO] - Command processor started
+2026-01-15 11:52:22 - DroneController - [INFO] - Mission controller started
+2026-01-15 11:52:22 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 11:52:22 - DroneController - [INFO] - All threads started
+2026-01-15 11:52:22 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 11:53:50 - DroneController - [INFO] - Mission planner initialized with KML: /Users/trishit_debsharma/Documents/Code/NIDAR/NIDAR/spray_drone/data/JUs.kml
+2026-01-15 11:53:50 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 11:53:50 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 11:53:50 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 11:53:50 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 11:53:50 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 11:53:50 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 11:53:51 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 11:53:51 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 11:53:51 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 11:53:51 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 11:53:52 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 11:53:52 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 11:53:55 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 11:53:55 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_115355.csv
+2026-01-15 11:53:55 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 11:53:55 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 11:53:55 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 11:53:55 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 11:53:55 - DroneController - [INFO] - Command processor started
+2026-01-15 11:53:55 - DroneController - [INFO] - Mission controller started
+2026-01-15 11:53:55 - DroneController - [INFO] - All threads started
+2026-01-15 11:53:55 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 11:55:02 - DroneController - [ERROR] - Failed to load KML file: Placemark 'Field' not found. Available placemarks: ['Center', 'MultiGeometry']
+2026-01-15 11:55:02 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 11:55:02 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 11:55:02 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 11:55:02 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 11:55:02 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 11:55:02 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 11:55:03 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 11:55:03 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 11:55:03 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 11:55:03 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 11:55:04 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 11:55:04 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 11:55:07 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 11:55:07 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_115507.csv
+2026-01-15 11:55:07 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 11:55:07 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 11:55:07 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 11:55:07 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 11:55:07 - DroneController - [INFO] - Command processor started
+2026-01-15 11:55:07 - DroneController - [INFO] - Mission controller started
+2026-01-15 11:55:07 - DroneController - [INFO] - All threads started
+2026-01-15 11:55:07 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 12:04:03 - DroneController - [ERROR] - Failed to load KML file: Placemark 'Field' not found. Available placemarks: ['Center', 'MultiGeometry']
+2026-01-15 12:04:03 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 12:04:03 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 12:04:03 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 12:04:03 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 12:04:03 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 12:04:03 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 12:04:03 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 12:04:03 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 12:04:03 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 12:04:03 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 12:04:04 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 12:04:04 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 12:04:07 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 12:04:07 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_120407.csv
+2026-01-15 12:04:07 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 12:04:07 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 12:04:07 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 12:04:07 - DroneController - [INFO] - Command processor started
+2026-01-15 12:04:07 - DroneController - [INFO] - Mission controller started
+2026-01-15 12:04:07 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 12:04:07 - DroneController - [INFO] - All threads started
+2026-01-15 12:04:07 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 12:06:21 - DroneController - [ERROR] - Failed to load KML file: Placemark 'Field' not found. Available placemarks: ['Center', 'MultiGeometry']
+2026-01-15 12:06:21 - DroneController - [WARNING] - GPIO not available - spray system will run in simulation mode
+2026-01-15 12:06:21 - DroneController - [INFO] - DroneController initialized with SprayController
+2026-01-15 12:06:21 - DroneController - [INFO] - Geofence mode: polygon
+2026-01-15 12:06:21 - DroneController - [INFO] - Connecting to 127.0.0.1:14551
+2026-01-15 12:06:21 - DroneController - [INFO] - Connection attempt 1/3...
+2026-01-15 12:06:21 - DroneController - [INFO] - Waiting for heartbeat...
+2026-01-15 12:06:22 - DroneController - [INFO] - Heartbeat from system 1, component 0
+2026-01-15 12:06:22 - DroneController - [INFO] - Requesting data streams...
+2026-01-15 12:06:22 - DroneController - [INFO] - Verifying data stream...
+2026-01-15 12:06:22 - DroneController - [INFO] - Verifying data stream reception...
+2026-01-15 12:06:23 - DroneController - [INFO] - ✓ All critical data streams verified
+2026-01-15 12:06:23 - DroneController - [INFO] - Waiting for data streams to initialize...
+2026-01-15 12:06:26 - DroneController - [INFO] - State transition: DISCONNECTED -> CONNECTED
+2026-01-15 12:06:26 - DroneController - [INFO] - Telemetry log initialized: telemetry/telemetry_20260115_120626.csv
+2026-01-15 12:06:26 - DroneController - [INFO] - ✓ Connection established and verified
+2026-01-15 12:06:26 - DroneController - [INFO] - Telemetry loop started
+2026-01-15 12:06:26 - DroneController - [INFO] - Heartbeat monitor started
+2026-01-15 12:06:26 - DroneController - [INFO] - Command processor started
+2026-01-15 12:06:26 - DroneController - [INFO] - ✓ First telemetry message received
+2026-01-15 12:06:26 - DroneController - [INFO] - Mission controller started
+2026-01-15 12:06:26 - DroneController - [INFO] - All threads started
+2026-01-15 12:06:26 - DroneController - [INFO] - State transition: CONNECTED -> IDLE
+2026-01-15 12:06:26 - DroneController - [INFO] - Stopping controller...
+2026-01-15 12:06:26 - DroneController - [INFO] - Cleaning up spray controller...
+2026-01-15 12:06:26 - DroneController - [INFO] - Landing initiated
+2026-01-15 12:06:26 - DroneController - [INFO] - State transition: IDLE -> LANDING
+2026-01-15 12:06:26 - DroneController - [INFO] - Setting mode to LAND (attempt 1)
+2026-01-15 12:06:26 - DroneController - [INFO] - Mission controller stopped
+2026-01-15 12:06:26 - DroneController - [INFO] - Telemetry loop stopped. Total messages: 1889
+2026-01-15 12:06:26 - DroneController - [INFO] - Message type distribution: {'AHRS': 67, 'AHRS2': 67, 'ATTITUDE': 67, 'BATTERY_STATUS': 67, 'EKF_STATUS_REPORT': 67, 'ESC_TELEMETRY_1_TO_4': 67, 'ESC_TELEMETRY_5_TO_8': 67, 'EXTENDED_SYS_STATE': 4, 'GLOBAL_POSITION_INT': 67, 'GPS_RAW_INT': 67, 'HEARTBEAT': 4, 'HOME_POSITION': 4, 'LOCAL_POSITION_NED': 67, 'MEMINFO': 67, 'MISSION_CURRENT': 67, 'NAV_CONTROLLER_OUTPUT': 67, 'POWER_STATUS': 67, 'RAW_IMU': 67, 'RC_CHANNELS': 67, 'SCALED_IMU2': 67, 'SCALED_IMU3': 67, 'SCALED_PRESSURE': 67, 'SCALED_PRESSURE2': 67, 'SERVO_OUTPUT_RAW': 67, 'SIMSTATE': 67, 'SYSTEM_TIME': 67, 'SYS_STATUS': 67, 'TERRAIN_REPORT': 67, 'TIMESYNC': 1, 'VFR_HUD': 67, 'VIBRATION': 67, 'WIND': 67}
+2026-01-15 12:06:27 - DroneController - [INFO] - Heartbeat monitor stopped
+2026-01-15 12:06:27 - DroneController - [INFO] - Command processor stopped
+2026-01-15 12:06:27 - DroneController - [INFO] - Mode changed to LAND
+2026-01-15 12:06:27 - DroneController - [INFO] - Landing in progress
+2026-01-15 12:06:27 - DroneController - [INFO] - Controller stopped
