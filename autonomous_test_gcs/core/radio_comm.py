@@ -94,20 +94,36 @@ class RadioComm:                #Handles low-level radio communication with the 
             log_message("GCS",f"Radio TX error: {e}\n")
 
     def send_command(self, command: str, params: dict = None) -> None:      #Send a command packet to the drone
+        if not self.serial or not self.serial.is_open:
+            print(f"[RadioComm] Cannot send command '{command}' - serial not connected")
+            log_message("GCS", f"Radio TX failed - serial not connected for command: {command}\n")
+            return
         msg = {
             "type": "command",
             "command": command,
             "params": params or {},
             "timestamp": time.time()
         }
-        data = json.dumps(msg) + "\n"  # newline frame
-        self.serial.write(data.encode('utf-8'))
-        self.serial.flush()
+        try:
+            data = json.dumps(msg) + "\n"  # newline frame
+            self.serial.write(data.encode('utf-8'))
+            self.serial.flush()
+            log_message("GCS", f"Sent command: {command} (len={len(data)})\n")
+        except Exception as e:
+            print(f"[RadioComm] Send Error: {e}")
+            log_message("GCS", f"Radio TX error: {e}\n")
 
     def send_packet(self, packet: dict) -> None:
+        if not self.serial or not self.serial.is_open:
+            print("[RadioComm] Cannot send packet - serial not connected")
+            return
         packet["timestamp"] = time.time()
-        data = json.dumps(packet) + "\n"  # newline frame
-        self.serial.write(data.encode('utf-8'))
+        try:
+            data = json.dumps(packet) + "\n"  # newline frame
+            self.serial.write(data.encode('utf-8'))
+            self.serial.flush()
+        except Exception as e:
+            print(f"[RadioComm] Send Error: {e}")
         self.serial.flush()
 
     def _listen_loop(self) -> None:         #Continuously listen for incoming packets from the drone

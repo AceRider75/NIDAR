@@ -186,22 +186,38 @@ class GCSUI(ctk.CTk):
     def on_transfer_waypoints_clicked(self):
         """Handle Transfer Waypoints button click."""
         try:
-            # Option 1: Simple transfer with default settings
+            # Check if there are waypoints to transfer (from scanner or imported)
+            centers = self.controller.get_spot_centers(DroneName.Scanner)
+            imported_waypoints = getattr(self.controller, 'sprayer_waypoints', [])
+            
+            total_waypoints = len(centers) + len(imported_waypoints)
+            print(f"[UI] Transfer clicked - Found {len(centers)} spot centers, {len(imported_waypoints)} imported waypoints")
+            
+            if not centers and not imported_waypoints:
+                self.show_message("Warning", "No waypoints to transfer.\n\nEither:\n- Wait for Scanner drone to detect spots, or\n- Import waypoints from CSV file", "warning")
+                return
+            
+            # Check if sprayer radio is connected
+            sprayer_radio = self.controller.drone_states[DroneName.Sprayer.value].radio
+            if not sprayer_radio.serial or not sprayer_radio.serial.is_open:
+                self.show_message("Error", "Sprayer radio not connected. Check USB connection.", "error")
+                return
+            
+            source = "spots" if centers else "imported CSV"
+            count = len(centers) if centers else len(imported_waypoints)
+            print(f"[UI] Transferring {count} waypoints from {source} to Sprayer...")
+            
+            # Transfer waypoints (function now checks both sources)
             success = self.controller.transfer_waypoints_to_sprayer()
             
-            # Option 2: Transfer with custom altitude (if you have an input field)
-            # altitude = float(self.altitude_input.text() or "3.0")
-            # success = self.gcs_controller.transfer_waypoints_detailed(
-            #     altitude=altitude,
-            #     use_weighted_centers=True
-            # )
-            
             if success:
-                self.show_message("Success", "Waypoints transferred to Sprayer drone", "success")
+                self.show_message("Success", f"Transferred {count} waypoints to Sprayer drone\n(Source: {source})", "success")
             else:
-                self.show_message("Error", "No waypoints to transfer or transfer failed", "error")
+                self.show_message("Error", "Transfer failed - check logs for details", "error")
                 
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             self.show_message("Error", f"Failed to transfer waypoints: {e}", "error")
 
 

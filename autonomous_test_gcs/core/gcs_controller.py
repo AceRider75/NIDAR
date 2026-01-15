@@ -326,38 +326,58 @@ class GCSController:
     def transfer_waypoints_to_sprayer(self, scanner_drone: DroneName = DroneName.Scanner) -> bool:
         """
         Transfer detected yellow spot centers from scanner to sprayer drone incrementally.
+        Also checks for imported waypoints if no yellow spots are available.
         Sends START_WAYPOINTS, then ADD_WAYPOINT for each, and END_WAYPOINTS.
         """
         try:
+            # Check if sprayer radio is connected
+            sprayer_radio = self.drone_states[DroneName.Sprayer.value].radio
+            if not sprayer_radio.serial or not sprayer_radio.serial.is_open:
+                log_message("GCSController", "Sprayer radio not connected - cannot transfer waypoints")
+                return False
+
+            # First try to get yellow spots from scanner
             centers = self.get_spot_centers(scanner_drone)
+            
+            # If no yellow spots, check for imported/set waypoints
             if not centers:
-                log_message("GCSController", "No yellow spots detected to transfer")
+                if hasattr(self, 'sprayer_waypoints') and self.sprayer_waypoints:
+                    log_message("GCSController", f"No yellow spots, using {len(self.sprayer_waypoints)} imported waypoints")
+                    centers = [(wp.get('lat', wp.get('latitude')), wp.get('lon', wp.get('longitude'))) 
+                               for wp in self.sprayer_waypoints 
+                               if wp.get('lat', wp.get('latitude')) and wp.get('lon', wp.get('longitude'))]
+                
+            if not centers:
+                log_message("GCSController", "No yellow spots or imported waypoints to transfer")
                 return False
 
             default_alt = 3.0
             total = len(centers)
+            log_message("GCSController", f"Transferring {total} waypoints to Sprayer...")
 
-            # Start batch
-            self.drone_states[DroneName.Sprayer.value].radio.send_command(
-                "START_WAYPOINTS",
-                {"expected_count": total, "altitude": default_alt}
-            )
-            time.sleep(0.05)  # pacing
+            # Start batch - send multiple times for reliability
+            for _ in range(2):  # Send START twice for reliability
+                self.drone_states[DroneName.Sprayer.value].radio.send_command(
+                    "START_WAYPOINTS",
+                    {"expected_count": total, "altitude": default_alt}
+                )
+                time.sleep(0.3)  # 300ms delay
 
-            # Send one at a time
+            # Send one at a time with sufficient delay for radio transmission
             for idx, (lat, lon) in enumerate(centers, start=1):
                 self.drone_states[DroneName.Sprayer.value].radio.send_command(
                     "ADD_WAYPOINT",
                     {"index": idx, "lat": lat, "lon": lon, "alt": default_alt}
                 )
-                time.sleep(0.05)  # pacing per packet
+                time.sleep(0.3)  # 300ms delay per packet to prevent radio buffer overflow
 
-            # End batch
-            self.drone_states[DroneName.Sprayer.value].radio.send_command(
-                "END_WAYPOINTS",
-                {"expected_count": total}
-            )
-            time.sleep(0.05)  # pacing
+            # End batch - send multiple times for reliability
+            for _ in range(2):  # Send END twice for reliability
+                self.drone_states[DroneName.Sprayer.value].radio.send_command(
+                    "END_WAYPOINTS",
+                    {"expected_count": total}
+                )
+                time.sleep(0.3)  # 300ms delay
 
             log_message("GCSController",
                         f"Transferred {total} waypoints to Sprayer drone (incremental)")
@@ -402,24 +422,29 @@ class GCSController:
                 return False
 
             total = len(points)
-            self.drone_states[DroneName.Sprayer.value].radio.send_command(
-                "START_WAYPOINTS",
-                {"expected_count": total, "altitude": altitude}
-            )
-            time.sleep(0.05)
+            
+            # Start batch - send multiple times for reliability
+            for _ in range(2):
+                self.drone_states[DroneName.Sprayer.value].radio.send_command(
+                    "START_WAYPOINTS",
+                    {"expected_count": total, "altitude": altitude}
+                )
+                time.sleep(0.3)
 
             for idx, (lat, lon) in enumerate(points, start=1):
                 self.drone_states[DroneName.Sprayer.value].radio.send_command(
                     "ADD_WAYPOINT",
                     {"index": idx, "lat": lat, "lon": lon, "alt": altitude}
                 )
-                time.sleep(0.05)
+                time.sleep(0.3)  # 300ms delay per packet
 
-            self.drone_states[DroneName.Sprayer.value].radio.send_command(
-                "END_WAYPOINTS",
-                {"expected_count": total}
-            )
-            time.sleep(0.05)
+            # End batch - send multiple times for reliability
+            for _ in range(2):
+                self.drone_states[DroneName.Sprayer.value].radio.send_command(
+                    "END_WAYPOINTS",
+                    {"expected_count": total}
+                )
+                time.sleep(0.3)
 
             log_message("GCSController",
                         f"Transferred {total} waypoints (alt={altitude}m) to Sprayer (incremental)")
