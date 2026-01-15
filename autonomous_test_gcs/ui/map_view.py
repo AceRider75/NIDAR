@@ -48,6 +48,8 @@ class MapView(ctk.CTkFrame):
         
         # Path history: {DroneName: [(lat, lon), ...]}
         self.paths = {DroneName.Scanner: [], DroneName.Sprayer: []}
+        self.geofence_polygon = []
+        self.waypoints = []
         
         # --- Tile System ---
         # Google Satellite
@@ -129,6 +131,21 @@ class MapView(ctk.CTkFrame):
     def reload_map(self):
         self.tile_data.clear()
         self.tile_cache.clear()
+        self._draw_map()
+
+    def set_geofence_polygon(self, coordinates: list):
+        """Sets the geofence polygon to be drawn on the map."""
+        self.geofence_polygon = coordinates
+        self._draw_map()
+
+    def display_waypoints(self, waypoints: list):
+        """Sets the waypoints to be drawn on the map."""
+        self.waypoints = waypoints
+        self._draw_map()
+
+    def clear_waypoints(self):
+        """Clears all waypoints from the map."""
+        self.waypoints = []
         self._draw_map()
 
     def on_zoom(self, event):
@@ -265,6 +282,42 @@ class MapView(ctk.CTkFrame):
                 if not is_active: fill = "#1d4ed8" if d_name == DroneName.Scanner else "#991b1b"
                 r = 6 if is_active else 4
                 self.canvas.create_oval(cx-r, cy-r, cx+r, cy+r, fill=fill, outline="white" if is_active else "")
+
+        # Draw Geofence
+        if self.geofence_polygon:
+            poly_coords = []
+            for lat, lon in self.geofence_polygon:
+                px, py = lonlat_to_pixels(lon, lat, self.zoom)
+                poly_coords.extend([px - tl_px, py - tl_py])
+            
+            if len(poly_coords) >= 6:
+                self.canvas.create_polygon(poly_coords,
+                                           outline="#f87171",
+                                           fill="#ef4444",
+                                           stipple="gray50",
+                                           width=2)
+
+        # Draw Waypoints
+        for wp in self.waypoints:
+            lat, lon = wp.get("lat"), wp.get("lon")
+            if lat is None or lon is None:
+                continue
+
+            px, py = lonlat_to_pixels(lon, lat, self.zoom)
+            cx, cy = px - tl_px, py - tl_py
+            
+            # Draw circle for waypoint
+            r = 5
+            self.canvas.create_oval(cx - r, cy - r, cx + r, cy + r, 
+                                    fill="#ffc107", outline="white")
+            
+            # Draw spot_id text
+            spot_id = wp.get('spot_id', 'WP')
+            self.canvas.create_text(cx + 8, cy, 
+                                    text=spot_id, 
+                                    anchor="w",
+                                    fill="white",
+                                    font=("Arial", 10, "bold"))
 
         # If active drone has no GPS history, show warning
         if not self.paths.get(self.active_drone):

@@ -1,6 +1,9 @@
 import time
 import threading
 from typing import List, Dict, Any, Tuple
+import base64
+import xml.etree.ElementTree as ET
+import re
 
 from core.drone_state import DroneState, DroneName
 from core.radio_comm import RadioComm
@@ -26,6 +29,8 @@ class GCSController:
             radio=RadioComm(port=r"/dev/ttyUSB0")
         )
 
+        self.mission_kml_content: bytes | None = None
+        self.map_view = None
         self.lock = threading.Lock()
         self._running = True
 
@@ -301,6 +306,14 @@ class GCSController:
         self.drone_states[drone.value].radio.send_command("LAND")
 
     def start(self, drone: DroneName) -> None:
+        # If a mission KML is set, send it to all drones before starting
+        if self.mission_kml_content:
+            log_message("GCSController", f"Sending mission geofence to all drones before starting mission for {drone.name}.")
+            for d in DroneName:
+                self.send_kml_to_drone(d, self.mission_kml_content)
+            # Add a small delay to ensure KML is processed before mission start
+            time.sleep(1.0)
+
         self.drone_states[drone.value].radio.send_command("START")
         with self.lock:
             state = self.drone_states[drone.value]
@@ -453,6 +466,94 @@ class GCSController:
         except Exception as e:
             log_message("GCSController", f"Failed to transfer waypoints: {e}")
             return False
+
+    def send_kml_to_drone(self, drone: DroneName, kml_content: bytes) -> bool:
+        """
+        Send a KML file to the specified drone.
+        The KML content is base64 encoded and sent in a single command.
+        """
+        try:
+            radio = self.drone_states[drone.value].radio
+            if not radio.serial or not radio.serial.is_open:
+                log_message("GCSController", f"{drone.name} radio not connected - cannot send KML")
+                return False
+
+            kml_b64 = base64.b64encode(kml_content).decode('ascii')
+            
+            log_message("GCSController", f"Sending KML geofence ({len(kml_b64)} bytes) to {drone.name} drone...")
+
+            # Send the command
+            radio.send_command(
+                "UPLOAD_KML",
+                {"kml_data": kml_b64}
+            )
+            time.sleep(0.5) # Give some time for the command to be sent
+
+            log_message("GCSController", f"KML transfer command sent to {drone.name}.")
+            return True
+
+        except Exception as e:
+            log_message("GCSController", f"Failed to send KML to {drone.name}: {e}")
+            return False
+
+    def set_mission_kml(self, kml_content: bytes):
+        """
+        Stores the KML file content in the controller for later use
+        and triggers parsing to update the map view.
+        """
+        self.mission_kml_content = kml_content
+        log_message("GCSController", f"Mission geofence updated on GCS ({len(kml_content)} bytes).")
+        
+        # Attempt to parse and display on map
+        self._parse_and_update_map_geofence(kml_content)
+
+    def _parse_and_update_map_geofence(self, kml_content: bytes):
+        """Parses KML content and updates the map view with the geofence polygon."""
+        if not self.map_view:
+            return
+            
+        try:
+            # KML files have namespaces, which we need to handle to find tags.
+            # The namespace is usually defined at the top of the KML file.
+            root = ET.fromstring(kml_content)
+            
+            # This is a common namespace for KML. We'll try to find it dynamically.
+            namespace = ''
+            match = re.match(r'\{.*\}', root.tag)
+            if match:
+                namespace = match.group(0)
+
+            # Find the coordinates element. It might be nested.
+            # Common path is Document -> Placemark -> Polygon -> outerBoundaryIs -> LinearRing -> coordinates
+            coordinates_tag = root.find(f".//{namespace}coordinates")
+            
+            if coordinates_tag is None:
+                log_message("GCSController", "Could not find <coordinates> tag in KML file.")
+                return
+
+            # Coordinates are stored as a single string: "lon,lat,alt lon,lat,alt ..."
+            coord_text = coordinates_tag.text.strip()
+            
+            polygon_points = []
+            for point_str in coord_text.split():
+                try:
+                    lon, lat, *_ = map(float, point_str.split(','))
+                    polygon_points.append((lat, lon))
+                except (ValueError, IndexError):
+                    continue # Skip malformed points
+            
+            if polygon_points:
+                self.map_view.set_geofence_polygon(polygon_points)
+                log_message("GCSController", f"Successfully parsed and displayed geofence with {len(polygon_points)} points.")
+            else:
+                log_message("GCSController", "No valid coordinates found in KML file.")
+
+        except ET.ParseError as e:
+            log_message("GCSController", f"KML Parse Error: {e}. Is this a valid KML file?")
+        except Exception as e:
+            import traceback
+            log_message("GCSController", f"An unexpected error occurred during KML parsing: {e}")
+            traceback.print_exc()
 
     def get_waypoints(self) -> list:
         """Get current waypoints for sprayer drone."""

@@ -27,6 +27,10 @@ class GCSUI(ctk.CTk):
         self.dashboard = Dashboard(self, controller=self.controller)
         self.dashboard.pack(fill="both", expand=True)
 
+        # Pass the map_view reference to the controller
+        if hasattr(self.dashboard, 'map_view'):
+            self.controller.map_view = self.dashboard.map_view
+
         self.after(self.UPDATE_INTERVAL_MS, self._periodic_update)   
         self.after(self.GRAPH_UPDATE_INTERVAL_MS, self._update_graphs)
         self.after(self.WAYPOINT_UPDATE_INTERVAL_MS, self._update_waypoints_from_spots)

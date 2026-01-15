@@ -32,7 +32,8 @@ class Dashboard(ctk.CTkFrame):
         # Waypoint Manager (replaces position graphs)
         self.waypoint_manager = WaypointManager(
             self,
-            controller=controller
+            controller=controller,
+            map_view=self.map_view
         )
         self.waypoint_manager.grid(
             row=0, column=1, columnspan=2, sticky="nsew", padx=5, pady=5)

@@ -4,17 +4,20 @@ import csv
 import os
 from typing import List, Dict, Optional
 from core.drone_state import DroneName
+import base64
 
 # Minimum detections required for a spot to be considered valid
 MIN_DETECTION_COUNT = 2
 
 
+
 class WaypointManager(ctk.CTkFrame):
     """Widget for displaying and managing waypoints from detected yellow spots."""
     
-    def __init__(self, parent, controller, **kwargs):
+    def __init__(self, parent, controller, map_view=None, **kwargs):
         super().__init__(parent, **kwargs)
         self.controller = controller
+        self.map_view = map_view
         self.waypoints: List[Dict] = []  # All waypoints (including filtered out)
         self.valid_waypoints: List[Dict] = []  # Only waypoints with enough detections
         
@@ -111,6 +114,19 @@ class WaypointManager(ctk.CTkFrame):
             hover_color="#e76b00"
         )
         self.transfer_btn.pack(side="left", padx=2)
+        
+        # Upload KML button
+        self.upload_kml_btn = ctk.CTkButton(
+            button_frame,
+            text="🗺️ Set Geofence",
+            command=self._upload_kml_geofence,
+            width=110,
+            height=28,
+            font=ctk.CTkFont(size=11),
+            fg_color="#17a2b8",
+            hover_color="#138496"
+        )
+        self.upload_kml_btn.pack(side="left", padx=2)
         
         # Waypoint display frame with scrollbar
         self.waypoint_frame = ctk.CTkScrollableFrame(
@@ -310,6 +326,8 @@ class WaypointManager(ctk.CTkFrame):
                 self.valid_waypoints = []
                 self._update_display()
                 self.controller.clear_waypoints()
+                if self.map_view:
+                    self.map_view.clear_waypoints()
     
     def _transfer_to_sprayer(self):
         """Transfer only valid waypoints to the sprayer drone."""
@@ -341,6 +359,34 @@ class WaypointManager(ctk.CTkFrame):
                 )
         except Exception as e:
             messagebox.showerror("Transfer Error", f"Failed to transfer waypoints:\n{e}")
+
+    def _upload_kml_geofence(self):
+        """Upload a KML geofence file and set it for the mission."""
+        filepath = filedialog.askopenfilename(
+            title="Select KML Geofence File",
+            filetypes=[("KML files", "*.kml"), ("All files", "*.*")],
+            initialdir=os.path.expanduser("~")
+        )
+        
+        if not filepath:
+            return
+
+        try:
+            with open(filepath, 'rb') as f:
+                kml_content = f.read()
+
+            # Pass the raw content to the controller to be stored
+            self.controller.set_mission_kml(kml_content)
+            
+            messagebox.showinfo(
+                "Geofence Set",
+                f"Mission geofence has been set from:\n{os.path.basename(filepath)}\n\n"
+                "It will be sent to drones when their missions are started."
+            )
+
+        except Exception as e:
+            messagebox.showerror("Set Geofence Error", f"Failed to set mission geofence:\n{e}")
+
     
     def set_waypoints(self, waypoints: List[Dict]):
         """Set waypoints externally and update display."""
@@ -395,6 +441,9 @@ class WaypointManager(ctk.CTkFrame):
         # Add only valid waypoint rows
         for i, wp in enumerate(self.valid_waypoints):
             self._add_waypoint_row(i + 1, wp)
+
+        if self.map_view:
+            self.map_view.display_waypoints(self.valid_waypoints)
         
         # Show message if there are spots but none are valid yet
         if total_spots > 0 and valid_count == 0:
