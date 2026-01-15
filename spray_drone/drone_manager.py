@@ -19,7 +19,7 @@ class DroneManager:
         KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
         
         config = DroneConfig(
-            connection_string='/dev/ttyACM0',  # Change to '/dev/ttyACM0' for real hardware
+            connection_string='/dev/ttyACM1',  # Change to '/dev/ttyACM0' for real hardware
             geofence_mode="polygon",  # or "radius"
             kml_file=KML_PATH,
             polygon_name="Field",
@@ -27,7 +27,7 @@ class DroneManager:
             geofence_radius=500.0,
             waypoint_radius=3.0,
             optimize_waypoint_order=True,
-            default_altitude=3.0
+            default_altitude=4.0
         )
         
         self.controller = DroneController(config)
@@ -44,7 +44,7 @@ class DroneManager:
         # Buffer for incremental waypoints
         self._pending_waypoints = []
         self._expected_waypoints = 0
-        self._pending_altitude = 3.0
+        self._pending_altitude = 4.0
 
     # -------------------------------------------------
     # COMMAND HANDLING - UPDATED
@@ -58,7 +58,7 @@ class DroneManager:
         if cmd == "START":
             # NEW: Load mission from params, then start
             waypoints = params.get("waypoints", [])
-            altitude = params.get("altitude", 3.0)
+            altitude = params.get("altitude", 4.0)
             
             if waypoints:
                 # Waypoints should be list of [lat, lon, alt]
@@ -112,14 +112,14 @@ class DroneManager:
         # Incremental waypoint protocol
         elif cmd == "START_WAYPOINTS":
             self._expected_waypoints = int(params.get("expected_count", 0))
-            self._pending_altitude = float(params.get("altitude", 3.0))
+            self._pending_altitude = float(params.get("altitude", 4.0))
             self._pending_waypoints = []
             print(f"[WP] START_WAYPOINTS received: expecting {self._expected_waypoints} waypoints")
 
         elif cmd == "ADD_WAYPOINT":
             lat = params.get("lat")
             lon = params.get("lon")
-            alt = params.get("alt", getattr(self, '_pending_altitude', 3.0))
+            alt = params.get("alt", getattr(self, '_pending_altitude', 4.0))
             idx = params.get("index", len(getattr(self, '_pending_waypoints', [])) + 1)
             
             # Initialize buffer if START_WAYPOINTS was missed

@@ -174,7 +174,7 @@ class WaypointManager(ctk.CTkFrame):
                     'spot_id': spot_id,
                     'lat': avg_lat,
                     'lon': avg_lon,
-                    'alt': 3.0,  # Default altitude
+                    'alt': 4.0,  # Default altitude
                     'area': avg_area,
                     'detection_count': len(coords),
                     'rank': latest_rank,

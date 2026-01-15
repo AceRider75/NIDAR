@@ -18,7 +18,7 @@ def main():
         polygon_name="MultiGeometry",
         max_altitude=30.0,
         waypoint_radius=3.0,
-        default_altitude=3.0,
+        default_altitude=4.0,
         optimize_waypoint_order=True
     )
     

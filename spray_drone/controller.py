@@ -841,7 +841,7 @@ class DroneController:
                                                 current_pos[0], current_pos[1], spiral_wp.lat, spiral_wp.lon)
                                             
                                             # If we're getting close (within 3m), move to next point
-                                            if spiral_dist_h <= 3.0:
+                                            if spiral_dist_h <= 4.0:
                                                 self.logger.debug(f"Close to spiral point {idx + 1}, continuing to next")
                                                 break
                                             
