@@ -114,29 +114,53 @@ class DroneManager:
             self._expected_waypoints = int(params.get("expected_count", 0))
             self._pending_altitude = float(params.get("altitude", 3.0))
             self._pending_waypoints = []
+            print(f"[WP] START_WAYPOINTS received: expecting {self._expected_waypoints} waypoints")
 
         elif cmd == "ADD_WAYPOINT":
             lat = params.get("lat")
             lon = params.get("lon")
-            alt = params.get("alt", self._pending_altitude)
+            alt = params.get("alt", getattr(self, '_pending_altitude', 3.0))
+            idx = params.get("index", len(getattr(self, '_pending_waypoints', [])) + 1)
+            
+            # Initialize buffer if START_WAYPOINTS was missed
+            if not hasattr(self, '_pending_waypoints'):
+                self._pending_waypoints = []
+            if not hasattr(self, '_expected_waypoints'):
+                self._expected_waypoints = 0
+                
             if lat is not None and lon is not None:
                 try:
                     self._pending_waypoints.append([float(lat), float(lon), float(alt)])
+                    print(f"[WP] ADD_WAYPOINT {idx}: ({lat}, {lon}, {alt}) - total buffered: {len(self._pending_waypoints)}")
                 except (ValueError, TypeError):
-                    print(f"Ignoring malformed waypoint: {params}")
+                    print(f"[WP] Ignoring malformed waypoint: {params}")
 
         elif cmd == "END_WAYPOINTS":
             expected = int(params.get("expected_count", self._expected_waypoints))
-            if expected != self._expected_waypoints:
-                print(f"Waypoint count mismatch: start={self._expected_waypoints}, end={expected}")
-            if len(self._pending_waypoints) != self._expected_waypoints:
-                print(f"Received {len(self._pending_waypoints)} of {self._expected_waypoints}, aborting mission load")
+            received = len(self._pending_waypoints) if hasattr(self, '_pending_waypoints') else 0
+            
+            print(f"[WP] END_WAYPOINTS: expected={expected}, received={received}")
+            
+            # If START was missed but we have waypoints, use received count
+            if self._expected_waypoints == 0 and received > 0:
+                print(f"[WP] START_WAYPOINTS was missed, using received count: {received}")
+                self._expected_waypoints = received
+            
+            # Check if we have enough waypoints (allow some tolerance for corruption)
+            min_required = max(1, expected - 2)  # Allow up to 2 missing waypoints
+            
+            if received < min_required:
+                print(f"[WP] Received {received} of {expected}, need at least {min_required}, aborting mission load")
                 # Reset buffer
                 self._pending_waypoints = []
                 self._expected_waypoints = 0
                 return
+            
+            if received != expected:
+                print(f"[WP] Warning: received {received} waypoints, expected {expected}, loading anyway")
 
             # Load mission from buffered waypoints and add return-to-home
+            print(f"[WP] Loading mission with {received} waypoints")
             self.controller.queue_command(
                 self.controller.load_mission_from_points,
                 self._pending_waypoints,
