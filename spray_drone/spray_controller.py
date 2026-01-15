@@ -113,26 +113,27 @@ class SprayController:
         return self.spray_active.is_set()
     
     def _relay_on(self) -> bool:
-        """Turn spray relay ON"""
+        """Turn spray relay ON (active LOW)"""
         try:
             if self.gpio_initialized:
-                GPIO.output(self.config.relay_pin, GPIO.HIGH)
+                GPIO.output(self.config.relay_pin, GPIO.LOW)
                 self.logger.info("Spray relay ON")
             else:
-                self.logger.info("Spray ON (simulation mode - no GPIO)")
+                self.logger.info("Spray ON (simulation mode)")
             return True
         except Exception as e:
             self.logger.error(f"Failed to turn spray relay ON: {e}")
             return False
 
+
     def _relay_off(self) -> bool:
-        """Turn spray relay OFF"""
+        """Turn spray relay OFF (active LOW)"""
         try:
             if self.gpio_initialized:
-                GPIO.output(self.config.relay_pin, GPIO.LOW)
+                GPIO.output(self.config.relay_pin, GPIO.HIGH)
                 self.logger.info("Spray relay OFF")
             else:
-                self.logger.info("Spray OFF (simulation mode - no GPIO)")
+                self.logger.info("Spray OFF (simulation mode)")
             return True
         except Exception as e:
             self.logger.error(f"Failed to turn spray relay OFF: {e}")
