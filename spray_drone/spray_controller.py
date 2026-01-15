@@ -30,7 +30,7 @@ class SprayState(Enum):
 @dataclass
 class SprayConfig:
     """Configuration for spray system"""
-    relay_pin: int = 18  # GPIO pin for relay control
+    relay_pin: int = 6  # GPIO pin for relay control
     default_duration: float = 10.0  # Default spray duration in seconds
     max_duration: float = 60.0  # Maximum allowed spray duration
     min_duration: float = 0.5  # Minimum allowed spray duration
@@ -116,7 +116,7 @@ class SprayController:
         """Turn spray relay ON"""
         try:
             if self.gpio_initialized:
-                GPIO.output(self.config.relay_pin, GPIO.LOW)
+                GPIO.output(self.config.relay_pin, GPIO.HIGH)
                 self.logger.info("Spray relay ON")
             else:
                 self.logger.info("Spray ON (simulation mode - no GPIO)")
@@ -129,7 +129,7 @@ class SprayController:
         """Turn spray relay OFF"""
         try:
             if self.gpio_initialized:
-                GPIO.output(self.config.relay_pin, GPIO.HIGH)
+                GPIO.output(self.config.relay_pin, GPIO.LOW)
                 self.logger.info("Spray relay OFF")
             else:
                 self.logger.info("Spray OFF (simulation mode - no GPIO)")
