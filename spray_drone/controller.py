@@ -1628,3 +1628,34 @@ class DroneController:
         self.logger.info(f"Geofence mode set to: {mode}")
         self._add_log(f"Geofence mode: {mode}")
         return True
+
+    def update_kml_geofence(self, new_kml_path: str) -> bool:
+        """Dynamically update the geofence from a new KML file."""
+        self.logger.info(f"Attempting to update geofence with new KML: {new_kml_path}")
+        self._add_log(f"Updating geofence from new KML...")
+
+        if not os.path.exists(new_kml_path):
+            self.logger.error(f"New KML file not found at: {new_kml_path}")
+            self._add_log(f"ERROR: KML file not found.")
+            return False
+
+        try:
+            # Create a new MissionPlanner instance
+            new_mission_planner = MissionPlanner(
+                kml=new_kml_path,
+                polygon_name=self.config.polygon_name
+            )
+            
+            # Atomically update the mission planner for both controller and geofence
+            with self.mission_lock:
+                self.mission_planner = new_mission_planner
+                self.geofence.mission_planner = new_mission_planner
+
+            self.logger.info("✓ Geofence successfully updated from new KML file.")
+            self._add_log("Geofence updated.")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Failed to update geofence from KML file: {e}")
+            self._add_log("ERROR: Failed to update geofence.")
+            return False

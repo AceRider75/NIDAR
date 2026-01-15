@@ -2,6 +2,7 @@ from controller import DroneController
 from radio_comm import RadioComm
 import time
 import os
+import base64
 from config import DroneConfig
 # from utils import log_message
 from utils import setup_logger
@@ -16,7 +17,17 @@ class DroneManager:
 
         # NEW: Configure controller with KML geofencing
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        KML_PATH = os.path.join(BASE_DIR, "data", "JUs.kml")
+        
+        # Prioritize GCS-provided geofence, otherwise use fallback
+        gcs_kml_path = os.path.join(BASE_DIR, "data", "gcs_geofence.kml")
+        default_kml_path = os.path.join(BASE_DIR, "data", "JUs.kml")
+
+        if os.path.exists(gcs_kml_path):
+            KML_PATH = gcs_kml_path
+            print(f"[DroneManager] Loading GCS-provided geofence: {KML_PATH}")
+        else:
+            KML_PATH = default_kml_path
+            print(f"[DroneManager] Loading default geofence: {KML_PATH}")
         
         config = DroneConfig(
             connection_string='/dev/ttyACM0',  # Change to '/dev/ttyACM0' for real hardware
@@ -173,6 +184,35 @@ class DroneManager:
             # Reset buffer
             self._pending_waypoints = []
             self._expected_waypoints = 0
+
+        elif cmd == "UPLOAD_KML":
+            kml_data_b64 = params.get('kml_data')
+            if kml_data_b64:
+                print("[DroneManager] Received UPLOAD_KML command.")
+                try:
+                    kml_content = base64.b64decode(kml_data_b64)
+                    
+                    # Define file path
+                    base_dir = os.path.dirname(os.path.abspath(__file__))
+                    kml_path = os.path.join(base_dir, "data", "gcs_geofence.kml")
+                    
+                    # Write to file
+                    with open(kml_path, 'wb') as f:
+                        f.write(kml_content)
+                    
+                    print(f"[DroneManager] Saved new geofence to {kml_path}")
+                    
+                    # Update the controller with the new geofence
+                    print("[DroneManager] Updating controller with new geofence...")
+                    if self.controller.update_kml_geofence(kml_path):
+                        print("[DroneManager] Geofence updated successfully.")
+                    else:
+                        print("[DroneManager] ERROR: Failed to update geofence in controller.")
+                    
+                except Exception as e:
+                    print(f"[DroneManager] Error processing UPLOAD_KML: {e}")
+            else:
+                print("[DroneManager] UPLOAD_KML command received without kml_data.")
 
         else:
             print(f"Unknown Command: {cmd}")
