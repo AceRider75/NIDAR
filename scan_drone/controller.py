@@ -367,6 +367,7 @@ class DroneController:
         self._add_log("Shutting down...")
         self.running.clear()
         self.mission_active.clear()
+        self.land()  # Ensure drone is landed
 
         # Wait for threads to finish
         for thread in self.threads:

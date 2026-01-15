@@ -201,18 +201,69 @@ class DroneManager:
     # MAIN LOOP
     # -------------------------------------------------
     def run(self):
-        while self.controller.running.is_set():
-            cmd = self.radio.get_latest_command()
-            if cmd:
-                self.handle_command(cmd)
-
-            if time.time() - self._last_tx > 0.5:  # 2 Hz
-                self.send_telemetry()
-                self._last_tx = time.time()
-            
-            time.sleep(0.01)
+        print("\n[DroneManager] Entering main loop...")
+        print("[DroneManager] Waiting for commands from GCS...")
         
-        self.controller.stop()
+        # SIMULATION: Auto-start if in SITL mode
+        if "127.0.0.1" in self.controller.config.connection_string:
+            print("[SIMULATOR] SITL connection detected.")
+            print("[SIMULATOR] Simulating START command in 5 seconds...")
+            
+            def simulate_start():
+                time.sleep(5)
+                print("\n" + "="*40)
+                print("[SIMULATOR] INJECTING START COMMAND")
+                print("="*40 + "\n")
+                
+                # Mock a packet from GCS
+                start_packet = {
+                    "command": "START",
+                    "params": {
+                        "altitude": 3.0
+                    }
+                }
+                self.handle_command(start_packet)
+            
+            threading.Thread(target=simulate_start, daemon=True).start()
+        
+        try:
+            while self.controller.running.is_set():
+                # Handle incoming commands from GCS
+                cmd = self.radio.get_latest_command()
+                if cmd:
+                    self.handle_command(cmd)
+
+                # Send telemetry at fixed rate (2 Hz)
+                if time.time() - self._last_tx > 0.5:
+                    self.send_telemetry()
+                    self._last_tx = time.time()
+                
+                time.sleep(0.01)
+                
+        except KeyboardInterrupt:
+            print("\n[DroneManager] Keyboard Interrupt detected (Ctrl+C)")
+            print("[DroneManager] !!! TRIGGERING EMERGENCY LANDING !!!")
+            
+            try:
+                # Construct a LAND command packet to ensure safe termination
+                land_packet = {
+                    "command": "LAND",
+                    "params": {}
+                }
+                self.handle_command(land_packet)
+                
+                # Give the system a moment to process/send the command
+                time.sleep(1.0)
+            except Exception as e:
+                print(f"[DroneManager] Failed to trigger emergency landing: {e}")
+
+        except Exception as e:
+            print(f"\n[DroneManager] ERROR in main loop: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            self.stop()
+
 
 if __name__ == "__main__":
     drone = DroneManager()
