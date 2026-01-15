@@ -511,6 +511,7 @@ class DroneManager:
             import traceback
             traceback.print_exc()
         finally:
+            
             self.stop()
     
     def stop(self):
