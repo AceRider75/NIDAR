@@ -6,6 +6,7 @@ import base64
 from config import DroneConfig
 # from utils import log_message
 from utils import setup_logger
+import threading
 
 DRONE_NAME = "Sprayer"
 PASSWORD = "vihang@2025"
@@ -30,7 +31,7 @@ class DroneManager:
             print(f"[DroneManager] Loading default geofence: {KML_PATH}")
         
         config = DroneConfig(
-            connection_string='/dev/ttyACM1',  # Change to '/dev/ttyACM0' for real hardware
+            connection_string='127.0.0.1:14551',  # Change to '/dev/ttyACM0' for real hardware
             geofence_mode="polygon",  # or "radius"
             kml_file=KML_PATH,
             polygon_name="Field",
@@ -303,7 +304,20 @@ class DroneManager:
             traceback.print_exc()
         finally:
             self.stop()
-
+    def stop(self):
+        """Clean shutdown of all components."""
+        print("\n" + "=" * 60)
+        print("DRONE MANAGER - Shutting Down")
+        print("=" * 60)
+        
+        print("[DroneManager] Stopping controller...")
+        self.controller.stop()
+        print("[DroneManager] Stopping radio...")
+        self.radio.stop()
+        
+        print("=" * 60)
+        print("DRONE MANAGER - Shutdown Complete")
+        print("=" * 60)
 
 if __name__ == "__main__":
     drone = DroneManager()

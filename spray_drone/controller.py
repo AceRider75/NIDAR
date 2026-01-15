@@ -379,6 +379,7 @@ class DroneController:
 
         # Stop spray system
         self.spray_controller.cleanup()
+        self.land()
 
         # Wait for threads to finish
         for thread in self.threads:
