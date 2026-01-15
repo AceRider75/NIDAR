@@ -88,7 +88,16 @@ class Controller:
                 # SYSTEM STATUS (Battery)
                 if msg_type == "SYS_STATUS":
                     with self.state_lock:
-                        self.state["battery"] = data.get("battery_remaining", -1)
+                        battery = data.get("battery_remaining", -1)
+                        if battery >= 0:
+                            self.state["battery"] = battery
+
+                # BATTERY STATUS (More reliable on newer ArduPilot)
+                elif msg_type == "BATTERY_STATUS":
+                    with self.state_lock:
+                        battery = data.get("battery_remaining", -1)
+                        if battery >= 0:
+                            self.state["battery"] = battery
 
                 # GLOBAL POSITION (lat, lon, alt)
                 elif msg_type == "GLOBAL_POSITION_INT":

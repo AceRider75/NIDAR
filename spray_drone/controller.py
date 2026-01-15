@@ -511,7 +511,17 @@ class DroneController:
                 if msg_type == "SYS_STATUS":
                     with self.telemetry_lock:
                         self.telemetry.timestamp = now
-                        self.telemetry.battery = msg.battery_remaining
+                        # SYS_STATUS battery_remaining: -1 means not available
+                        if msg.battery_remaining >= 0:
+                            self.telemetry.battery = msg.battery_remaining
+
+                elif msg_type == "BATTERY_STATUS":
+                    with self.telemetry_lock:
+                        self.telemetry.timestamp = now
+                        # BATTERY_STATUS has battery_remaining as percentage (0-100)
+                        # Value of -1 means not available
+                        if msg.battery_remaining >= 0:
+                            self.telemetry.battery = msg.battery_remaining
 
                 elif msg_type == "GLOBAL_POSITION_INT":
                     with self.telemetry_lock:
