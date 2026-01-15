@@ -215,7 +215,7 @@ class DroneManager:
         print(f"[DroneManager] Loading KML from: {KML_PATH}")
         
         config = DroneConfig(
-            connection_string='127.0.0.1:14551',
+            connection_string='/dev/ttyACM0',
             geofence_mode="polygon",
             kml_file=KML_PATH,
             polygon_name="MultiGeometry",
